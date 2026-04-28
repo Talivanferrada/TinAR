@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Tina AR - Doctora Dentina</title>
+  
+  <!-- AFRAME -->
+  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+  <!-- MindAR -->
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  
+  <style>
+    body { margin: 0; overflow: hidden; }
+    #loading-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #4FC3F7;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    #loading-text {
+      color: white;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    .spinner {
+      width: 60px; height: 60px;
+      border: 6px solid #fff;
+      border-top: 6px solid #FFB74D;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <div class="spinner"></div>
+    <div id="loading-text">Cargando Tina...</div>
+  </div>
+  
+  <!-- UI Overlay (placeholder) -->
+  <div id="ui-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100;"></div>
+  
+  <!-- AR Scene -->
+  <a-scene
+    mindar-image="imageTargetSrc: assets/targets/marker.mind; autoStart: true; showStats: false;"
+    color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights"
+    vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false"
+    embedded
+  >
+    <a-assets>
+      <a-asset-item id="tina-model" src="assets/models/Tina_optimized.glb"></a-asset-item>
+    </a-assets>
+    
+    <!-- Camera -->
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    
+    <!-- Target -->
+    <a-entity mindar-image-target="targetIndex: 0" id="target">
+      <!-- Tina will be added here -->
+      <a-entity id="tina-container"></a-entity>
+    </a-entity>
+  </a-scene>
+  
+  <script src="src/app.js" type="module"></script>
+</body>
+</html>
