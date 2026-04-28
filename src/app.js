@@ -16,12 +16,21 @@ class TinARApp {
     this.stateMachine = stateMachine;
     this.encouragementTimer = 0;
     this.encouragementInterval = 10; // Speak every 10 seconds
+    this.modelLoadAttempts = 0;
+    this.maxModelLoadAttempts = 3;
+    this.arSupported = false;
     
     this.init();
   }
   
   async init() {
     console.log('🦕 TinAR initializing...');
+    
+    // Check AR support first
+    if (!this._checkARSupport()) {
+      this._showARNotSupported();
+      return;
+    }
     
     // Bind state events
     this._bindStateEvents();
@@ -31,6 +40,41 @@ class TinARApp {
       this.onSceneReady();
     } else {
       window.addEventListener('load', () => this.onSceneReady());
+    }
+  }
+  
+  /**
+   * Check if AR is supported
+   */
+  _checkARSupport() {
+    // Check for WebGL
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    
+    if (!gl) {
+      console.error('❌ WebGL not supported');
+      return false;
+    }
+    
+    // Check for WebXR (optional, MindAR doesn't require it)
+    this.arSupported = true;
+    console.log('✅ AR support check passed');
+    return true;
+  }
+  
+  /**
+   * Show AR not supported message
+   */
+  _showARNotSupported() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+      overlay.innerHTML = `
+        <div style="text-align: center; color: white; padding: 20px;">
+          <h2>⚠️ AR No Soportado</h2>
+          <p>Tu dispositivo no soporta realidad aumentada.</p>
+          <p>Por favor usa un dispositivo compatible con WebGL.</p>
+        </div>
+      `;
     }
   }
   
@@ -92,6 +136,12 @@ class TinARApp {
   onSceneReady() {
     const scene = document.querySelector('a-scene');
     
+    if (!scene) {
+      console.error('❌ A-Frame scene not found');
+      this._showError('Error loading AR scene');
+      return;
+    }
+    
     if (scene.hasLoaded) {
       this.setupScene();
     } else {
@@ -104,8 +154,22 @@ class TinARApp {
       this.hideLoading();
     });
     
+    // Handle AR errors
+    scene.addEventListener('arError', (event) => {
+      console.error('❌ AR Error:', event.detail);
+      this._handleARError(event.detail);
+    });
+    
+    // Handle camera permission
+    this._requestCameraPermission();
+    
     // Handle target found
     const target = document.getElementById('target');
+    if (!target) {
+      console.error('❌ Target element not found');
+      return;
+    }
+    
     target.addEventListener('targetFound', () => {
       console.log('🎯 Target found!');
       this.isTracking = true;
@@ -126,6 +190,64 @@ class TinARApp {
       audioManager.speakTargetLost();
       uiManager.showTargetLost();
     });
+  }
+  
+  /**
+   * Request camera permission
+   */
+  async _requestCameraPermission() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      // Stop the test stream immediately
+      stream.getTracks().forEach(track => track.stop());
+      console.log('✅ Camera permission granted');
+    } catch (error) {
+      console.error('❌ Camera permission denied:', error);
+      this._handleCameraDenied();
+    }
+  }
+  
+  /**
+   * Handle camera permission denied
+   */
+  _handleCameraDenied() {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+      overlay.innerHTML = `
+        <div style="text-align: center; color: white; padding: 20px;">
+          <h2>📷 Cámara Requerida</h2>
+          <p>Por favor permite el acceso a la cámara para usar esta experiencia AR.</p>
+          <button onclick="location.reload()" style="margin-top: 20px; padding: 12px 24px; 
+            background: white; border: none; border-radius: 25px; font-size: 16px; cursor: pointer;">
+            Reintentar
+          </button>
+        </div>
+      `;
+    }
+  }
+  
+  /**
+   * Handle AR errors
+   */
+  _handleARError(error) {
+    console.error('AR Error:', error);
+    this._showError('Error iniciando realidad aumentada. Por favor recarga la página.');
+  }
+  
+  /**
+   * Show generic error message
+   */
+  _showError(message) {
+    const overlay = document.getElementById('loading-overlay');
+    if (overlay) {
+      const textEl = document.getElementById('loading-text');
+      if (textEl) {
+        textEl.textContent = `❌ ${message}`;
+        textEl.style.color = '#FF6B6B';
+      }
+    }
   }
   
   setupScene() {
@@ -163,6 +285,11 @@ class TinARApp {
   async loadTinaModel() {
     const container = document.getElementById('tina-container');
     
+    if (!container) {
+      console.error('❌ Tina container not found');
+      return null;
+    }
+    
     // Create entity for Tina
     const tinaEntity = document.createElement('a-entity');
     tinaEntity.setAttribute('id', 'tina');
@@ -183,18 +310,61 @@ class TinARApp {
       dir: 'alternate'
     });
     
+    // Handle model load events
+    tinaEntity.addEventListener('model-loaded', () => {
+      console.log('🦕 Tina model loaded successfully!');
+      this.modelLoadAttempts = 0;
+    });
+    
+    tinaEntity.addEventListener('model-error', (error) => {
+      console.error('❌ Tina model load error:', error);
+      this._handleModelError();
+    });
+    
     container.appendChild(tinaEntity);
     this.tinaModel = tinaEntity;
     
-    console.log('🦕 Tina model loaded!');
+    console.log('🦕 Tina model entity created, waiting for load...');
     return tinaEntity;
+  }
+  
+  /**
+   * Handle model loading error with retry
+   */
+  _handleModelError() {
+    this.modelLoadAttempts++;
+    
+    if (this.modelLoadAttempts < this.maxModelLoadAttempts) {
+      console.log(`🔄 Retrying model load (attempt ${this.modelLoadAttempts}/${this.maxModelLoadAttempts})`);
+      // Remove failed entity
+      if (this.tinaModel) {
+        this.tinaModel.remove();
+        this.tinaModel = null;
+      }
+      // Retry after delay
+      setTimeout(() => this.loadTinaModel(), 1000);
+    } else {
+      console.error('❌ Max model load attempts reached');
+      this._showError('No se pudo cargar el modelo 3D. Verifica tu conexión.');
+    }
   }
   
   // State handlers
   showIntro() {
     console.log('👋 Showing intro - Tina waves');
-    // Trigger wave animation
-    animationManager.play('wave');
+    
+    // Only trigger wave animation if model is loaded
+    if (this.tinaModel) {
+      animationManager.play('wave');
+    } else {
+      // Queue animation for when model loads
+      setTimeout(() => {
+        if (this.tinaModel) {
+          animationManager.play('wave');
+        }
+      }, 1000);
+    }
+    
     // Play welcome audio
     audioManager.speakIntro();
     // UI message handled by uiManager via stateChange event
@@ -203,6 +373,10 @@ class TinARApp {
   showZone(zone) {
     const config = ZONE_CONFIG[zone];
     console.log(`🦷 Zone: ${config.name} (${config.duration / 1000}s)`);
+    
+    // Reset encouragement timer for new zone
+    this.encouragementTimer = 0;
+    
     // Trigger pointing animation toward zone direction
     animationManager.syncWithState(zone);
     // Play zone audio with educational content
@@ -247,6 +421,34 @@ class TinARApp {
   
   speakEncouragement() {
     audioManager.speakEncouragement();
+  }
+  
+  /**
+   * Get performance metrics
+   */
+  getPerformanceMetrics() {
+    const timing = performance.timing;
+    const loadTime = timing.loadEventEnd - timing.navigationStart;
+    
+    return {
+      loadTime: loadTime,
+      isLoaded: this.isLoaded,
+      isTracking: this.isTracking,
+      modelLoaded: !!this.tinaModel,
+      arSupported: this.arSupported,
+      currentState: this.stateMachine.currentState
+    };
+  }
+  
+  /**
+   * Restart the experience
+   */
+  restart() {
+    console.log('🔄 Restarting experience...');
+    this.stateMachine.restart();
+    audioManager.stop();
+    animationManager.stopAll();
+    animationManager.play('breathing');
   }
 }
 

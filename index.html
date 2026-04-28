@@ -4,7 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#4FC3F7">
+  <meta name="description" content="Tina AR - Experiencia educativa de realidad aumentada para enseñar técnica de cepillado dental a niños">
+  
   <title>Tina AR - Doctora Dentina</title>
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="assets/models/Tina_optimized.glb" as="fetch" crossorigin>
+  <link rel="preload" href="assets/targets/marker.mind" as="fetch" crossorigin>
+  
+  <!-- Preconnect to CDNs -->
+  <link rel="preconnect" href="https://aframe.io">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   
   <!-- AFRAME -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
