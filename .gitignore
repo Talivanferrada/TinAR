@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local
+
+# Original unoptimized model (keep as backup, don't commit to repo)
+# Modelo3D/Tina.glb
+
+# Temporary files
+*.tmp
+*.temp
