@@ -3,6 +3,7 @@
 
 import { stateMachine, STATES, ZONE_CONFIG } from './state-manager.js';
 import { audioManager, LANGUAGES } from './audio-manager.js';
+import { animationManager } from './animation-manager.js';
 
 class TinARApp {
   constructor() {
@@ -83,6 +84,8 @@ class TinARApp {
   
   _onTimerComplete(detail) {
     console.log('⏱️ Zone timer complete');
+    // Play jumping animation when zone is complete
+    animationManager.playZoneComplete();
   }
   
   onSceneReady() {
@@ -114,6 +117,9 @@ class TinARApp {
       
       // Pause timer when target is lost
       this.stateMachine.pause();
+      
+      // Stop all animations
+      animationManager.stopAll();
       
       // Play audio and show message to find marker
       audioManager.speakTargetLost();
@@ -149,8 +155,12 @@ class TinARApp {
     // Resume timer if paused
     this.stateMachine.resume();
     
+    // Resume appropriate animation based on current state
+    const currentState = this.stateMachine.currentState;
+    animationManager.syncWithState(currentState);
+    
     // If in INTRO, start brushing on target found
-    if (this.stateMachine.currentState === STATES.INTRO) {
+    if (currentState === STATES.INTRO) {
       this.stateMachine.startBrushing();
     }
   }
@@ -188,7 +198,8 @@ class TinARApp {
   // State handlers
   showIntro() {
     console.log('👋 Showing intro - Tina waves');
-    // TODO: Trigger wave animation (Phase 5)
+    // Trigger wave animation
+    animationManager.play('wave');
     // Play welcome audio
     audioManager.speakIntro();
     this.showMessage('¡Hola! Soy Tina, tu amiga diente. ¡Vamos a cepillarnos juntos!');
@@ -197,7 +208,8 @@ class TinARApp {
   showZone(zone) {
     const config = ZONE_CONFIG[zone];
     console.log(`🦷 Zone: ${config.name} (${config.duration / 1000}s)`);
-    // TODO: Trigger pointing animation to zone (Phase 5)
+    // Trigger pointing animation toward zone direction
+    animationManager.syncWithState(zone);
     // Play zone audio with educational content
     audioManager.speakZone(zone);
     this.showMessage(`Cepilla la zona: ${config.name}`);
@@ -205,7 +217,8 @@ class TinARApp {
   
   showCelebration() {
     console.log('🎉 Celebration time!');
-    // TODO: Trigger celebration animation (Phase 5)
+    // Trigger celebration animation (spin + jump)
+    animationManager.play('celebration');
     // Play celebration audio
     audioManager.speakCelebration();
     // TODO: Show confetti (Phase 6)
