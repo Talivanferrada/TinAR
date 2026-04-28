@@ -2,6 +2,7 @@
 // WebAR Educativo para Salud Dental Infantil
 
 import { stateMachine, STATES, ZONE_CONFIG } from './state-manager.js';
+import { audioManager, LANGUAGES } from './audio-manager.js';
 
 class TinARApp {
   constructor() {
@@ -11,6 +12,8 @@ class TinARApp {
     this.isLoaded = false;
     this.isTracking = false;
     this.stateMachine = stateMachine;
+    this.encouragementTimer = 0;
+    this.encouragementInterval = 10; // Speak every 10 seconds
     
     this.init();
   }
@@ -69,6 +72,13 @@ class TinARApp {
   _onTimerTick(detail) {
     // Update UI with timer progress
     this.updateTimerUI(detail);
+    
+    // Speak encouragement periodically
+    this.encouragementTimer++;
+    if (this.encouragementTimer >= this.encouragementInterval && detail.seconds > 5) {
+      this.encouragementTimer = 0;
+      audioManager.speakEncouragement();
+    }
   }
   
   _onTimerComplete(detail) {
@@ -105,7 +115,8 @@ class TinARApp {
       // Pause timer when target is lost
       this.stateMachine.pause();
       
-      // Show message to find marker
+      // Play audio and show message to find marker
+      audioManager.speakTargetLost();
       this.showMessage('Apunta la cámara al marcador para continuar');
     });
   }
@@ -178,7 +189,8 @@ class TinARApp {
   showIntro() {
     console.log('👋 Showing intro - Tina waves');
     // TODO: Trigger wave animation (Phase 5)
-    // TODO: Play welcome audio (Phase 4)
+    // Play welcome audio
+    audioManager.speakIntro();
     this.showMessage('¡Hola! Soy Tina, tu amiga diente. ¡Vamos a cepillarnos juntos!');
   }
   
@@ -186,14 +198,16 @@ class TinARApp {
     const config = ZONE_CONFIG[zone];
     console.log(`🦷 Zone: ${config.name} (${config.duration / 1000}s)`);
     // TODO: Trigger pointing animation to zone (Phase 5)
-    // TODO: Play zone audio (Phase 4)
+    // Play zone audio with educational content
+    audioManager.speakZone(zone);
     this.showMessage(`Cepilla la zona: ${config.name}`);
   }
   
   showCelebration() {
     console.log('🎉 Celebration time!');
     // TODO: Trigger celebration animation (Phase 5)
-    // TODO: Play celebration audio (Phase 4)
+    // Play celebration audio
+    audioManager.speakCelebration();
     // TODO: Show confetti (Phase 6)
     this.showMessage('¡Excelente! ¡Terminaste el cepillado! 🦷✨');
   }
@@ -214,6 +228,30 @@ class TinARApp {
       messageElement.style.opacity = '1';
     }
     console.log(`💬 ${text}`);
+  }
+  
+  // Audio/Language methods
+  setLanguage(langCode) {
+    audioManager.setLanguage(langCode);
+  }
+  
+  getLanguage() {
+    return audioManager.getLanguage();
+  }
+  
+  getSupportedLanguages() {
+    return Object.entries(LANGUAGES).map(([name, code]) => ({
+      name,
+      code
+    }));
+  }
+  
+  toggleAudio() {
+    return audioManager.toggle();
+  }
+  
+  speakEncouragement() {
+    audioManager.speakEncouragement();
   }
 }
 
