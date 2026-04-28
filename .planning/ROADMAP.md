@@ -59,7 +59,7 @@ Sistema de estados que controla el flujo: INTRO → ZONAS → CELEBRATION
 **Plans:** 1 plan
 
 ### Plan List
-- [ ] 03-states-01-PLAN.md — Implementar state-manager.js con flujo completo
+- [x] 03-states-01-PLAN.md — Implementar state-manager.js con flujo completo
 
 **Key Deliverables:**
 - Máquina de estados funcional
@@ -184,9 +184,9 @@ Deploy en GitHub Pages con QR funcional y documentación completa.
 - **AR-04:** Tracking estable
 
 ### State Management (STATE)
-- **STATE-01:** Máquina de estados (7 estados)
-- **STATE-02:** Timer 30s por zona
-- **STATE-03:** Eventos de transición
+- **STATE-01:** ✅ Máquina de estados (7 estados)
+- **STATE-02:** ✅ Timer 30s por zona
+- **STATE-03:** ✅ Eventos de transición
 
 ### Audio (AUDIO)
 - **AUDIO-01:** Web Speech API TTS
