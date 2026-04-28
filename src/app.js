@@ -70,8 +70,39 @@ class TinARApp {
   }
   
   onTargetFound() {
-    // Will be expanded in next tasks
-    console.log('Target detected - ready for content');
+    if (!this.tinaModel) {
+      this.loadTinaModel();
+    }
+  }
+  
+  async loadTinaModel() {
+    const container = document.getElementById('tina-container');
+    
+    // Create entity for Tina
+    const tinaEntity = document.createElement('a-entity');
+    tinaEntity.setAttribute('id', 'tina');
+    tinaEntity.setAttribute('gltf-model', '#tina-model');
+    
+    // Position and scale (adjust based on model)
+    tinaEntity.setAttribute('position', '0 0 0.1');
+    tinaEntity.setAttribute('scale', '0.3 0.3 0.3');
+    tinaEntity.setAttribute('rotation', '0 0 0');
+    
+    // Add idle breathing animation (simulated)
+    tinaEntity.setAttribute('animation', {
+      property: 'scale',
+      to: '0.31 0.31 0.31',
+      dur: 2000,
+      easing: 'easeInOutQuad',
+      loop: true,
+      dir: 'alternate'
+    });
+    
+    container.appendChild(tinaEntity);
+    this.tinaModel = tinaEntity;
+    
+    console.log('🦕 Tina model loaded!');
+    return tinaEntity;
   }
 }
 
