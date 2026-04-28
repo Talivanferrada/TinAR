@@ -98,7 +98,7 @@ Animaciones simuladas para Tina (modelo estático).
 **Plans:** 1 plan
 
 ### Plan List
-- [ ] 05-animation-01-PLAN.md — Implementar animation-manager.js con todas las animaciones
+- [x] 05-animation-01-PLAN.md — Implementar animation-manager.js con todas las animaciones
 
 **Key Deliverables:**
 - Animaciones: wave, breathing, pointing, dancing, jumping, celebration
@@ -195,9 +195,9 @@ Deploy en GitHub Pages con QR funcional y documentación completa.
 - **AUDIO-04:** ✅ Contenido educativo técnico
 
 ### Animation (ANIM)
-- **ANIM-01:** Animaciones simuladas (wave, breathing, etc.)
-- **ANIM-02:** Sincronización con estados
-- **ANIM-03:** 60fps fluidos
+- **ANIM-01:** ✅ Animaciones simuladas (wave, breathing, etc.)
+- **ANIM-02:** ✅ Sincronización con estados
+- **ANIM-03:** ✅ 60fps fluidos
 
 ### UI (UI)
 - **UI-01:** Overlay carga
