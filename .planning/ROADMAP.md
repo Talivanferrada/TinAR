@@ -78,7 +78,7 @@ Sistema TTS que habla en ES/EN/PT con contenido educativo.
 **Plans:** 1 plan
 
 ### Plan List
-- [ ] 04-audio-01-PLAN.md — Implementar audio-manager.js con TTS y diccionarios
+- [x] 04-audio-01-PLAN.md — Implementar audio-manager.js con TTS y diccionarios
 
 **Key Deliverables:**
 - Web Speech API integrado
@@ -189,10 +189,10 @@ Deploy en GitHub Pages con QR funcional y documentación completa.
 - **STATE-03:** ✅ Eventos de transición
 
 ### Audio (AUDIO)
-- **AUDIO-01:** Web Speech API TTS
-- **AUDIO-02:** 3 idiomas (ES/EN/PT)
-- **AUDIO-03:** Detección automática idioma
-- **AUDIO-04:** Contenido educativo técnico
+- **AUDIO-01:** ✅ Web Speech API TTS
+- **AUDIO-02:** ✅ 3 idiomas (ES/EN/PT)
+- **AUDIO-03:** ✅ Detección automática idioma
+- **AUDIO-04:** ✅ Contenido educativo técnico
 
 ### Animation (ANIM)
 - **ANIM-01:** Animaciones simuladas (wave, breathing, etc.)
