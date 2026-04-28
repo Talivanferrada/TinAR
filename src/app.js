@@ -4,6 +4,7 @@
 import { stateMachine, STATES, ZONE_CONFIG } from './state-manager.js';
 import { audioManager, LANGUAGES } from './audio-manager.js';
 import { animationManager } from './animation-manager.js';
+import { uiManager } from './ui-manager.js';
 
 class TinARApp {
   constructor() {
@@ -123,7 +124,7 @@ class TinARApp {
       
       // Play audio and show message to find marker
       audioManager.speakTargetLost();
-      this.showMessage('Apunta la cámara al marcador para continuar');
+      uiManager.showTargetLost();
     });
   }
   
@@ -133,14 +134,8 @@ class TinARApp {
   }
   
   hideLoading() {
-    const overlay = document.getElementById('loading-overlay');
-    if (overlay) {
-      overlay.style.opacity = '0';
-      overlay.style.transition = 'opacity 0.5s';
-      setTimeout(() => {
-        overlay.style.display = 'none';
-      }, 500);
-    }
+    // Delegate to UI manager
+    uiManager.hideLoading();
     this.isLoaded = true;
     
     // Transition to INTRO state
@@ -202,7 +197,7 @@ class TinARApp {
     animationManager.play('wave');
     // Play welcome audio
     audioManager.speakIntro();
-    this.showMessage('¡Hola! Soy Tina, tu amiga diente. ¡Vamos a cepillarnos juntos!');
+    // UI message handled by uiManager via stateChange event
   }
   
   showZone(zone) {
@@ -212,7 +207,7 @@ class TinARApp {
     animationManager.syncWithState(zone);
     // Play zone audio with educational content
     audioManager.speakZone(zone);
-    this.showMessage(`Cepilla la zona: ${config.name}`);
+    // UI timer and message handled by uiManager via stateChange event
   }
   
   showCelebration() {
@@ -221,26 +216,13 @@ class TinARApp {
     animationManager.play('celebration');
     // Play celebration audio
     audioManager.speakCelebration();
-    // TODO: Show confetti (Phase 6)
-    this.showMessage('¡Excelente! ¡Terminaste el cepillado! 🦷✨');
+    // Celebration particles handled by uiManager via stateChange event
   }
   
   updateTimerUI(detail) {
-    // Update timer display
-    const timerElement = document.getElementById('timer-display');
-    if (timerElement) {
-      timerElement.textContent = detail.seconds;
-    }
+    // UI timer display handled by uiManager via timerTick event
+    // This method just logs and handles encouragement timing
     console.log(`⏱️ Timer: ${detail.seconds}s remaining`);
-  }
-  
-  showMessage(text) {
-    const messageElement = document.getElementById('message-display');
-    if (messageElement) {
-      messageElement.textContent = text;
-      messageElement.style.opacity = '1';
-    }
-    console.log(`💬 ${text}`);
   }
   
   // Audio/Language methods
