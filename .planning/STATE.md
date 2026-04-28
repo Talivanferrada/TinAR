@@ -2,8 +2,8 @@
 
 ## Current Position
 
-**Phase:** 05-animation COMPLETE → Ready for Phase 6
-**Status:** Phase 5 Complete - Animation Manager Implemented
+**Phase:** 06-ui COMPLETE → Ready for Phase 7
+**Status:** Phase 6 Complete - UI & Overlays Implemented
 **Last Updated:** 2026-04-28
 
 ---
@@ -17,11 +17,11 @@
 | 03-states | COMPLETE | 1/1 | ██████████ 100% |
 | 04-audio | COMPLETE | 1/1 | ██████████ 100% |
 | 05-animation | COMPLETE | 1/1 | ██████████ 100% |
-| 06-ui | PENDING | 0/2 | ░░░░░░░░░░ 0% |
+| 06-ui | COMPLETE | 2/2 | ██████████ 100% |
 | 07-integration | PENDING | 0/1 | ░░░░░░░░░░ 0% |
 | 08-deploy | PENDING | 0/1 | ░░░░░░░░░░ 0% |
 
-**Overall: 7/11 plans complete (64%)**
+**Overall: 9/11 plans complete (82%)**
 
 ---
 
@@ -62,7 +62,7 @@
 
 ---
 
-## Current Phase: 06-ui
+## Current Phase: 07-integration
 
 ### Status: READY
 
@@ -74,7 +74,7 @@
 - [x] Ejecutar Fase 3: Estados ✅
 - [x] Ejecutar Fase 4: Audio ✅
 - [x] Ejecutar Fase 5: Animaciones ✅
-- [ ] Ejecutar Fase 6: UI
+- [x] Ejecutar Fase 6: UI & Overlays ✅
 - [ ] Ejecutar Fase 7: Integración
 - [ ] Ejecutar Fase 8: Deploy
 
@@ -89,7 +89,9 @@
 | Marcador AR (mind) | assets/targets/marker.mind | 256KB - Compilado ✅ |
 | Marcador AR (png) | assets/images/marker.png | Listo ✅ |
 | Logo Dentina | /Logo/logo-dentina.jpeg | 74KB - OK |
-| Overlays SVG | Pendiente crear | Fase 6 |
+| UI Manager | src/ui-manager.js | Creado ✅ |
+| Overlays SVG | src/ui-manager.js (inline) | Creado ✅ |
+| Styles | css/styles.css | Actualizado ✅ |
 
 ---
 
@@ -115,4 +117,4 @@ Niño completa las 4 zonas de cepillado (2 minutos) con técnica correcta.
 ## Session
 
 **Last session:** 2026-04-28
-**Stopped at:** Completed 05-animation-01-PLAN.md
+**Stopped at:** Completed 06-ui-01-PLAN.md and 06-ui-02-PLAN.md

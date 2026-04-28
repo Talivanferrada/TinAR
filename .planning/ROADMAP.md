@@ -112,20 +112,20 @@ Animaciones simuladas para Tina (modelo estático).
 ### Goal
 Interfaz completa con indicadores educativos y feedback visual.
 
-**Requirements:** [UI-01, UI-02, UI-03, UI-04, UI-05]
+**Requirements:** [UI-01, UI-02, UI-03, UI-04, UI-05] ✅
 
 **Plans:** 2 plans
 
 ### Plan List
-- [ ] 06-ui-01-PLAN.md — Implementar UI base: loading, timer, mensajes
-- [ ] 06-ui-02-PLAN.md — Crear overlays educativos: flechas, círculos, partículas
+- [x] 06-ui-01-PLAN.md — Implementar UI base: loading, timer, mensajes ✅
+- [x] 06-ui-02-PLAN.md — Crear overlays educativos: flechas, círculos, partículas ✅
 
 **Key Deliverables:**
-- Overlay de carga
-- Timer visual por zona
-- Flechas 45°, círculos movimiento
-- Confetti y estrellas celebración
-- Bacterias que desaparecen
+- Overlay de carga ✅
+- Timer visual por zona ✅
+- Flechas 45°, círculos movimiento ✅
+- Confetti y estrellas celebración ✅
+- Selector de idioma ES/EN/PT ✅
 
 ---
 
@@ -200,11 +200,11 @@ Deploy en GitHub Pages con QR funcional y documentación completa.
 - **ANIM-03:** ✅ 60fps fluidos
 
 ### UI (UI)
-- **UI-01:** Overlay carga
-- **UI-02:** Timer visual
-- **UI-03:** Mensajes de texto
-- **UI-04:** Overlays educativos (flechas, círculos)
-- **UI-05:** Partículas celebración
+- **UI-01:** ✅ Overlay carga
+- **UI-02:** ✅ Timer visual
+- **UI-03:** ✅ Mensajes de texto
+- **UI-04:** ✅ Overlays educativos (flechas, círculos)
+- **UI-05:** ✅ Partículas celebración
 
 ### Integration (INT)
 - **INT-01:** app.js integrador
