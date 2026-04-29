@@ -12,7 +12,6 @@
   
   <!-- Preload critical assets -->
   <link rel="preload" href="assets/models/Tina_optimized.glb" as="fetch" crossorigin>
-  <link rel="preload" href="assets/targets/marker.mind" as="fetch" crossorigin>
   
   <!-- Preconnect to CDNs -->
   <link rel="preconnect" href="https://aframe.io">
@@ -20,62 +19,64 @@
   
   <!-- AFRAME -->
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <!-- MindAR -->
-  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+  <!-- A-Frame AR component for WebXR -->
+  <script src="https://unpkg.com/aframe-xr@0.1.0/dist/aframe-xr.min.js"></script>
   
   <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <!-- Loading Overlay (UI-01) -->
+  <!-- Loading Overlay -->
   <div id="loading-overlay">
     <div class="spinner"></div>
     <div id="loading-text">Cargando Tina...</div>
-    <div class="loading-progress">
-      <div class="loading-progress-bar"></div>
-    </div>
+    <div id="loading-subtitle">Apunta al lavamanos para colocar a Tina</div>
   </div>
   
   <!-- UI Overlay Container -->
   <div id="ui-overlay"></div>
   
-  <!-- AR Scene -->
+  <!-- Instructions Overlay -->
+  <div id="tap-instruction" class="tap-instruction hidden">
+    <div class="tap-icon">👆</div>
+    <div class="tap-text">Toca la pantalla para colocar a Tina</div>
+  </div>
+  
+  <!-- AR Scene with WebXR -->
   <a-scene
-    mindar-image="imageTargetSrc: assets/targets/marker.mind; autoStart: true; showStats: false; maxTrack: 1; filterMinCF: 0.001; filterBeta: 0.01; missTolerance: 5; warmupTolerance: 3;"
-    color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights, antialias: true"
     vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false"
+    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
     embedded
+    renderer="logarithmicDepthBuffer: true; antialias: true; alpha: true"
     background="transparent: true"
   >
     <a-assets>
       <a-asset-item id="tina-model" src="assets/models/Tina_optimized.glb"></a-asset-item>
     </a-assets>
     
-    <!-- Lighting - CRITICAL for model visibility from all angles -->
+    <!-- Lighting -->
     <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
     <a-light type="directional" color="#ffffff" intensity="1.0" position="0 3 2"></a-light>
     <a-light type="directional" color="#ffffff" intensity="0.6" position="2 2 0"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="0.4" position="-2 1 -1"></a-light>
     
     <!-- Camera -->
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+    <a-entity camera look-controls="enabled: false"></a-entity>
     
-    <!-- Target -->
-    <a-entity mindar-image-target="targetIndex: 0" id="target">
-      <!-- Tina Model - standing ON the marker plane -->
+    <!-- Tina - placed via tap -->
+    <a-entity 
+      id="tina-anchor"
+      visible="false"
+    >
       <a-entity 
         id="tina" 
         gltf-model="#tina-model"
         position="0 0 0"
-        scale="0.25 0.25 0.25"
-        rotation="-90 0 0"
-        visible="true"
+        scale="0.3 0.3 0.3"
+        rotation="0 0 0"
       ></a-entity>
     </a-entity>
   </a-scene>
   
-  <script src="src/app.js" type="module"></script>
+  <script src="src/app-worldtracking.js" type="module"></script>
 </body>
 </html>

@@ -608,3 +608,52 @@ a-entity {
 .restart-btn:active {
   transform: translateX(-50%) scale(0.98);
 }
+
+/* ========================================
+   TAP INSTRUCTION (World Tracking)
+   ======================================== */
+
+.tap-instruction {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 500;
+  pointer-events: none;
+  animation: pulse-tap 2s ease-in-out infinite;
+}
+
+.tap-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  animation: bounce-tap 1s ease-in-out infinite;
+}
+
+.tap-text {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+@keyframes pulse-tap {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes bounce-tap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* Loading subtitle */
+#loading-subtitle {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin-top: 10px;
+}
