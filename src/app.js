@@ -265,8 +265,22 @@ class TinARApp {
   }
   
   onTargetFound() {
+    // Get existing Tina entity from HTML
     if (!this.tinaModel) {
-      this.loadTinaModel();
+      this.tinaModel = document.getElementById('tina');
+      if (this.tinaModel) {
+        console.log('🦕 Tina entity found in DOM');
+        // Add model load listener
+        this.tinaModel.addEventListener('model-loaded', () => {
+          console.log('🦕 Tina 3D model loaded and visible!');
+          this.modelLoadAttempts = 0;
+        });
+        this.tinaModel.addEventListener('model-error', (e) => {
+          console.error('❌ Model error:', e);
+        });
+      } else {
+        console.error('❌ Tina entity not found in DOM');
+      }
     }
     
     // Resume timer if paused
@@ -283,48 +297,17 @@ class TinARApp {
   }
   
   async loadTinaModel() {
-    const container = document.getElementById('tina-container');
+    // Tina is now directly in HTML, just get reference
+    const tinaEntity = document.getElementById('tina');
     
-    if (!container) {
-      console.error('❌ Tina container not found');
+    if (!tinaEntity) {
+      console.error('❌ Tina entity not found in HTML');
       return null;
     }
     
-    // Create entity for Tina
-    const tinaEntity = document.createElement('a-entity');
-    tinaEntity.setAttribute('id', 'tina');
-    tinaEntity.setAttribute('gltf-model', '#tina-model');
-    
-    // Position and scale - model appears ABOVE the marker
-    tinaEntity.setAttribute('position', '0 0.5 0');  // Raised above marker
-    tinaEntity.setAttribute('scale', '1.5 1.5 1.5');  // Larger scale for visibility
-    tinaEntity.setAttribute('rotation', '0 180 0');  // Face the camera
-    
-    // Add idle breathing animation (simulated)
-    tinaEntity.setAttribute('animation', {
-      property: 'scale',
-      to: '1.55 1.55 1.55',
-      dur: 2000,
-      easing: 'easeInOutQuad',
-      loop: true,
-      dir: 'alternate'
-    });
-    
-    // Handle model load events
-    tinaEntity.addEventListener('model-loaded', () => {
-      console.log('🦕 Tina model loaded successfully!');
-      this.modelLoadAttempts = 0;
-    });
-    
-    tinaEntity.addEventListener('model-error', (error) => {
-      console.error('❌ Tina model load error:', error);
-      this._handleModelError();
-    });
-    
-    container.appendChild(tinaEntity);
     this.tinaModel = tinaEntity;
+    console.log('🦕 Using Tina from HTML');
     
-    console.log('🦕 Tina model entity created, waiting for load...');
     return tinaEntity;
   }
   
