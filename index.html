@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#FF6B9D">
+  <meta name="theme-color"="#FFB6C1">
   
-  <title>Tina AR - Doctora Dentina v3</title>
-  <!-- Version 3: Tina Verde Animada con Musica -->
+  <title>Tina AR - Doctora Dentina v4</title>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,125 +17,104 @@
       height: 100vh;
       overflow: hidden;
       font-family: 'Comic Sans MS', 'Chalkboard', cursive;
-      background: linear-gradient(180deg, #87CEEB 0%, #E0F7FA 100%);
+      background: #000;
     }
     
-    /* Camera background */
     #camera {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       object-fit: cover;
       z-index: 1;
     }
     
-    /* Overlay to make camera softer */
-    #camera-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(255,255,255,0.1);
-      z-index: 2;
-      pointer-events: none;
-    }
-    
-    /* Tina container */
+    /* Tina Container - T-Rex style */
     #tina-container {
       position: fixed;
-      bottom: 18%;
+      bottom: 12%;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
       pointer-events: none;
+      animation: container-bounce 4s ease-in-out infinite;
     }
     
     #tina-svg {
-      width: 300px;
-      height: 400px;
-      filter: drop-shadow(0 15px 40px rgba(0,0,0,0.3));
+      width: 340px;
+      height: 480px;
+      filter: drop-shadow(0 20px 50px rgba(0,0,0,0.4));
     }
     
-    /* Tina animations */
-    .tina-body {
-      animation: breathe 3s ease-in-out infinite;
-      transform-origin: center bottom;
+    @keyframes container-bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-12px); }
     }
     
-    .tina-arm-left {
-      animation: wave-arm 2s ease-in-out infinite;
-      transform-origin: 160px 200px;
-    }
-    
-    .tina-arm-right {
-      animation: brush-motion 1s ease-in-out infinite;
-      transform-origin: 240px 200px;
-    }
-    
-    .tina-eye {
-      animation: blink 4s ease-in-out infinite;
-    }
-    
-    .tina-tail {
-      animation: wag-tail 1.5s ease-in-out infinite;
-      transform-origin: 280px 250px;
-    }
-    
-    .tina-sparkle {
-      animation: sparkle 1s ease-in-out infinite;
-    }
+    /* Tina Animations */
+    .tina-body-group { animation: breathe 3s ease-in-out infinite; transform-origin: center bottom; }
+    .tina-head { animation: head-tilt 5s ease-in-out infinite; transform-origin: 170px 180px; }
+    .tina-arm-left { animation: arm-wave-left 2s ease-in-out infinite; transform-origin: 120px 280px; }
+    .tina-arm-right { animation: arm-wave-right 2.5s ease-in-out infinite; transform-origin: 220px 280px; }
+    .tina-tail { animation: tail-wag 2s ease-in-out infinite; transform-origin: 280px 350px; }
+    .tina-eye-left, .tina-eye-right { animation: blink 4s ease-in-out infinite; transform-origin: center; }
+    .tina-mouth { animation: talk 0.5s ease-in-out infinite; transform-origin: center; }
     
     @keyframes breathe {
-      0%, 100% { transform: scaleY(1); }
-      50% { transform: scaleY(1.02); }
+      0%, 100% { transform: scaleY(1) scaleX(1); }
+      50% { transform: scaleY(1.015) scaleX(0.995); }
     }
     
-    @keyframes wave-arm {
+    @keyframes head-tilt {
       0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(-15deg); }
-      75% { transform: rotate(15deg); }
+      25% { transform: rotate(3deg); }
+      75% { transform: rotate(-3deg); }
     }
     
-    @keyframes brush-motion {
-      0%, 100% { transform: rotate(-10deg); }
-      50% { transform: rotate(10deg); }
+    @keyframes arm-wave-left {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-15deg); }
+    }
+    
+    @keyframes arm-wave-right {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(15deg); }
+    }
+    
+    @keyframes tail-wag {
+      0%, 100% { transform: rotate(-8deg); }
+      50% { transform: rotate(8deg); }
     }
     
     @keyframes blink {
-      0%, 90%, 100% { transform: scaleY(1); }
-      95% { transform: scaleY(0.1); }
+      0%, 45%, 55%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.1); }
     }
     
-    @keyframes wag-tail {
-      0%, 100% { transform: rotate(-10deg); }
-      50% { transform: rotate(10deg); }
+    @keyframes talk {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(0.85); }
     }
     
-    @keyframes sparkle {
-      0%, 100% { opacity: 0; transform: scale(0); }
-      50% { opacity: 1; transform: scale(1); }
+    .talking .tina-mouth {
+      animation: talk 0.3s ease-in-out infinite;
     }
     
-    @keyframes float-container {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-15px); }
+    /* Celebration animations */
+    .celebrating #tina-container {
+      animation: jump-celebrate 0.5s ease-in-out infinite;
     }
     
-    #tina-container {
-      animation: float-container 4s ease-in-out infinite;
+    @keyframes jump-celebrate {
+      0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+      50% { transform: translateX(-50%) translateY(-30px) scale(1.05); }
     }
     
     /* Loading */
     #loading {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #FF6B9D, #FFB74D);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #FFB6C1, #FFC0CB, #FFE4E1);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -146,10 +124,9 @@
     }
     
     .spinner {
-      width: 80px;
-      height: 80px;
-      border: 8px solid rgba(255,255,255,0.3);
-      border-top: 8px solid white;
+      width: 80px; height: 80px;
+      border: 8px solid rgba(255,182,193,0.3);
+      border-top: 8px solid #FF69B4;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -157,13 +134,13 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     
     #loading-text {
-      color: white;
+      color: #FF69B4;
       font-size: 28px;
       margin-top: 25px;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px 2px white;
     }
     
-    /* UI elements */
+    /* UI */
     #lang-selector {
       position: fixed;
       top: 20px;
@@ -178,7 +155,7 @@
       min-height: 55px;
       padding: 12px 18px;
       border: 3px solid white;
-      background: rgba(255,107,157,0.8);
+      background: rgba(255,105,180,0.85);
       color: white;
       border-radius: 30px;
       font-size: 18px;
@@ -190,7 +167,7 @@
     
     .lang-btn.active {
       background: white;
-      color: #FF6B9D;
+      color: #FF69B4;
       transform: scale(1.1);
     }
     
@@ -205,18 +182,25 @@
     }
     
     .zone-dot {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       background: rgba(255,255,255,0.4);
       border: 3px solid white;
       transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
     }
     
     .zone-dot.active {
       background: #FFD700;
       transform: scale(1.4);
       box-shadow: 0 0 20px #FFD700;
+      color: #333;
     }
     
     #timer {
@@ -224,42 +208,43 @@
       top: 110px;
       left: 50%;
       transform: translateX(-50%);
-      width: 130px;
-      height: 130px;
+      width: 140px;
+      height: 140px;
       z-index: 100;
     }
     
-    #timer svg {
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg);
-    }
-    
-    #timer circle {
-      fill: none;
-      stroke-width: 10;
-    }
-    
+    #timer svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    #timer circle { fill: none; stroke-width: 10; }
     #timer .bg { stroke: rgba(255,255,255,0.3); }
-    #timer .progress { stroke: #4CAF50; stroke-linecap: round; }
+    #timer .progress { stroke: #FF69B4; stroke-linecap: round; }
     
     #timer-text {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       color: white;
-      font-size: 42px;
+      font-size: 48px;
       font-weight: bold;
       text-shadow: 3px 3px 6px rgba(0,0,0,0.4);
     }
     
-    #message {
-      position: fixed;
-      bottom: 90px;
+    #timer-zone {
+      position: absolute;
+      top: 75%;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255,107,157,0.9);
+      color: white;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    #message {
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,105,180,0.95);
       color: white;
       padding: 18px 36px;
       border-radius: 35px;
@@ -272,13 +257,30 @@
       border: 3px solid rgba(255,255,255,0.5);
     }
     
+    #music-btn {
+      position: fixed;
+      top: 85px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 28px;
+      background: rgba(255,105,180,0.9);
+      color: white;
+      border: 3px solid white;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 100;
+      font-family: inherit;
+      font-weight: bold;
+    }
+    
     #restart-btn {
       position: fixed;
       bottom: 45px;
       left: 50%;
       transform: translateX(-50%);
       padding: 20px 45px;
-      background: linear-gradient(135deg, #FFD700, #FFA500);
+      background: linear-gradient(135deg, #FF69B4, #FF1493);
       color: white;
       border: none;
       border-radius: 35px;
@@ -286,26 +288,9 @@
       font-weight: bold;
       cursor: pointer;
       z-index: 200;
-      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+      box-shadow: 0 6px 25px rgba(255,105,180,0.5);
       display: none;
       font-family: inherit;
-    }
-    
-    /* Music button */
-    #music-btn {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 24px;
-      background: rgba(255,107,157,0.9);
-      color: white;
-      border: 3px solid white;
-      border-radius: 25px;
-      font-size: 16px;
-      cursor: pointer;
-      z-index: 100;
-      display: none;
     }
     
     .confetti {
@@ -319,128 +304,146 @@
     }
     
     @keyframes fall {
-      to {
-        transform: translateY(110vh) rotate(720deg);
-        opacity: 0;
-      }
+      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
     }
     
     .hidden { display: none !important; }
+    
+    /* Zone theme colors for timer */
+    .zone-1 #timer .progress { stroke: #4CAF50; }
+    .zone-2 #timer .progress { stroke: #2196F3; }
+    .zone-3 #timer .progress { stroke: #FF9800; }
+    .zone-4 #timer .progress { stroke: #9C27B0; }
   </style>
 </head>
 <body>
-  <!-- Camera -->
   <video id="camera" autoplay playsinline muted></video>
-  <div id="camera-overlay"></div>
   
-  <!-- Tina - Dinosaurio basado en Doctora Dentina -->
+  <!-- TINA - T-Rex Pastel Pink Dinosaur -->
   <div id="tina-container" class="hidden">
-    <svg id="tina-svg" viewBox="0 0 300 400">
-      <!-- Sparkles around Tina -->
-      <g class="tina-sparkle">
-        <polygon points="50,50 53,60 63,60 55,67 58,77 50,70 42,77 45,67 37,60 47,60" fill="#FFD700"/>
-      </g>
-      <g class="tina-sparkle" style="animation-delay: 0.3s">
-        <polygon points="250,80 253,90 263,90 255,97 258,107 250,100 242,107 245,97 237,90 247,90" fill="#FFD700"/>
-      </g>
-      <g class="tina-sparkle" style="animation-delay: 0.6s">
-        <polygon points="80,350 83,360 93,360 85,367 88,377 80,370 72,377 75,367 67,360 77,360" fill="#FFD700"/>
-      </g>
+    <svg id="tina-svg" viewBox="0 0 340 480">
+      <!-- Shadow -->
+      <ellipse cx="170" cy="465" rx="80" ry="15" fill="rgba(0,0,0,0.15)"/>
       
-      <!-- Tail -->
+      <!-- Tail (short, rounded) -->
       <g class="tina-tail">
-        <path d="M 260 250 Q 290 230 285 200 Q 280 170 295 150" stroke="#7CB342" stroke-width="25" fill="none" stroke-linecap="round"/>
-        <path d="M 260 250 Q 290 230 285 200 Q 280 170 295 150" stroke="#8BC34A" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <ellipse cx="290" cy="340" rx="45" ry="30" fill="#FFB6C1"/>
+        <ellipse cx="310" cy="335" rx="30" ry="22" fill="#FFC0CB"/>
       </g>
       
-      <!-- Body -->
-      <g class="tina-body">
-        <!-- Main body -->
-        <ellipse cx="150" cy="250" rx="70" ry="80" fill="#7CB342"/>
-        <ellipse cx="150" cy="250" rx="65" ry="75" fill="#8BC34A"/>
+      <!-- Body Group -->
+      <g class="tina-body-group">
+        <!-- Back leg left -->
+        <ellipse cx="115" cy="400" rx="35" ry="45" fill="#FFB6C1"/>
+        <ellipse cx="115" cy="400" rx="30" ry="40" fill="#FFC0CB"/>
+        <ellipse cx="115" cy="435" rx="32" ry="18" fill="#FFB6C1"/>
         
-        <!-- Belly -->
-        <ellipse cx="150" cy="260" rx="45" ry="50" fill="#C5E1A5"/>
+        <!-- Back leg right -->
+        <ellipse cx="225" cy="400" rx="35" ry="45" fill="#FFB6C1"/>
+        <ellipse cx="225" cy="400" rx="30" ry="40" fill="#FFC0CB"/>
+        <ellipse cx="225" cy="435" rx="32" ry="18" fill="#FFB6C1"/>
         
-        <!-- Legs -->
-        <ellipse cx="100" cy="340" rx="28" ry="35" fill="#7CB342"/>
-        <ellipse cx="100" cy="340" rx="24" ry="30" fill="#8BC34A"/>
-        <ellipse cx="200" cy="340" rx="28" ry="35" fill="#7CB342"/>
-        <ellipse cx="200" cy="340" rx="24" ry="30" fill="#8BC34A"/>
+        <!-- Main body (chubby, cylindrical) -->
+        <ellipse cx="170" cy="320" rx="85" ry="100" fill="#FFB6C1"/>
+        <ellipse cx="170" cy="320" rx="80" ry="95" fill="#FFC0CB"/>
         
-        <!-- Feet -->
-        <ellipse cx="100" cy="365" rx="30" ry="15" fill="#5D8A32"/>
-        <ellipse cx="200" cy="365" rx="30" ry="15" fill="#5D8A32"/>
+        <!-- Belly (light yellow/beige) -->
+        <ellipse cx="170" cy="330" rx="55" ry="65" fill="#FFFACD"/>
+        <ellipse cx="170" cy="335" rx="50" ry="60" fill="#FFF8DC"/>
+        
+        <!-- Front leg left (short, thick) -->
+        <ellipse cx="100" cy="360" rx="28" ry="38" fill="#FFB6C1"/>
+        <ellipse cx="100" cy="360" rx="24" ry="34" fill="#FFC0CB"/>
+        <ellipse cx="100" cy="390" rx="26" ry="15" fill="#FFB6C1"/>
+        
+        <!-- Front leg right (short, thick) -->
+        <ellipse cx="240" cy="360" rx="28" ry="38" fill="#FFB6C1"/>
+        <ellipse cx="240" cy="360" rx="24" ry="34" fill="#FFC0CB"/>
+        <ellipse cx="240" cy="390" rx="26" ry="15" fill="#FFB6C1"/>
       </g>
       
-      <!-- Arms -->
+      <!-- Arms (very short T-Rex arms) -->
       <g class="tina-arm-left">
-        <ellipse cx="70" cy="220" rx="20" ry="35" fill="#7CB342" transform="rotate(-20 70 220)"/>
-        <ellipse cx="60" cy="250" rx="15" ry="18" fill="#5D8A32"/>
+        <ellipse cx="105" cy="270" rx="18" ry="25" fill="#FFB6C1" transform="rotate(-15 105 270)"/>
+        <ellipse cx="95" cy="290" rx="12" ry="15" fill="#FFC0CB"/>
       </g>
       <g class="tina-arm-right">
-        <ellipse cx="230" cy="220" rx="20" ry="35" fill="#7CB342" transform="rotate(20 230 220)"/>
-        <ellipse cx="240" cy="250" rx="15" ry="18" fill="#5D8A32"/>
-        
-        <!-- Toothbrush in hand -->
-        <rect x="235" y="200" width="50" height="10" rx="3" fill="#FF9800"/>
-        <rect x="230" y="175" width="20" height="28" rx="4" fill="#2196F3"/>
-        <line x1="233" y1="180" x2="233" y2="200" stroke="white" stroke-width="2"/>
-        <line x1="238" y1="180" x2="238" y2="200" stroke="white" stroke-width="2"/>
-        <line x1="243" y1="180" x2="243" y2="200" stroke="white" stroke-width="2"/>
+        <ellipse cx="235" cy="270" rx="18" ry="25" fill="#FFB6C1" transform="rotate(15 235 270)"/>
+        <ellipse cx="245" cy="290" rx="12" ry="15" fill="#FFC0CB"/>
       </g>
       
-      <!-- Head -->
-      <g class="tina-body">
-        <ellipse cx="150" cy="120" rx="65" ry="60" fill="#7CB342"/>
-        <ellipse cx="150" cy="120" rx="60" ry="55" fill="#8BC34A"/>
+      <!-- Head Group (large, 40-50% of body) -->
+      <g class="tina-head">
+        <!-- Neck -->
+        <ellipse cx="170" cy="210" rx="40" ry="35" fill="#FFB6C1"/>
         
-        <!-- Cheeks -->
-        <ellipse cx="100" cy="135" rx="15" ry="10" fill="#FFB6C1" opacity="0.7"/>
-        <ellipse cx="200" cy="135" rx="15" ry="10" fill="#FFB6C1" opacity="0.7"/>
+        <!-- Main head -->
+        <ellipse cx="170" cy="120" rx="90" ry="95" fill="#FFB6C1"/>
+        <ellipse cx="170" cy="120" rx="85" ry="90" fill="#FFC0CB"/>
         
-        <!-- Face -->
-        <ellipse cx="150" cy="115" rx="40" ry="35" fill="#C5E1A5"/>
+        <!-- Snout (rounded, elongated forward) -->
+        <ellipse cx="170" cy="155" rx="55" ry="40" fill="#FFC0CB"/>
+        <ellipse cx="170" cy="150" rx="50" ry="35" fill="#FFD1DC"/>
         
-        <!-- Eyes -->
-        <g class="tina-eye">
-          <ellipse cx="120" cy="100" rx="18" ry="22" fill="white"/>
-          <ellipse cx="180" cy="100" rx="18" ry="22" fill="white"/>
-          <circle cx="123" cy="105" r="10" fill="#333"/>
-          <circle cx="183" cy="105" r="10" fill="#333"/>
-          <circle cx="126" cy="100" r="4" fill="white"/>
-          <circle cx="186" cy="100" r="4" fill="white"/>
+        <!-- Nostrils -->
+        <ellipse cx="150" cy="145" rx="6" ry="4" fill="#E57373"/>
+        <ellipse cx="190" cy="145" rx="6" ry="4" fill="#E57373"/>
+        
+        <!-- Mouth interior (red) -->
+        <ellipse class="tina-mouth" cx="170" cy="175" rx="35" ry="20" fill="#E53935"/>
+        
+        <!-- Teeth (soft white, rounded, non-threatening) -->
+        <rect x="145" y="160" rx="4" width="12" height="15" fill="#FAFAFA"/>
+        <rect x="165" y="160" rx="4" width="12" height="15" fill="#FAFAFA"/>
+        <rect x="185" y="160" rx="4" width="12" height="15" fill="#FAFAFA"/>
+        
+        <!-- Lower teeth -->
+        <rect x="150" y="180" rx="3" width="10" height="10" fill="#FAFAFA"/>
+        <rect x="167" y="180" rx="3" width="10" height="10" fill="#FAFAFA"/>
+        <rect x="182" y="180" rx="3" width="10" height="10" fill="#FAFAFA"/>
+        
+        <!-- Smile line -->
+        <path d="M 125 165 Q 170 200 215 165" stroke="#FFB6C1" stroke-width="4" fill="none"/>
+        
+        <!-- Cheeks (rosy) -->
+        <ellipse cx="95" cy="130" rx="20" ry="15" fill="#FFB6C1" opacity="0.8"/>
+        <ellipse cx="245" cy="130" rx="20" ry="15" fill="#FFB6C1" opacity="0.8"/>
+        
+        <!-- Eye whites (large, circular) -->
+        <g class="tina-eye-left">
+          <ellipse cx="130" cy="90" rx="28" ry="32" fill="white"/>
+          <!-- Iris -->
+          <ellipse cx="135" cy="95" rx="15" ry="18" fill="#2C1810"/>
+          <!-- Pupil -->
+          <ellipse cx="138" cy="98" rx="8" ry="10" fill="#000"/>
+          <!-- Eye highlight (friendly sparkle) -->
+          <circle cx="142" cy="88" r="6" fill="white"/>
+          <circle cx="132" cy="100" r="3" fill="white" opacity="0.6"/>
         </g>
         
-        <!-- Eyebrows -->
-        <path d="M 105 75 Q 120 70 135 75" stroke="#5D8A32" stroke-width="4" fill="none"/>
-        <path d="M 165 75 Q 180 70 195 75" stroke="#5D8A32" stroke-width="4" fill="none"/>
+        <g class="tina-eye-right">
+          <ellipse cx="210" cy="90" rx="28" ry="32" fill="white"/>
+          <!-- Iris -->
+          <ellipse cx="205" cy="95" rx="15" ry="18" fill="#2C1810"/>
+          <!-- Pupil -->
+          <ellipse cx="202" cy="98" rx="8" ry="10" fill="#000"/>
+          <!-- Eye highlight -->
+          <circle cx="198" cy="88" r="6" fill="white"/>
+          <circle cx="208" cy="100" r="3" fill="white" opacity="0.6"/>
+        </g>
         
-        <!-- Nose -->
-        <ellipse cx="150" cy="120" rx="8" ry="5" fill="#5D8A32"/>
+        <!-- Eyebrows (subtle, for expression) -->
+        <path d="M 105 60 Q 130 50 155 60" stroke="#E57373" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <path d="M 185 60 Q 210 50 235 60" stroke="#E57373" stroke-width="5" fill="none" stroke-linecap="round"/>
         
-        <!-- Smile with teeth -->
-        <path d="M 115 140 Q 150 165 185 140" stroke="#5D8A32" stroke-width="4" fill="none"/>
-        <path d="M 120 142 Q 150 160 180 142" fill="white"/>
+        <!-- Blush marks -->
+        <ellipse cx="100" cy="120" rx="15" ry="10" fill="#FF69B4" opacity="0.4"/>
+        <ellipse cx="240" cy="120" rx="15" ry="10" fill="#FF69B4" opacity="0.4"/>
         
-        <!-- Teeth in smile -->
-        <rect x="125" y="145" width="10" height="12" rx="2" fill="white"/>
-        <rect x="145" y="145" width="10" height="12" rx="2" fill="white"/>
-        <rect x="165" y="145" width="10" height="12" rx="2" fill="white"/>
-        
-        <!-- Dino spikes on head -->
-        <polygon points="90,70 100,40 110,70" fill="#FFD700"/>
-        <polygon points="120,65 130,30 140,65" fill="#FFD700"/>
-        <polygon points="150,60 160,25 170,60" fill="#FFD700"/>
-        <polygon points="180,65 190,30 200,65" fill="#FFD700"/>
-        <polygon points="200,70 210,40 220,70" fill="#FFD700"/>
+        <!-- Small decorative elements -->
+        <circle cx="85" cy="80" r="4" fill="#FFD700" opacity="0.6"/>
+        <circle cx="255" cy="80" r="4" fill="#FFD700" opacity="0.6"/>
       </g>
-      
-      <!-- Bow tie /Accessory -->
-      <ellipse cx="150" cy="185" rx="25" ry="10" fill="#FF6B9D"/>
-      <circle cx="150" cy="185" r="8" fill="#FF1493"/>
-      <ellipse cx="125" cy="185" rx="15" ry="8" fill="#FF6B9D" transform="rotate(-30 125 185)"/>
-      <ellipse cx="175" cy="185" rx="15" ry="8" fill="#FF6B9D" transform="rotate(30 175 185)"/>
     </svg>
   </div>
   
@@ -450,10 +453,7 @@
     <div id="loading-text">Cargando a Tina...</div>
   </div>
   
-  <!-- Music button -->
-  <button id="music-btn">🎵 Música</button>
-  
-  <!-- UI -->
+  <!-- UI Elements -->
   <div id="lang-selector">
     <button class="lang-btn active" data-lang="ES">ES</button>
     <button class="lang-btn" data-lang="EN">EN</button>
@@ -461,10 +461,10 @@
   </div>
   
   <div id="zones" class="hidden">
-    <div class="zone-dot" data-zone="1"></div>
-    <div class="zone-dot" data-zone="2"></div>
-    <div class="zone-dot" data-zone="3"></div>
-    <div class="zone-dot" data-zone="4"></div>
+    <div class="zone-dot" data-zone="1">1</div>
+    <div class="zone-dot" data-zone="2">2</div>
+    <div class="zone-dot" data-zone="3">3</div>
+    <div class="zone-dot" data-zone="4">4</div>
   </div>
   
   <div id="timer" class="hidden">
@@ -473,20 +473,22 @@
       <circle class="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="0"/>
     </svg>
     <div id="timer-text">30</div>
+    <div id="timer-zone"></div>
   </div>
   
+  <button id="music-btn">🎵 Música ON</button>
   <div id="message"></div>
   <button id="restart-btn">🔄 Jugar de nuevo</button>
   
   <script>
-    // ===== APP STATE =====
+    // ===== STATE =====
     let lang = 'ES';
     let zone = 0;
     let seconds = 30;
     let timer = null;
-    let audioContext = null;
+    let audioCtx = null;
     let musicPlaying = false;
-    let musicNodes = [];
+    let currentMelody = null;
     
     // Elements
     const camera = document.getElementById('camera');
@@ -495,6 +497,7 @@
     const zonesEl = document.getElementById('zones');
     const timerEl = document.getElementById('timer');
     const timerText = document.getElementById('timer-text');
+    const timerZone = document.getElementById('timer-zone');
     const timerProgress = document.querySelector('.progress');
     const messageEl = document.getElementById('message');
     const restartBtn = document.getElementById('restart-btn');
@@ -503,107 +506,145 @@
     // ===== TEXTS =====
     const TEXTS = {
       ES: {
-        intro: '¡Hola! Soy Tina la dinosauria. ¡Vamos a cepillarnos los dientes juntos!',
-        zone: 'Ahora cepillemos la zona {z}. ¡Inclina el cepillo 45° y haz círculos pequeños!',
-        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Qué bien lo haces!'],
-        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉',
+        intro: '¡Hola! Soy Tina, tu amiga dinosaurio. ¡Vamos a cepillarnos los dientes juntos!',
+        zone: '¡Cepillemos la zona {z}! Recuerda: inclina el cepillo 45 grados y haz círculos pequeños.',
+        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Qué bien lo haces!', '¡Eres genial!'],
+        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! ¡Estoy orgullosa de ti! 🎉',
         restart: '🔄 Jugar de nuevo',
-        music: '🎵 Música'
+        zoneNames: ['Superior Derecha', 'Superior Izquierda', 'Inferior Derecha', 'Inferior Izquierda']
       },
       EN: {
-        intro: 'Hi! I\'m Tina the dinosaur. Let\'s brush our teeth together!',
-        zone: 'Now let\'s brush the {z} area. Tilt the brush 45° and make small circles!',
-        encourage: ['Great job!', 'Excellent!', 'Keep going!', 'You\'re doing great!'],
-        celebrate: 'Fantastic! You brushed all your teeth like a champion! 🎉',
+        intro: 'Hi! I\'m Tina, your dinosaur friend. Let\'s brush our teeth together!',
+        zone: 'Let\'s brush the {z} area! Remember: tilt the brush 45 degrees and make small circles.',
+        encourage: ['Great job!', 'Excellent!', 'Keep going!', 'You\'re doing great!', 'You\'re amazing!'],
+        celebrate: 'Fantastic! You brushed all your teeth like a champion! I\'m so proud of you! 🎉',
         restart: '🔄 Play again',
-        music: '🎵 Music'
+        zoneNames: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left']
       },
       PT: {
-        intro: 'Olá! Sou Tina a dinossauro. Vamos escovar os dentes juntos!',
-        zone: 'Agora vamos escovar a área {z}. Incline a escova 45° e faça círculos pequenos!',
-        encourage: ['Muito bem!', 'Excelente!', 'Continue assim!', 'Você está indo muito bem!'],
-        celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉',
+        intro: 'Olá! Sou Tina, sua amiga dinossauro. Vamos escovar os dentes juntos!',
+        zone: 'Vamos escovar a área {z}! Lembre-se: incline a escova 45 graus e faça círculos pequenos.',
+        encourage: ['Muito bem!', 'Excelente!', 'Continue assim!', 'Você está indo muito bem!', 'Você é incrível!'],
+        celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! Estou orgulhosa de você! 🎉',
         restart: '🔄 Jogar de novo',
-        music: '🎵 Música'
+        zoneNames: ['Superior Direita', 'Superior Esquerda', 'Inferior Direita', 'Inferior Esquerda']
       }
     };
     
-    const ZONE_NAMES = {
-      ES: ['superior derecha', 'superior izquierda', 'inferior derecha', 'inferior izquierda'],
-      EN: ['right upper', 'left upper', 'right lower', 'left lower'],
-      PT: ['superior direita', 'superior esquerda', 'inferior direita', 'inferior esquerda']
-    };
-    
-    // ===== MUSIC SYSTEM =====
+    // ===== MUSIC SYSTEM - Different melody per zone =====
     function createAudioContext() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       }
-      return audioContext;
+      return audioCtx;
     }
     
-    function playBackgroundMusic() {
-      if (musicPlaying) return;
+    // Musical notes frequencies
+    const NOTES = {
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
+      REST: 0
+    };
+    
+    // Different happy melodies for each zone
+    const MELODIES = {
+      1: { // Zone 1 - Cheerful morning tune
+        notes: ['C4', 'E4', 'G4', 'C5', 'G4', 'E4', 'C4', 'E4', 'G4', 'A4', 'G4', 'E4', 'D4', 'C4'],
+        durations: [0.3, 0.3, 0.3, 0.5, 0.3, 0.3, 0.3, 0.3, 0.3, 0.4, 0.3, 0.3, 0.4, 0.5],
+        tempo: 1.0,
+        name: 'Alegre Mañana'
+      },
+      2: { // Zone 2 - Playful bounce
+        notes: ['G4', 'A4', 'B4', 'C5', 'D5', 'C5', 'B4', 'A4', 'G4', 'A4', 'B4', 'G4'],
+        durations: [0.25, 0.25, 0.25, 0.25, 0.5, 0.25, 0.25, 0.25, 0.3, 0.25, 0.25, 0.5],
+        tempo: 1.1,
+        name: 'Juguetón'
+      },
+      3: { // Zone 3 - Gentle waltz
+        notes: ['E4', 'G4', 'C5', 'B4', 'G4', 'A4', 'G4', 'E4', 'F4', 'E4', 'D4', 'C4'],
+        durations: [0.4, 0.4, 0.6, 0.4, 0.4, 0.6, 0.3, 0.3, 0.4, 0.3, 0.3, 0.6],
+        tempo: 0.9,
+        name: 'Vals Suave'
+      },
+      4: { // Zone 4 - Celebration build-up
+        notes: ['C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4', 'C5', 'D5', 'E5', 'C5', 'G4', 'C5'],
+        durations: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.3, 0.3, 0.4, 0.3, 0.3, 0.6],
+        tempo: 1.2,
+        name: 'Celebración'
+      }
+    };
+    
+    let melodyTimeout = null;
+    
+    function playMelody(melodyKey) {
+      if (!musicPlaying) return;
       
       const ctx = createAudioContext();
-      musicPlaying = true;
-      musicBtn.textContent = '🔊 ' + TEXTS[lang].music;
+      const melody = MELODIES[melodyKey];
+      if (!melody) return;
       
-      // Simple happy melody using Web Audio API
-      const playNote = (freq, startTime, duration, volume = 0.1) => {
+      let time = ctx.currentTime;
+      
+      melody.notes.forEach((noteName, i) => {
+        if (noteName === 'REST') {
+          time += melody.durations[i] / melody.tempo;
+          return;
+        }
+        
+        const freq = NOTES[noteName];
+        const duration = melody.durations[i] / melody.tempo;
+        
+        // Create oscillator
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         
         osc.type = 'sine';
         osc.frequency.value = freq;
         
-        gain.gain.setValueAtTime(0, startTime);
-        gain.gain.linearRampToValueAtTime(volume, startTime + 0.05);
-        gain.gain.linearRampToValueAtTime(volume * 0.7, startTime + duration - 0.1);
-        gain.gain.linearRampToValueAtTime(0, startTime + duration);
+        // ADSR envelope for more pleasant sound
+        gain.gain.setValueAtTime(0, time);
+        gain.gain.linearRampToValueAtTime(0.15, time + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.08, time + duration * 0.3);
+        gain.gain.linearRampToValueAtTime(0, time + duration);
         
         osc.connect(gain);
         gain.connect(ctx.destination);
         
-        osc.start(startTime);
-        osc.stop(startTime + duration);
+        osc.start(time);
+        osc.stop(time + duration);
         
-        musicNodes.push(osc);
-      };
+        time += duration;
+      });
       
-      // Happy melody notes (C major scale)
-      const notes = [523.25, 587.33, 659.25, 698.46, 783.99, 880, 783.99, 698.46];
-      const noteDuration = 0.4;
-      
-      const playMelody = () => {
-        if (!musicPlaying) return;
-        
-        const now = ctx.currentTime;
-        notes.forEach((freq, i) => {
-          playNote(freq, now + i * noteDuration, noteDuration * 0.9);
-        });
-        
-        // Repeat melody
-        setTimeout(playMelody, notes.length * noteDuration * 1000);
-      };
-      
-      playMelody();
+      // Loop the melody
+      const totalDuration = melody.durations.reduce((a, b) => a + b) / melody.tempo * 1000;
+      melodyTimeout = setTimeout(() => {
+        if (musicPlaying) playMelody(melodyKey);
+      }, totalDuration + 500);
     }
     
-    function stopBackgroundMusic() {
+    function startMusic(zoneNum) {
+      musicPlaying = true;
+      musicBtn.textContent = '🔊 Música ON';
+      
+      // Clear previous melody
+      if (melodyTimeout) clearTimeout(melodyTimeout);
+      
+      // Play zone-specific melody
+      playMelody(zoneNum);
+    }
+    
+    function stopMusic() {
       musicPlaying = false;
-      musicBtn.textContent = TEXTS[lang].music;
-      musicNodes.forEach(node => {
-        try { node.stop(); } catch(e) {}
-      });
-      musicNodes = [];
+      musicBtn.textContent = '🎵 Música ON';
+      if (melodyTimeout) clearTimeout(melodyTimeout);
     }
     
     musicBtn.onclick = () => {
       if (musicPlaying) {
-        stopBackgroundMusic();
+        stopMusic();
       } else {
-        playBackgroundMusic();
+        startMusic(zone || 1);
       }
     };
     
@@ -615,10 +656,9 @@
         });
         camera.srcObject = stream;
         await camera.play();
-        console.log('✅ Camera OK');
         return true;
       } catch (e) {
-        console.error('❌ Camera error:', e);
+        console.error('Camera error:', e);
         document.getElementById('loading-text').textContent = 'Activa la cámara';
         return false;
       }
@@ -631,31 +671,33 @@
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'ES' ? 'es-ES' : lang === 'EN' ? 'en-US' : 'pt-PT';
         u.rate = 0.85;
-        u.pitch = 1.1;
+        u.pitch = 1.2; // Slightly higher for friendly child-like voice
         speechSynthesis.speak(u);
+        
+        // Animate mouth while speaking
+        tinaContainer.classList.add('talking');
+        u.onend = () => tinaContainer.classList.remove('talking');
       }
     }
     
-    // ===== UI HELPERS =====
     function show(text) {
       messageEl.textContent = text;
     }
     
-    // ===== EXPERIENCE FLOW =====
+    // ===== EXPERIENCE =====
     function start() {
       loading.classList.add('hidden');
       tinaContainer.classList.remove('hidden');
-      musicBtn.style.display = 'block';
       
       show(TEXTS[lang].intro);
       speak(TEXTS[lang].intro);
       
-      // Auto-start music after user interaction
+      // Auto-start music after a moment
       setTimeout(() => {
-        if (!musicPlaying) playBackgroundMusic();
-      }, 1000);
+        if (!musicPlaying) startMusic(1);
+      }, 2000);
       
-      setTimeout(() => nextZone(), 5000);
+      setTimeout(nextZone, 5500);
     }
     
     let encourageInterval = null;
@@ -669,43 +711,55 @@
       }
       
       seconds = 30;
+      
+      // Update UI
+      document.body.className = `zone-${zone}`;
       zonesEl.classList.remove('hidden');
       timerEl.classList.remove('hidden');
+      timerZone.textContent = TEXTS[lang].zoneNames[zone - 1];
       
       // Update zone dots
       document.querySelectorAll('.zone-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i + 1 === zone);
       });
       
-      const zoneName = ZONE_NAMES[lang][zone - 1];
-      const text = TEXTS[lang].zone.replace('{z}', zoneName);
+      // Message and speech
+      const zoneName = TEXTS[lang].zoneNames[zone - 1];
+      const text = TEXTS[lang].zone.replace('{z}', zoneName.toLowerCase());
       show(text);
       speak(text);
       
-      // Clear previous timer
+      // Change music to zone melody
+      if (musicPlaying) {
+        if (melodyTimeout) clearTimeout(melodyTimeout);
+        playMelody(zone);
+      }
+      
+      // Clear timers
       clearInterval(timer);
       clearInterval(encourageInterval);
       
-      // Encouragement every 8 seconds
-      let encourageIndex = 0;
+      // Encouragement every 7 seconds
+      let encIdx = 0;
       encourageInterval = setInterval(() => {
         if (zone <= 4 && seconds > 5) {
-          speak(TEXTS[lang].encourage[encourageIndex % TEXTS[lang].encourage.length]);
-          encourageIndex++;
+          speak(TEXTS[lang].encourage[encIdx % TEXTS[lang].encourage.length]);
+          encIdx++;
         }
-      }, 8000);
+      }, 7000);
       
-      // Start timer
+      // Timer
       timer = setInterval(() => {
         seconds--;
         timerText.textContent = seconds;
         
-        // Update progress
         const prog = (30 - seconds) / 30;
         timerProgress.style.strokeDashoffset = 339.292 * (1 - prog);
         
-        // Color
-        timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
+        // Color changes
+        const colors = ['#4CAF50', '#8BC34A', '#CDDC39', '#FFC107', '#FF9800', '#FF5722'];
+        const colorIdx = Math.floor((30 - seconds) / 5);
+        timerProgress.style.stroke = colors[Math.min(colorIdx, colors.length - 1)];
         
         if (seconds <= 0) {
           clearInterval(timer);
@@ -719,12 +773,13 @@
       zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
       
+      tinaContainer.classList.add('celebrating');
       show(TEXTS[lang].celebrate);
       speak(TEXTS[lang].celebrate);
       
       // Confetti
-      const colors = ['#FF6B9D', '#4ECDC4', '#FFD700', '#95E1D3', '#FFB74D', '#7CB342'];
-      for (let i = 0; i < 60; i++) {
+      const colors = ['#FF69B4', '#FFB6C1', '#FFD700', '#87CEEB', '#98FB98', '#DDA0DD'];
+      for (let i = 0; i < 80; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
         c.style.left = Math.random() * 100 + '%';
@@ -734,14 +789,17 @@
         setTimeout(() => c.remove(), 5000);
       }
       
-      // Stop music
-      setTimeout(stopBackgroundMusic, 3000);
+      // Stop music after celebration
+      setTimeout(() => {
+        stopMusic();
+        tinaContainer.classList.remove('celebrating');
+      }, 4000);
       
       // Show restart
       setTimeout(() => {
         restartBtn.style.display = 'block';
         restartBtn.textContent = TEXTS[lang].restart;
-      }, 2000);
+      }, 2500);
     }
     
     // ===== LANGUAGE =====
@@ -750,7 +808,6 @@
         lang = btn.dataset.lang;
         document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        musicBtn.textContent = (musicPlaying ? '🔊 ' : '🎵 ') + TEXTS[lang].music.split(' ')[1];
       };
     });
     
