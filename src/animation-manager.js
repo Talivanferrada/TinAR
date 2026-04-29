@@ -21,8 +21,8 @@ export const ANIMATIONS = {
   // Gentle scale oscillation
   breathing: {
     property: 'scale',
-    from: '0.5 0.5 0.5',
-    to: '0.52 0.52 0.52',
+    from: '0.3 0.3 0.3',
+    to: '0.32 0.32 0.32',
     dur: 3000,
     easing: 'easeInOutSine',
     loop: true,
@@ -44,8 +44,8 @@ export const ANIMATIONS = {
   // Bounce + rotation combination
   dancing: {
     property: 'position',
-    from: '0 0.3 0',
-    to: '0 0.35 0',
+    from: '0 0 0',
+    to: '0 0.05 0',
     dur: 500,
     easing: 'easeInOutQuad',
     loop: true,
@@ -56,8 +56,8 @@ export const ANIMATIONS = {
   // Jump up (translate Y), land
   jumping: {
     property: 'position',
-    from: '0 0.3 0',
-    to: '0 0.5 0',
+    from: '0 0 0',
+    to: '0 0.2 0',
     dur: 250,
     easing: 'easeOutQuad',
     loop: false,

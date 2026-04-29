@@ -19,6 +19,8 @@ class TinARApp {
     this.modelLoadAttempts = 0;
     this.maxModelLoadAttempts = 3;
     this.arSupported = false;
+    this.targetLostTimeout = null;  // Delay before hiding on target lost
+    this.targetLostDelay = 1500;    // 1.5 seconds grace period
     
     this.init();
   }
@@ -173,22 +175,36 @@ class TinARApp {
     target.addEventListener('targetFound', () => {
       console.log('🎯 Target found!');
       this.isTracking = true;
+      
+      // Clear any pending target lost timeout
+      if (this.targetLostTimeout) {
+        clearTimeout(this.targetLostTimeout);
+        this.targetLostTimeout = null;
+      }
+      
       this.onTargetFound();
     });
     
     target.addEventListener('targetLost', () => {
-      console.log('Target lost - pausing timer');
-      this.isTracking = false;
+      console.log('Target temporarily lost - waiting before pause...');
       
-      // Pause timer when target is lost
-      this.stateMachine.pause();
-      
-      // Stop all animations
-      animationManager.stopAll();
-      
-      // Play audio and show message to find marker
-      audioManager.speakTargetLost();
-      uiManager.showTargetLost();
+      // Don't immediately pause - wait for grace period
+      this.targetLostTimeout = setTimeout(() => {
+        if (!this.isTracking) return; // Already found again
+        
+        console.log('Target lost confirmed - pausing timer');
+        this.isTracking = false;
+        
+        // Pause timer when target is lost
+        this.stateMachine.pause();
+        
+        // Stop all animations
+        animationManager.stopAll();
+        
+        // Play audio and show message to find marker
+        audioManager.speakTargetLost();
+        uiManager.showTargetLost();
+      }, this.targetLostDelay);
     });
   }
   
