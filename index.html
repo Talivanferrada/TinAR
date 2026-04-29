@@ -426,10 +426,17 @@
             resolve();
           },
           (xhr) => {
-            const percent = Math.floor((xhr.loaded / xhr.total) * 100);
-            document.getElementById('loading-percent').textContent = percent + '%';
+            if (xhr.total > 0) {
+              const percent = Math.floor((xhr.loaded / xhr.total) * 100);
+              document.getElementById('loading-percent').textContent = percent + '%';
+            }
           },
-          reject
+          (error) => {
+            console.error('❌ Error loading model:', error);
+            document.getElementById('loading-text').textContent = 'Error cargando modelo';
+            document.getElementById('loading-percent').textContent = 'Recarga la página';
+            reject(error);
+          }
         );
       });
     }
