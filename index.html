@@ -10,17 +10,22 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Styles FIRST -->
+  <!-- Google Model Viewer - Easy 3D model display -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+  
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
   <style>
-    /* Critical styles for camera background */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     body {
-      margin: 0;
-      padding: 0;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       background: transparent;
     }
     
+    /* Camera background */
     #camera-container {
       position: fixed;
       top: 0;
@@ -36,20 +41,20 @@
       object-fit: cover;
     }
     
-    #tina-container {
+    /* Tina 3D model */
+    #tina-viewer {
       position: fixed;
-      bottom: 20%;
+      bottom: 15%;
       left: 50%;
       transform: translateX(-50%);
+      width: 320px;
+      height: 420px;
       z-index: 10;
       pointer-events: none;
+      --poster-color: transparent;
     }
     
-    #tina-canvas {
-      width: 300px;
-      height: 400px;
-    }
-    
+    /* UI Layer */
     #ui-layer {
       position: fixed;
       top: 0;
@@ -59,6 +64,210 @@
       z-index: 100;
       pointer-events: none;
     }
+    
+    /* Loading */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(255, 255, 255, 0.3);
+      border-top: 6px solid #FFB74D;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #loading-text {
+      color: white;
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    
+    /* Language selector */
+    #language-selector {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      gap: 10px;
+      pointer-events: auto;
+      z-index: 200;
+    }
+    
+    .lang-btn {
+      min-width: 48px;
+      min-height: 48px;
+      padding: 12px 18px;
+      border: 2px solid white;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .lang-btn.active {
+      background: white;
+      color: #29B6F6;
+    }
+    
+    /* Zone indicators */
+    #zone-indicators {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 160;
+    }
+    
+    .zone-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.6);
+      transition: all 0.3s ease;
+    }
+    
+    .zone-dot.active {
+      background: #FFB74D;
+      border-color: white;
+      box-shadow: 0 0 12px rgba(255, 183, 77, 0.8);
+      transform: scale(1.3);
+    }
+    
+    /* Timer */
+    #timer-container {
+      position: fixed;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 100px;
+      z-index: 150;
+    }
+    
+    .timer-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    
+    .timer-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.2);
+      stroke-width: 8;
+    }
+    
+    .timer-progress {
+      fill: none;
+      stroke: #4CAF50;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 339.292;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+    
+    .timer-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+    
+    .timer-text {
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    
+    /* Message */
+    #message-display {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 30px;
+      font-size: 16px;
+      max-width: 85%;
+      text-align: center;
+      z-index: 180;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    
+    .hidden { display: none !important; }
+    
+    /* Restart button */
+    .restart-btn {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 600;
+      pointer-events: auto;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Celebration particles */
+    .celebration-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 500;
+    }
+    
+    .confetti {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      animation: confetti-fall 3s linear forwards;
+    }
+    
+    @keyframes confetti-fall {
+      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
   </style>
 </head>
 <body>
@@ -67,86 +276,277 @@
     <video id="camera-video" autoplay playsinline muted></video>
   </div>
   
-  <!-- Tina Container (will be rendered with Three.js) -->
-  <div id="tina-container">
-    <canvas id="tina-canvas"></canvas>
-  </div>
+  <!-- Tina 3D Model using model-viewer -->
+  <model-viewer
+    id="tina-viewer"
+    src="assets/models/Tina_optimized.glb"
+    alt="Tina la dinosauria"
+    auto-rotate
+    camera-controls="false"
+    disable-zoom
+    rotation-per-second="30deg"
+    style="width: 320px; height: 420px;"
+  ></model-viewer>
   
   <!-- UI Layer -->
   <div id="ui-layer">
     <!-- Loading Overlay -->
-    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-      background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%); 
-      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;">
-      <div class="spinner" style="width: 60px; height: 60px; border: 6px solid rgba(255, 255, 255, 0.3); 
-        border-top: 6px solid #FFB74D; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-      <div id="loading-text" style="color: white; font-size: 24px; margin-top: 20px;">Cargando Tina...</div>
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+      <div id="loading-text">Cargando Tina...</div>
     </div>
     
     <!-- Language Selector -->
-    <div id="language-selector" class="language-selector" style="position: fixed; top: 20px; right: 20px; 
-      display: flex; gap: 10px; pointer-events: auto; z-index: 200;">
-      <button class="lang-btn active" data-lang="ES" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
-        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">ES</button>
-      <button class="lang-btn" data-lang="EN" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
-        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">EN</button>
-      <button class="lang-btn" data-lang="PT" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
-        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">PT</button>
+    <div id="language-selector">
+      <button class="lang-btn active" data-lang="ES">ES</button>
+      <button class="lang-btn" data-lang="EN">EN</button>
+      <button class="lang-btn" data-lang="PT">PT</button>
     </div>
     
     <!-- Zone Indicators -->
-    <div id="zone-indicators" class="zone-indicators hidden" style="position: fixed; top: 20px; left: 20px; 
-      display: flex; flex-direction: column; gap: 8px; z-index: 160;">
-      <div class="zone-dot" data-zone="1" style="width: 16px; height: 16px; border-radius: 50%; 
-        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
-      <div class="zone-dot" data-zone="2" style="width: 16px; height: 16px; border-radius: 50%; 
-        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
-      <div class="zone-dot" data-zone="3" style="width: 16px; height: 16px; border-radius: 50%; 
-        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
-      <div class="zone-dot" data-zone="4" style="width: 16px; height: 16px; border-radius: 50%; 
-        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
+    <div id="zone-indicators" class="hidden">
+      <div class="zone-dot" data-zone="1"></div>
+      <div class="zone-dot" data-zone="2"></div>
+      <div class="zone-dot" data-zone="3"></div>
+      <div class="zone-dot" data-zone="4"></div>
     </div>
     
     <!-- Timer -->
-    <div id="timer-container" class="timer-container hidden" style="position: fixed; top: 100px; left: 50%; 
-      transform: translateX(-50%); width: 100px; height: 100px; z-index: 150;">
-      <svg class="timer-svg" viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
-        <circle class="timer-bg" cx="60" cy="60" r="54" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="8"></circle>
-        <circle class="timer-progress" cx="60" cy="60" r="54" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"></circle>
+    <div id="timer-container" class="hidden">
+      <svg class="timer-svg" viewBox="0 0 120 120">
+        <circle class="timer-bg" cx="60" cy="60" r="54"></circle>
+        <circle class="timer-progress" cx="60" cy="60" r="54"></circle>
       </svg>
-      <div class="timer-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-        <div class="timer-text" style="font-size: 28px; font-weight: bold; color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">30</div>
-        <div class="timer-zone-label" style="font-size: 10px; color: rgba(255, 255, 255, 0.9);"></div>
+      <div class="timer-content">
+        <div class="timer-text">30</div>
       </div>
     </div>
     
     <!-- Message Display -->
-    <div id="message-display" class="message-display" style="position: fixed; bottom: 80px; left: 50%; 
-      transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: white; padding: 16px 32px; 
-      border-radius: 30px; font-size: 16px; max-width: 85%; text-align: center; z-index: 180;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);"></div>
+    <div id="message-display"></div>
   </div>
   
-  <!-- Three.js for 3D model -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-  
-  <!-- App -->
-  <script src="src/app-simple.js" type="module"></script>
-  
-  <style>
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+  <!-- App Script -->
+  <script>
+    // TinAR Simple App
+    const LANGUAGES = { ES: 'es-ES', EN: 'en-US', PT: 'pt-PT' };
+    const ZONE_NAMES = {
+      ES: ['superior derecho', 'superior izquierdo', 'inferior derecho', 'inferior izquierdo'],
+      EN: ['right upper', 'left upper', 'right lower', 'left lower'],
+      PT: ['superior direito', 'superior esquerdo', 'inferior direito', 'inferior esquerdo']
+    };
+    
+    let currentLanguage = 'ES';
+    let currentZone = 0;
+    let timerInterval = null;
+    let timerSeconds = 30;
+    let isLoaded = false;
+    
+    // Elements
+    const loadingOverlay = document.getElementById('loading-overlay');
+    const loadingText = document.getElementById('loading-text');
+    const tinaViewer = document.getElementById('tina-viewer');
+    const timerContainer = document.getElementById('timer-container');
+    const timerText = document.querySelector('.timer-text');
+    const timerProgress = document.querySelector('.timer-progress');
+    const zoneIndicators = document.getElementById('zone-indicators');
+    const messageDisplay = document.getElementById('message-display');
+    const video = document.getElementById('camera-video');
+    
+    // Initialize
+    async function init() {
+      console.log('🦕 TinAR initializing...');
+      
+      // Setup camera
+      await setupCamera();
+      
+      // Wait for model to load
+      tinaViewer.addEventListener('load', () => {
+        console.log('🦕 Tina model loaded!');
+        hideLoading();
+        startExperience();
+      });
+      
+      // Handle load error
+      tinaViewer.addEventListener('error', (e) => {
+        console.error('❌ Model error:', e);
+        loadingText.textContent = 'Error cargando modelo';
+      });
+      
+      // Language buttons
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+      });
     }
-    .hidden { display: none !important; }
-    .zone-dot.active {
-      background: #FFB74D !important;
-      border-color: white !important;
-      box-shadow: 0 0 12px rgba(255, 183, 77, 0.8);
-      transform: scale(1.3);
+    
+    async function setupCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }
+        });
+        video.srcObject = stream;
+        await video.play();
+        console.log('✅ Camera started');
+      } catch (error) {
+        console.error('❌ Camera error:', error);
+        loadingText.textContent = 'Activa la cámara para continuar';
+      }
     }
-  </style>
+    
+    function hideLoading() {
+      loadingOverlay.style.opacity = '0';
+      setTimeout(() => loadingOverlay.style.display = 'none', 500);
+    }
+    
+    function startExperience() {
+      isLoaded = true;
+      showMessage(getText('INTRO'));
+      speak(getText('INTRO'));
+      
+      // Start brushing after intro
+      setTimeout(() => {
+        startZone(1);
+      }, 5000);
+    }
+    
+    function startZone(zone) {
+      currentZone = zone;
+      timerSeconds = 30;
+      
+      // Show UI
+      timerContainer.classList.remove('hidden');
+      zoneIndicators.classList.remove('hidden');
+      
+      // Update zone indicators
+      document.querySelectorAll('.zone-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i + 1 === zone);
+      });
+      
+      // Show message
+      const zoneName = ZONE_NAMES[currentLanguage][zone - 1];
+      showMessage(getText('ZONE').replace('{zone}', zoneName));
+      speak(getText('ZONE').replace('{zone}', zoneName));
+      
+      // Update timer label
+      document.querySelector('.timer-content').innerHTML = `<div class="timer-text">${timerSeconds}</div>`;
+      
+      // Start timer
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds--;
+        updateTimer();
+        
+        if (timerSeconds <= 0) {
+          clearInterval(timerInterval);
+          if (currentZone < 4) {
+            startZone(currentZone + 1);
+          } else {
+            showCelebration();
+          }
+        }
+      }, 1000);
+    }
+    
+    function updateTimer() {
+      timerText.textContent = timerSeconds;
+      
+      const progress = (30 - timerSeconds) / 30;
+      const circumference = 2 * Math.PI * 54;
+      timerProgress.style.strokeDashoffset = circumference * (1 - progress);
+      
+      // Color change
+      if (timerSeconds > 10) {
+        timerProgress.style.stroke = '#4CAF50';
+      } else if (timerSeconds > 5) {
+        timerProgress.style.stroke = '#FFC107';
+      } else {
+        timerProgress.style.stroke = '#F44336';
+      }
+    }
+    
+    function showCelebration() {
+      timerContainer.classList.add('hidden');
+      zoneIndicators.classList.add('hidden');
+      
+      showMessage(getText('CELEBRATION'));
+      speak(getText('CELEBRATION'));
+      
+      // Confetti
+      showConfetti();
+      
+      // Restart button
+      setTimeout(() => {
+        const btn = document.createElement('button');
+        btn.className = 'restart-btn';
+        btn.textContent = currentLanguage === 'ES' ? '🔄 Jugar de nuevo' : 
+                          currentLanguage === 'EN' ? '🔄 Play again' : '🔄 Jogar de novo';
+        btn.onclick = () => location.reload();
+        document.body.appendChild(btn);
+      }, 2000);
+    }
+    
+    function showConfetti() {
+      const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#FFB74D', '#4FC3F7'];
+      const container = document.createElement('div');
+      container.className = 'celebration-particles';
+      
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        container.appendChild(confetti);
+      }
+      
+      document.body.appendChild(container);
+      setTimeout(() => container.remove(), 5000);
+    }
+    
+    function showMessage(text) {
+      messageDisplay.textContent = text;
+      messageDisplay.style.display = 'block';
+    }
+    
+    function getText(key) {
+      const texts = {
+        ES: {
+          INTRO: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
+          ZONE: 'Ahora cepillemos la zona {zone}. ¡Inclina el cepillo 45° y haz círculos!',
+          CELEBRATION: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉'
+        },
+        EN: {
+          INTRO: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
+          ZONE: 'Now let\'s brush the {zone} area. Tilt the brush 45° and make circles!',
+          CELEBRATION: 'Fantastic! You brushed all your teeth like a champion! 🎉'
+        },
+        PT: {
+          INTRO: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
+          ZONE: 'Agora vamos escovar a área {zone}. Incline a escova 45° e faça círculos!',
+          CELEBRATION: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉'
+        }
+      };
+      return texts[currentLanguage][key];
+    }
+    
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = LANGUAGES[currentLanguage];
+        utterance.rate = 0.9;
+        speechSynthesis.speak(utterance);
+      }
+    }
+    
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+    }
+    
+    // Start
+    init();
+  </script>
 </body>
 </html>
