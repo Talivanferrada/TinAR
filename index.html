@@ -43,22 +43,7 @@
     
     /* ========== ANIMACIONES ========== */
     
-    /* 1. WAVE - Saludo al cargar */
-    .anim-wave {
-      animation: wave 3s ease-in-out forwards;
-    }
-    
-    @keyframes wave {
-      0% { transform: translateX(-50%) rotateY(0deg) scale(1); }
-      15% { transform: translateX(-50%) rotateY(25deg) scale(1.05); }
-      30% { transform: translateX(-50%) rotateY(-25deg) scale(1.05); }
-      45% { transform: translateX(-50%) rotateY(20deg) scale(1.03); }
-      60% { transform: translateX(-50%) rotateY(-15deg) scale(1.02); }
-      75% { transform: translateX(-50%) rotateY(10deg) scale(1.01); }
-      100% { transform: translateX(-50%) rotateY(0deg) scale(1); }
-    }
-    
-    /* 2. BREATHE - Reposo, respiración suave */
+    /* BREATHE - Reposo, respiración suave */
     .anim-breathe {
       animation: breathe 3s ease-in-out infinite;
     }
@@ -72,7 +57,7 @@
       }
     }
     
-    /* 3. BRUSH - Cepillando con rebote y wiggle */
+    /* BRUSH - Cepillando con rebote y wiggle */
     .anim-brush {
       animation: brush 0.8s ease-in-out infinite;
     }
@@ -92,20 +77,20 @@
       }
     }
     
-    /* 4. ENCOURAGE - Pequeño salto feliz */
+    /* ENCOURAGE - Hablando/talking animation */
     .anim-encourage {
-      animation: encourage 1.5s ease-in-out;
+      animation: encourage 0.8s ease-in-out infinite;
     }
     
     @keyframes encourage {
       0% { transform: translateX(-50%) translateY(0) scale(1); }
-      30% { transform: translateX(-50%) translateY(-25px) scale(1.08); }
-      50% { transform: translateX(-50%) translateY(-35px) scale(1.12); }
-      70% { transform: translateX(-50%) translateY(-20px) scale(1.05); }
+      25% { transform: translateX(-50%) translateY(-15px) scale(1.05); }
+      50% { transform: translateX(-50%) translateY(-25px) scale(1.08); }
+      75% { transform: translateX(-50%) translateY(-15px) scale(1.05); }
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* 5. BOUNCE - Fin de zona, saltito de celebración */
+    /* BOUNCE - Fin de zona, saltito de celebración */
     .anim-bounce {
       animation: bounce 1.2s ease-in-out;
     }
@@ -119,26 +104,26 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* 6. CELEBRATE - Final, salta, gira y pulsa */
+    /* CELEBRATE - Final, salta feliz sin giro 360 */
     .anim-celebrate {
-      animation: celebrate 0.6s ease-in-out infinite;
+      animation: celebrate 0.5s ease-in-out infinite;
     }
     
     @keyframes celebrate {
       0% { 
-        transform: translateX(-50%) translateY(0) rotateY(0deg) scale(1);
+        transform: translateX(-50%) translateY(0) scale(1);
       }
-      25% { 
-        transform: translateX(-50%) translateY(-50px) rotateY(90deg) scale(1.15);
+      30% { 
+        transform: translateX(-50%) translateY(-45px) scale(1.18);
       }
       50% { 
-        transform: translateX(-50%) translateY(-10px) rotateY(180deg) scale(1.1);
+        transform: translateX(-50%) translateY(-15px) scale(1.1);
       }
-      75% { 
-        transform: translateX(-50%) translateY(-50px) rotateY(270deg) scale(1.15);
+      70% { 
+        transform: translateX(-50%) translateY(-40px) scale(1.15);
       }
       100% { 
-        transform: translateX(-50%) translateY(0) rotateY(360deg) scale(1);
+        transform: translateX(-50%) translateY(0) scale(1);
       }
     }
     
@@ -170,27 +155,68 @@
     #loading-text { color: #FF69B4; font-size: 26px; margin-top: 20px; font-weight: bold; }
     #loading-status { color: #FF69B4; font-size: 18px; margin-top: 10px; }
     
-    #lang-selector {
+    /* Dropdown de idioma - pequeño en esquina */
+    .dropdown-container {
       position: fixed;
-      top: 20px; right: 20px;
-      display: flex;
-      gap: 10px;
+      top: 15px;
+      right: 15px;
       z-index: 100;
     }
     
-    .lang-btn {
-      min-width: 50px; min-height: 50px;
-      padding: 10px 16px;
-      border: 3px solid white;
-      background: rgba(255,105,180,0.85);
+    .dropdown-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid white;
+      background: rgba(255,105,180,0.9);
       color: white;
-      border-radius: 25px;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     
-    .lang-btn.active { background: white; color: #FF69B4; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 0;
+      background: rgba(255,105,180,0.95);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      min-width: 100px;
+    }
+    
+    .dropdown-content.show {
+      display: block;
+    }
+    
+    .dropdown-item {
+      padding: 12px 20px;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      text-align: center;
+    }
+    
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+    
+    .dropdown-item:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    
+    .dropdown-item.active {
+      background: white;
+      color: #FF69B4;
+    }
     
     #zones {
       position: fixed;
@@ -269,17 +295,21 @@
     
     #music-btn {
       position: fixed;
-      top: 80px; left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 24px;
+      top: 70px;
+      right: 15px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
       background: rgba(255,105,180,0.9);
       color: white;
       border: 2px solid white;
-      border-radius: 20px;
-      font-size: 14px;
+      font-size: 18px;
       cursor: pointer;
       z-index: 100;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     
     #restart-btn {
@@ -330,10 +360,14 @@
     <div id="loading-status">0%</div>
   </div>
   
-  <div id="lang-selector">
-    <button class="lang-btn active" data-lang="ES">ES</button>
-    <button class="lang-btn" data-lang="EN">EN</button>
-    <button class="lang-btn" data-lang="PT">PT</button>
+  <!-- Dropdown de idioma -->
+  <div class="dropdown-container">
+    <button class="dropdown-btn" id="lang-btn">ES</button>
+    <div class="dropdown-content" id="lang-dropdown">
+      <div class="dropdown-item active" data-lang="ES">Español</div>
+      <div class="dropdown-item" data-lang="EN">English</div>
+      <div class="dropdown-item" data-lang="PT">Português</div>
+    </div>
   </div>
   
   <div id="zones" class="hidden">
@@ -352,7 +386,7 @@
     <div id="timer-label"></div>
   </div>
   
-  <button id="music-btn">🎵 Música</button>
+  <button id="music-btn">🎵</button>
   <div id="message"></div>
   <button id="restart-btn">🔄 Jugar de nuevo</button>
   
@@ -364,15 +398,18 @@
     let timer = null;
     let audioCtx = null;
     let musicPlaying = false;
-    let melodyTimeout = null;
+    let musicOscillators = [];
     let modelLoaded = false;
     let currentAnim = null;
+    let idleTimer = null;
+    let isIdle = true;
+    let idlePhase = 'static'; // 'static' or 'breathe'
     
     // Elementos
     const loading = document.getElementById('loading');
     const loadingStatus = document.getElementById('loading-status');
     const tina = document.getElementById('tina-3d');
-    const zones = document.getElementById('zones');
+    const zonesEl = document.getElementById('zones');
     const timerEl = document.getElementById('timer');
     const timerText = document.getElementById('timer-text');
     const timerLabel = document.getElementById('timer-label');
@@ -380,9 +417,11 @@
     const message = document.getElementById('message');
     const restartBtn = document.getElementById('restart-btn');
     const musicBtn = document.getElementById('music-btn');
+    const langBtn = document.getElementById('lang-btn');
+    const langDropdown = document.getElementById('lang-dropdown');
     
     // ===== ANIMACIONES =====
-    const ANIMS = ['wave', 'breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
+    const ANIMS = ['breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
     
     function setAnim(name, duration = null) {
       // Limpiar todas las animaciones
@@ -404,6 +443,43 @@
       }
     }
     
+    // ===== IDLE CYCLE (5s static, 5s breathe) =====
+    function startIdleCycle() {
+      stopIdleCycle();
+      isIdle = true;
+      idlePhase = 'static';
+      setAnim(null); // Sin animación = static
+      
+      idleTimer = setInterval(() => {
+        if (!isIdle) return;
+        
+        if (idlePhase === 'static') {
+          idlePhase = 'breathe';
+          setAnim('breathe');
+        } else {
+          idlePhase = 'static';
+          setAnim(null);
+        }
+      }, 5000);
+    }
+    
+    function stopIdleCycle() {
+      if (idleTimer) {
+        clearInterval(idleTimer);
+        idleTimer = null;
+      }
+    }
+    
+    function pauseIdle() {
+      isIdle = false;
+    }
+    
+    function resumeIdle() {
+      isIdle = true;
+      idlePhase = 'static';
+      setAnim(null);
+    }
+    
     // ===== TEXTOS =====
     const T = {
       ES: {
@@ -411,64 +487,222 @@
         zone: 'Cepillemos la zona {z}. Inclina el cepillo 45° y haz círculos pequeños.',
         encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Genial!'],
         celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉',
-        zones: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda']
+        zones: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda'],
+        restart: '🔄 Jugar de nuevo'
       },
       EN: {
         intro: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
         zone: 'Let\'s brush the {z} area. Tilt 45° and make small circles.',
         encourage: ['Great job!', 'Excellent!', 'Keep going!', 'Awesome!'],
         celebrate: 'Fantastic! You brushed all your teeth like a champion! 🎉',
-        zones: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left']
+        zones: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left'],
+        restart: '🔄 Play again'
       },
       PT: {
         intro: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
         zone: 'Vamos escovar a área {z}. Incline 45° e faça círculos pequenos.',
         encourage: ['Muito bem!', 'Excelente!', 'Continue!', 'Incrível!'],
         celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉',
-        zones: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda']
+        zones: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda'],
+        restart: '🔄 Jogar de novo'
       }
     };
     
-    // ===== MÚSICA =====
-    const NOTES = { C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25 };
-    const MELODIES = {
-      1: { n: ['C4','E4','G4','C5','G4','E4','C4','G4','E4','G4'], d: [0.3,0.3,0.3,0.5,0.3,0.3,0.3,0.3,0.3,0.5] },
-      2: { n: ['G4','A4','B4','C5','D5','C5','B4','A4','G4'], d: [0.25,0.25,0.25,0.25,0.5,0.25,0.25,0.25,0.5] },
-      3: { n: ['E4','G4','C5','B4','G4','A4','G4','E4','C4'], d: [0.4,0.4,0.6,0.4,0.4,0.4,0.3,0.3,0.6] },
-      4: { n: ['C4','D4','E4','F4','G4','A4','B4','C5','E5','C5','G4'], d: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.6] }
+    // ===== MÚSICA MEJORADA (30s por zona) =====
+    // Notas con frecuencias
+    const NOTES = {
+      C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77
     };
     
-    function playMelody(z) {
+    // Melodías completas (~30 segundos cada una) - diferentes estilos por zona
+    const ZONE_MELODIES = {
+      // Zona 1: Melodía alegre tipo "mañana feliz" - Do mayor
+      1: [
+        // Frase 1 (8s)
+        {n:'C4',d:0.4},{n:'E4',d:0.4},{n:'G4',d:0.4},{n:'C5',d:0.6},{n:'B4',d:0.3},{n:'A4',d:0.3},
+        {n:'G4',d:0.5},{n:'F4',d:0.3},{n:'E4',d:0.3},{n:'D4',d:0.5},{n:'C4',d:0.6},
+        // Frase 2 (8s)
+        {n:'E4',d:0.4},{n:'G4',d:0.4},{n:'A4',d:0.5},{n:'G4',d:0.3},{n:'F4',d:0.3},{n:'E4',d:0.5},
+        {n:'D4',d:0.4},{n:'E4',d:0.4},{n:'F4',d:0.5},{n:'E4',d:0.3},{n:'D4',d:0.3},{n:'C4',d:0.6},
+        // Frase 3 (8s)
+        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.5},{n:'B4',d:0.3},{n:'A4',d:0.3},
+        {n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.4},{n:'D4',d:0.5},{n:'C4',d:0.6},
+        // Frase 4 (6s)
+        {n:'C4',d:0.4},{n:'E4',d:0.4},{n:'G4',d:0.4},{n:'C5',d:0.8},{n:'G4',d:0.4},{n:'E4',d:0.4},{n:'C4',d:0.8}
+      ],
+      
+      // Zona 2: Melodía suave tipo "canción de cuna" - Sol mayor
+      2: [
+        // Frase 1
+        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'D5',d:0.6},{n:'C5',d:0.4},{n:'B4',d:0.4},
+        {n:'A4',d:0.5},{n:'G4',d:0.3},{n:'F4',d:0.3},{n:'E4',d:0.5},{n:'D4',d:0.6},
+        // Frase 2
+        {n:'B4',d:0.4},{n:'C5',d:0.4},{n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},{n:'A4',d:0.5},
+        {n:'G4',d:0.4},{n:'A4',d:0.4},{n:'B4',d:0.5},{n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.5},
+        // Frase 3
+        {n:'E4',d:0.4},{n:'F4',d:0.4},{n:'G4',d:0.5},{n:'A4',d:0.4},{n:'B4',d:0.4},{n:'C5',d:0.5},
+        {n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},{n:'A4',d:0.5},{n:'G4',d:0.6},
+        // Frase 4
+        {n:'G4',d:0.5},{n:'B4',d:0.5},{n:'D5',d:0.7},{n:'B4',d:0.4},{n:'G4',d:0.4},{n:'D4',d:0.8}
+      ],
+      
+      // Zona 3: Melodía juguetona - Re mayor
+      3: [
+        // Frase 1
+        {n:'D4',d:0.4},{n:'F4',d:0.4},{n:'A4',d:0.4},{n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},
+        {n:'A4',d:0.4},{n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.5},{n:'D4',d:0.6},
+        // Frase 2
+        {n:'A4',d:0.4},{n:'B4',d:0.4},{n:'C5',d:0.5},{n:'D5',d:0.4},{n:'C5',d:0.3},{n:'B4',d:0.3},
+        {n:'A4',d:0.4},{n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.5},{n:'D4',d:0.5},
+        // Frase 3
+        {n:'F4',d:0.4},{n:'G4',d:0.4},{n:'A4',d:0.5},{n:'B4',d:0.4},{n:'C5',d:0.4},{n:'D5',d:0.5},
+        {n:'E5',d:0.4},{n:'D5',d:0.3},{n:'C5',d:0.3},{n:'B4',d:0.5},{n:'A4',d:0.5},
+        // Frase 4
+        {n:'D4',d:0.4},{n:'F4',d:0.4},{n:'A4',d:0.5},{n:'D5',d:0.7},{n:'A4',d:0.5},{n:'D4',d:0.8}
+      ],
+      
+      // Zona 4: Melodía triunfal/celebración - Do mayor con más energía
+      4: [
+        // Frase 1 - apertura triunfal
+        {n:'C4',d:0.3},{n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.5},{n:'B4',d:0.2},{n:'A4',d:0.2},
+        {n:'G4',d:0.4},{n:'F4',d:0.3},{n:'E4',d:0.3},{n:'D4',d:0.4},{n:'C4',d:0.5},
+        // Frase 2 - subida
+        {n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.4},{n:'E5',d:0.5},{n:'D5',d:0.3},{n:'C5',d:0.3},
+        {n:'B4',d:0.4},{n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.4},{n:'E4',d:0.5},
+        // Frase 3 - clímax
+        {n:'G4',d:0.3},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.4},{n:'D5',d:0.3},{n:'E5',d:0.4},
+        {n:'F5',d:0.3},{n:'E5',d:0.3},{n:'D5',d:0.3},{n:'C5',d:0.4},{n:'B4',d:0.3},{n:'A4',d:0.3},{n:'G4',d:0.5},
+        // Frase 4 - resolución
+        {n:'C4',d:0.3},{n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.6},{n:'G4',d:0.4},{n:'E4',d:0.4},{n:'C4',d:0.8}
+      ]
+    };
+    
+    // Acordes de acompañamiento por zona
+    const ZONE_CHORDS = {
+      1: [
+        {notes:['C4','E4','G4'], d:2},
+        {notes:['F4','A4','C5'], d:2},
+        {notes:['G4','B4','D5'], d:2},
+        {notes:['C4','E4','G4'], d:2}
+      ],
+      2: [
+        {notes:['G4','B4','D5'], d:2},
+        {notes:['C4','E4','G4'], d:2},
+        {notes:['D4','F4','A4'], d:2},
+        {notes:['G4','B4','D5'], d:2}
+      ],
+      3: [
+        {notes:['D4','F4','A4'], d:2},
+        {notes:['G4','B4','D5'], d:2},
+        {notes:['A4','C5','E5'], d:2},
+        {notes:['D4','F4','A4'], d:2}
+      ],
+      4: [
+        {notes:['C4','E4','G4'], d:2},
+        {notes:['F4','A4','C5'], d:2},
+        {notes:['G4','B4','D5'], d:2},
+        {notes:['C4','E4','G4','C5'], d:2}
+      ]
+    };
+    
+    let musicStopRequested = false;
+    
+    function playZoneMusic(zoneNum) {
       if (!musicPlaying) return;
+      musicStopRequested = false;
+      stopAllOscillators();
+      
       const ctx = audioCtx || (audioCtx = new (window.AudioContext || window.webkitAudioContext)());
-      const m = MELODIES[z];
-      let t = ctx.currentTime;
-      m.n.forEach((n, i) => {
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.value = NOTES[n];
-        g.gain.setValueAtTime(0, t);
-        g.gain.linearRampToValueAtTime(0.1, t + 0.02);
-        g.gain.linearRampToValueAtTime(0, t + m.d[i]);
-        o.connect(g);
-        g.connect(ctx.destination);
-        o.start(t);
-        o.stop(t + m.d[i]);
-        t += m.d[i];
+      const melody = ZONE_MELODIES[zoneNum];
+      const chords = ZONE_CHORDS[zoneNum];
+      
+      // Master gain
+      const masterGain = ctx.createGain();
+      masterGain.gain.value = 0.3;
+      masterGain.connect(ctx.destination);
+      
+      // === MELODÍA (onda sinusoidal suave) ===
+      let melodyTime = ctx.currentTime + 0.1;
+      melody.forEach((note, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.value = NOTES[note.n];
+        
+        // Envelope suave (ADSR)
+        gain.gain.setValueAtTime(0, melodyTime);
+        gain.gain.linearRampToValueAtTime(0.25, melodyTime + 0.05);
+        gain.gain.setValueAtTime(0.25, melodyTime + note.d * 0.7);
+        gain.gain.linearRampToValueAtTime(0, melodyTime + note.d);
+        
+        osc.connect(gain);
+        gain.connect(masterGain);
+        osc.start(melodyTime);
+        osc.stop(melodyTime + note.d);
+        musicOscillators.push(osc);
+        
+        melodyTime += note.d;
       });
-      melodyTimeout = setTimeout(() => musicPlaying && playMelody(z), t * 1000 + 500);
+      
+      // === ACORDES (onda triangular, más suave) ===
+      let chordTime = ctx.currentTime + 0.1;
+      let chordIndex = 0;
+      
+      while (chordTime < melodyTime && !musicStopRequested) {
+        const chord = chords[chordIndex % chords.length];
+        
+        chord.notes.forEach(noteName => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          
+          osc.type = 'triangle';
+          osc.frequency.value = NOTES[noteName];
+          
+          gain.gain.setValueAtTime(0, chordTime);
+          gain.gain.linearRampToValueAtTime(0.12, chordTime + 0.15);
+          gain.gain.setValueAtTime(0.12, chordTime + chord.d * 0.8);
+          gain.gain.linearRampToValueAtTime(0, chordTime + chord.d);
+          
+          osc.connect(gain);
+          gain.connect(masterGain);
+          osc.start(chordTime);
+          osc.stop(chordTime + chord.d);
+          musicOscillators.push(osc);
+        });
+        
+        chordTime += chord.d;
+        chordIndex++;
+      }
+      
+      // Repetir cuando termine la melodía (~30s)
+      const totalDuration = melodyTime - ctx.currentTime;
+      setTimeout(() => {
+        if (musicPlaying && !musicStopRequested) {
+          playZoneMusic(zoneNum);
+        }
+      }, totalDuration * 1000 + 500);
+    }
+    
+    function stopAllOscillators() {
+      musicOscillators.forEach(osc => {
+        try { osc.stop(); } catch(e) {}
+      });
+      musicOscillators = [];
     }
     
     function toggleMusic() {
       if (musicPlaying) {
         musicPlaying = false;
-        musicBtn.textContent = '🎵 Música';
-        clearTimeout(melodyTimeout);
+        musicStopRequested = true;
+        musicBtn.textContent = '🎵';
+        stopAllOscillators();
       } else {
         musicPlaying = true;
-        musicBtn.textContent = '🔊 Música';
-        playMelody(zone || 1);
+        musicBtn.textContent = '🔊';
+        playZoneMusic(zone || 1);
       }
     }
     
@@ -484,13 +718,28 @@
       }
     }
     
-    // ===== VOZ =====
+    // ===== VOZ CON ANIMACIÓN DE HABLAR =====
     function speak(text) {
+      pauseIdle(); // Pausar el ciclo idle
+      
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'ES' ? 'es-ES' : lang === 'EN' ? 'en-US' : 'pt-PT';
         u.rate = 0.85;
+        
+        // Animar mientras habla (ENCOURAGE = talking)
+        setAnim('encourage');
+        
+        u.onend = () => {
+          // Volver al ciclo idle cuando termine de hablar
+          if (zone > 0 && zone <= 4) {
+            setAnim('brush'); // Durante zona activa, volver a brush
+          } else {
+            resumeIdle(); // Fuera de zona, volver a idle cycle
+          }
+        };
+        
         speechSynthesis.speak(u);
       }
     }
@@ -501,15 +750,9 @@
       loading.style.opacity = '0';
       setTimeout(() => loading.style.display = 'none', 500);
       
-      // 1. WAVE - Saludo al cargar
-      setAnim('wave', 3000);
+      // Intro con animación de hablar
       message.textContent = T[lang].intro;
       speak(T[lang].intro);
-      
-      // 2. BREATHE - Reposo después del wave
-      setTimeout(() => {
-        setAnim('breathe');
-      }, 3000);
       
       // Iniciar música
       setTimeout(() => {
@@ -517,7 +760,7 @@
       }, 1500);
       
       // Ir a primera zona
-      setTimeout(nextZone, 5000);
+      setTimeout(nextZone, 6000);
     }
     
     // ===== ZONAS =====
@@ -525,8 +768,9 @@
       zone++;
       if (zone > 4) { celebrate(); return; }
       
+      stopIdleCycle(); // Detener idle durante zona activa
       seconds = 30;
-      zones.classList.remove('hidden');
+      zonesEl.classList.remove('hidden');
       timerEl.classList.remove('hidden');
       timerLabel.textContent = T[lang].zones[zone - 1];
       
@@ -536,31 +780,46 @@
       message.textContent = txt;
       speak(txt);
       
-      // 3. BRUSH - Cepillando
-      setAnim('brush');
-      
-      if (musicPlaying) { clearTimeout(melodyTimeout); playMelody(zone); }
+      // Música para esta zona
+      if (musicPlaying) {
+        musicStopRequested = true;
+        stopAllOscillators();
+        setTimeout(() => playZoneMusic(zone), 100);
+      }
       
       clearInterval(timer);
       
       let encI = 0;
+      let returnedToBrush = false;
+      
       timer = setInterval(() => {
         seconds--;
         timerText.textContent = seconds;
         timerProgress.style.strokeDashoffset = 339.292 * (1 - (30 - seconds) / 30);
         timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
         
-        // 4. ENCOURAGE - Cada 10 segundos
+        // ENCOURAGE cada 10 segundos (hablando)
         if (seconds === 20 || seconds === 10) {
-          setAnim('encourage', 1500);
-          speak(T[lang].encourage[encI++ % 4]);
-          // Volver a brush después de encourage
-          setTimeout(() => setAnim('brush'), 1500);
+          const encText = T[lang].encourage[encI++ % 4];
+          message.textContent = encText;
+          speak(encText);
+          returnedToBrush = false;
+        }
+        
+        // Volver a BRUSH después de que termine de hablar
+        if (!speechSynthesis.speaking && !returnedToBrush && currentAnim === 'encourage') {
+          setAnim('brush');
+          returnedToBrush = true;
+        }
+        
+        // BRUSH durante la zona (por defecto cuando no habla)
+        if (!speechSynthesis.speaking && currentAnim !== 'brush' && currentAnim !== 'encourage') {
+          setAnim('brush');
         }
         
         if (seconds <= 0) {
           clearInterval(timer);
-          // 5. BOUNCE - Fin de zona
+          // BOUNCE - Fin de zona
           setAnim('bounce', 1200);
           setTimeout(nextZone, 1200);
         }
@@ -569,10 +828,10 @@
     
     // ===== CELEBRACIÓN =====
     function celebrate() {
-      zones.classList.add('hidden');
+      zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
       
-      // 6. CELEBRATE - Final
+      // CELEBRATE - Final (sin giro 360)
       setAnim('celebrate');
       message.textContent = T[lang].celebrate;
       speak(T[lang].celebrate);
@@ -591,22 +850,39 @@
       
       setTimeout(() => {
         musicPlaying = false;
-        musicBtn.textContent = '🎵 Música';
-        clearTimeout(melodyTimeout);
-        setAnim('breathe');
+        musicStopRequested = true;
+        musicBtn.textContent = '🎵';
+        stopAllOscillators();
+        startIdleCycle(); // Volver a idle cycle
         restartBtn.style.display = 'block';
         restartBtn.textContent = T[lang].restart;
       }, 3000);
     }
     
-    // ===== IDIOMA =====
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.onclick = () => {
-        lang = btn.dataset.lang;
-        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // ===== DROPDOWN IDIOMA =====
+    langBtn.onclick = () => {
+      langDropdown.classList.toggle('show');
+    };
+    
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+      item.onclick = () => {
+        lang = item.dataset.lang;
+        langBtn.textContent = lang;
+        document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        langDropdown.classList.remove('show');
+        
+        // Actualizar textos
+        message.textContent = T[lang].intro;
       };
     });
+    
+    // Cerrar dropdown al hacer clic fuera
+    document.onclick = (e) => {
+      if (!e.target.closest('.dropdown-container')) {
+        langDropdown.classList.remove('show');
+      }
+    };
     
     restartBtn.onclick = () => location.reload();
     
