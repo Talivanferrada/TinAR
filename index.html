@@ -10,73 +10,143 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Preload critical assets -->
-  <link rel="preload" href="assets/models/Tina_optimized.glb" as="fetch" crossorigin>
-  
-  <!-- Preconnect to CDNs -->
-  <link rel="preconnect" href="https://aframe.io">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
-  
-  <!-- AFRAME -->
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
-  <!-- A-Frame AR component for WebXR -->
-  <script src="https://unpkg.com/aframe-xr@0.1.0/dist/aframe-xr.min.js"></script>
-  
-  <!-- Styles -->
+  <!-- Styles FIRST -->
   <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* Critical styles for camera background */
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+    
+    #camera-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    
+    #camera-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    #tina-container {
+      position: fixed;
+      bottom: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      pointer-events: none;
+    }
+    
+    #tina-canvas {
+      width: 300px;
+      height: 400px;
+    }
+    
+    #ui-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 100;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-  <!-- Loading Overlay -->
-  <div id="loading-overlay">
-    <div class="spinner"></div>
-    <div id="loading-text">Cargando Tina...</div>
-    <div id="loading-subtitle">Apunta al lavamanos para colocar a Tina</div>
+  <!-- Camera Background -->
+  <div id="camera-container">
+    <video id="camera-video" autoplay playsinline muted></video>
   </div>
   
-  <!-- UI Overlay Container -->
-  <div id="ui-overlay"></div>
-  
-  <!-- Instructions Overlay -->
-  <div id="tap-instruction" class="tap-instruction hidden">
-    <div class="tap-icon">👆</div>
-    <div class="tap-text">Toca la pantalla para colocar a Tina</div>
+  <!-- Tina Container (will be rendered with Three.js) -->
+  <div id="tina-container">
+    <canvas id="tina-canvas"></canvas>
   </div>
   
-  <!-- AR Scene with WebXR -->
-  <a-scene
-    vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
-    embedded
-    renderer="logarithmicDepthBuffer: true; antialias: true; alpha: true"
-    background="transparent: true"
-  >
-    <a-assets>
-      <a-asset-item id="tina-model" src="assets/models/Tina_optimized.glb"></a-asset-item>
-    </a-assets>
+  <!-- UI Layer -->
+  <div id="ui-layer">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%); 
+      display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999;">
+      <div class="spinner" style="width: 60px; height: 60px; border: 6px solid rgba(255, 255, 255, 0.3); 
+        border-top: 6px solid #FFB74D; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+      <div id="loading-text" style="color: white; font-size: 24px; margin-top: 20px;">Cargando Tina...</div>
+    </div>
     
-    <!-- Lighting -->
-    <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="1.0" position="0 3 2"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="0.6" position="2 2 0"></a-light>
+    <!-- Language Selector -->
+    <div id="language-selector" class="language-selector" style="position: fixed; top: 20px; right: 20px; 
+      display: flex; gap: 10px; pointer-events: auto; z-index: 200;">
+      <button class="lang-btn active" data-lang="ES" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
+        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">ES</button>
+      <button class="lang-btn" data-lang="EN" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
+        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">EN</button>
+      <button class="lang-btn" data-lang="PT" style="min-width: 48px; min-height: 48px; padding: 12px 18px; 
+        border: 2px solid white; background: rgba(0, 0, 0, 0.6); color: white; border-radius: 25px; font-size: 16px; font-weight: bold; cursor: pointer;">PT</button>
+    </div>
     
-    <!-- Camera -->
-    <a-entity camera look-controls="enabled: false"></a-entity>
+    <!-- Zone Indicators -->
+    <div id="zone-indicators" class="zone-indicators hidden" style="position: fixed; top: 20px; left: 20px; 
+      display: flex; flex-direction: column; gap: 8px; z-index: 160;">
+      <div class="zone-dot" data-zone="1" style="width: 16px; height: 16px; border-radius: 50%; 
+        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
+      <div class="zone-dot" data-zone="2" style="width: 16px; height: 16px; border-radius: 50%; 
+        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
+      <div class="zone-dot" data-zone="3" style="width: 16px; height: 16px; border-radius: 50%; 
+        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
+      <div class="zone-dot" data-zone="4" style="width: 16px; height: 16px; border-radius: 50%; 
+        background: rgba(255, 255, 255, 0.3); border: 2px solid rgba(255, 255, 255, 0.6);"></div>
+    </div>
     
-    <!-- Tina - placed via tap -->
-    <a-entity 
-      id="tina-anchor"
-      visible="false"
-    >
-      <a-entity 
-        id="tina" 
-        gltf-model="#tina-model"
-        position="0 0 0"
-        scale="0.3 0.3 0.3"
-        rotation="0 0 0"
-      ></a-entity>
-    </a-entity>
-  </a-scene>
+    <!-- Timer -->
+    <div id="timer-container" class="timer-container hidden" style="position: fixed; top: 100px; left: 50%; 
+      transform: translateX(-50%); width: 100px; height: 100px; z-index: 150;">
+      <svg class="timer-svg" viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+        <circle class="timer-bg" cx="60" cy="60" r="54" fill="none" stroke="rgba(255, 255, 255, 0.2)" stroke-width="8"></circle>
+        <circle class="timer-progress" cx="60" cy="60" r="54" fill="none" stroke="#4CAF50" stroke-width="8" stroke-linecap="round"></circle>
+      </svg>
+      <div class="timer-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        <div class="timer-text" style="font-size: 28px; font-weight: bold; color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">30</div>
+        <div class="timer-zone-label" style="font-size: 10px; color: rgba(255, 255, 255, 0.9);"></div>
+      </div>
+    </div>
+    
+    <!-- Message Display -->
+    <div id="message-display" class="message-display" style="position: fixed; bottom: 80px; left: 50%; 
+      transform: translateX(-50%); background: rgba(0, 0, 0, 0.75); color: white; padding: 16px 32px; 
+      border-radius: 30px; font-size: 16px; max-width: 85%; text-align: center; z-index: 180;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);"></div>
+  </div>
   
-  <script src="src/app-worldtracking.js" type="module"></script>
+  <!-- Three.js for 3D model -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  
+  <!-- App -->
+  <script src="src/app-simple.js" type="module"></script>
+  
+  <style>
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .hidden { display: none !important; }
+    .zone-dot.active {
+      background: #FFB74D !important;
+      border-color: white !important;
+      box-shadow: 0 0 12px rgba(255, 183, 77, 0.8);
+      transform: scale(1.3);
+    }
+  </style>
 </body>
 </html>
