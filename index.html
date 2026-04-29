@@ -43,10 +43,11 @@
   <a-scene
     mindar-image="imageTargetSrc: assets/targets/marker.mind; autoStart: true; showStats: false;"
     color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights"
+    renderer="colorManagement: true, physicallyCorrectLights, antialias: true"
     vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false"
     embedded
+    background="transparent: true"
   >
     <a-assets>
       <a-asset-item id="tina-model" src="assets/models/Tina_optimized.glb"></a-asset-item>

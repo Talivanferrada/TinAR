@@ -295,15 +295,15 @@ class TinARApp {
     tinaEntity.setAttribute('id', 'tina');
     tinaEntity.setAttribute('gltf-model', '#tina-model');
     
-    // Position and scale (adjust based on model)
-    tinaEntity.setAttribute('position', '0 0 0.1');
-    tinaEntity.setAttribute('scale', '0.3 0.3 0.3');
-    tinaEntity.setAttribute('rotation', '0 0 0');
+    // Position and scale - model appears ABOVE the marker
+    tinaEntity.setAttribute('position', '0 0.5 0');  // Raised above marker
+    tinaEntity.setAttribute('scale', '1.5 1.5 1.5');  // Larger scale for visibility
+    tinaEntity.setAttribute('rotation', '0 180 0');  // Face the camera
     
     // Add idle breathing animation (simulated)
     tinaEntity.setAttribute('animation', {
       property: 'scale',
-      to: '0.31 0.31 0.31',
+      to: '1.55 1.55 1.55',
       dur: 2000,
       easing: 'easeInOutQuad',
       loop: true,

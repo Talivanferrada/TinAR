@@ -419,15 +419,15 @@ export class UIManager {
   }
   
   /**
-   * Position arrow overlay for zone
+   * Position arrow overlay for zone - BOTTOM corners
    */
   _positionArrowForZone(arrow, zone) {
-    // Position based on zone quadrant
+    // Position in bottom corners based on zone quadrant
     const positions = {
-      [STATES.ZONE_1]: { top: '20%', right: '20%' },   // Upper right
-      [STATES.ZONE_2]: { top: '20%', left: '20%' },    // Upper left
-      [STATES.ZONE_3]: { bottom: '20%', right: '20%' }, // Lower right
-      [STATES.ZONE_4]: { bottom: '20%', left: '20%' }   // Lower left
+      [STATES.ZONE_1]: { bottom: '200px', right: '20px' },   // Right side
+      [STATES.ZONE_2]: { bottom: '200px', left: '20px' },   // Left side
+      [STATES.ZONE_3]: { bottom: '120px', right: '20px' },  // Right side lower
+      [STATES.ZONE_4]: { bottom: '120px', left: '20px' }    // Left side lower
     };
     
     const pos = positions[zone];
@@ -440,15 +440,15 @@ export class UIManager {
   }
   
   /**
-   * Position motion indicator for zone
+   * Position motion indicator for zone - BOTTOM corners
    */
   _positionMotionForZone(motion, zone) {
-    // Slightly offset from arrow
+    // Slightly offset from arrow, in bottom corners
     const positions = {
-      [STATES.ZONE_1]: { top: '25%', right: '30%' },
-      [STATES.ZONE_2]: { top: '25%', left: '30%' },
-      [STATES.ZONE_3]: { bottom: '25%', right: '30%' },
-      [STATES.ZONE_4]: { bottom: '25%', left: '30%' }
+      [STATES.ZONE_1]: { bottom: '250px', right: '80px' },
+      [STATES.ZONE_2]: { bottom: '250px', left: '80px' },
+      [STATES.ZONE_3]: { bottom: '170px', right: '80px' },
+      [STATES.ZONE_4]: { bottom: '170px', left: '80px' }
     };
     
     const pos = positions[zone];
@@ -502,6 +502,42 @@ export class UIManager {
     this.hideAllOverlays();
     this.showMessage(this._getText('CELEBRATION'));
     this.showCelebrationParticles();
+    this.showRestartButton();
+  }
+  
+  /**
+   * Show restart button
+   */
+  showRestartButton() {
+    // Remove existing button if any
+    const existingBtn = document.getElementById('restart-btn');
+    if (existingBtn) existingBtn.remove();
+    
+    const btn = document.createElement('button');
+    btn.id = 'restart-btn';
+    btn.className = 'restart-btn';
+    btn.textContent = this.currentLanguage === 'ES' ? '🔄 Jugar de nuevo' :
+                       this.currentLanguage === 'EN' ? '🔄 Play again' :
+                       '🔄 Jogar de novo';
+    btn.style.pointerEvents = 'auto';
+    
+    btn.addEventListener('click', () => {
+      this.hideRestartButton();
+      // Dispatch restart event
+      document.dispatchEvent(new CustomEvent('restartApp'));
+      // Reload page as simplest restart
+      window.location.reload();
+    });
+    
+    document.body.appendChild(btn);
+  }
+  
+  /**
+   * Hide restart button
+   */
+  hideRestartButton() {
+    const btn = document.getElementById('restart-btn');
+    if (btn) btn.remove();
   }
   
   /**

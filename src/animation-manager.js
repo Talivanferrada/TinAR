@@ -18,11 +18,11 @@ export const ANIMATIONS = {
   },
   
   // Breathing: Idle animation (default)
-  // Gentle scale oscillation (0.98 to 1.02)
+  // Gentle scale oscillation
   breathing: {
     property: 'scale',
-    from: '0.3 0.3 0.3',
-    to: '0.31 0.31 0.31',
+    from: '1.5 1.5 1.5',
+    to: '1.55 1.55 1.55',
     dur: 3000,
     easing: 'easeInOutSine',
     loop: true,
@@ -44,8 +44,8 @@ export const ANIMATIONS = {
   // Bounce + rotation combination
   dancing: {
     property: 'position',
-    from: '0 0 0.1',
-    to: '0 0.05 0.1',
+    from: '0 0.5 0',
+    to: '0 0.55 0',
     dur: 500,
     easing: 'easeInOutQuad',
     loop: true,
@@ -56,8 +56,8 @@ export const ANIMATIONS = {
   // Jump up (translate Y), land
   jumping: {
     property: 'position',
-    from: '0 0 0.1',
-    to: '0 0.15 0.1',
+    from: '0 0.5 0',
+    to: '0 0.7 0',
     dur: 250,
     easing: 'easeOutQuad',
     loop: false,
