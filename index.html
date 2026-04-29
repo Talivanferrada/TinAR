@@ -41,7 +41,7 @@
   
   <!-- AR Scene -->
   <a-scene
-    mindar-image="imageTargetSrc: assets/targets/marker.mind; autoStart: true; showStats: false; maxTrack: 1; filterMinCF: 0.0001; filterBeta: 0.001;"
+    mindar-image="imageTargetSrc: assets/targets/marker.mind; autoStart: true; showStats: false; maxTrack: 1; filterMinCF: 0.001; filterBeta: 0.01; missTolerance: 5; warmupTolerance: 3;"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights, antialias: true"
     vr-mode-ui="enabled: false"
@@ -53,23 +53,24 @@
       <a-asset-item id="tina-model" src="assets/models/Tina_optimized.glb"></a-asset-item>
     </a-assets>
     
-    <!-- Lighting - CRITICAL for model visibility -->
-    <a-light type="ambient" color="#ffffff" intensity="1.0"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="0.8" position="0 2 1"></a-light>
-    <a-light type="directional" color="#ffffff" intensity="0.4" position="1 1 0"></a-light>
+    <!-- Lighting - CRITICAL for model visibility from all angles -->
+    <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="1.0" position="0 3 2"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.6" position="2 2 0"></a-light>
+    <a-light type="directional" color="#ffffff" intensity="0.4" position="-2 1 -1"></a-light>
     
     <!-- Camera -->
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
     
     <!-- Target -->
     <a-entity mindar-image-target="targetIndex: 0" id="target">
-      <!-- Tina Model - feet on marker, facing camera -->
+      <!-- Tina Model - standing ON the marker plane -->
       <a-entity 
         id="tina" 
         gltf-model="#tina-model"
         position="0 0 0"
-        scale="0.3 0.3 0.3"
-        rotation="0 180 0"
+        scale="0.25 0.25 0.25"
+        rotation="-90 0 0"
         visible="true"
       ></a-entity>
     </a-entity>

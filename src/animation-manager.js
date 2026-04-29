@@ -21,8 +21,8 @@ export const ANIMATIONS = {
   // Gentle scale oscillation
   breathing: {
     property: 'scale',
-    from: '0.3 0.3 0.3',
-    to: '0.32 0.32 0.32',
+    from: '0.25 0.25 0.25',
+    to: '0.26 0.26 0.26',
     dur: 3000,
     easing: 'easeInOutSine',
     loop: true,

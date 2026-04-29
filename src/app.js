@@ -20,7 +20,7 @@ class TinARApp {
     this.maxModelLoadAttempts = 3;
     this.arSupported = false;
     this.targetLostTimeout = null;  // Delay before hiding on target lost
-    this.targetLostDelay = 1500;    // 1.5 seconds grace period
+    this.targetLostDelay = 3000;    // 3 seconds grace period for more tolerance
     
     this.init();
   }
