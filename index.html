@@ -41,37 +41,108 @@
       --poster-color: transparent;
     }
     
-    /* Animations */
-    .anim-wave { animation: wave 3s ease-in-out; }
-    .anim-brush { animation: brush 1s ease-in-out infinite; }
-    .anim-bounce { animation: bounce 1s ease-in-out; }
-    .anim-celebrate { animation: celebrate 0.5s ease-in-out infinite; }
+    /* ========== ANIMACIONES ========== */
+    
+    /* 1. WAVE - Saludo al cargar */
+    .anim-wave {
+      animation: wave 3s ease-in-out forwards;
+    }
     
     @keyframes wave {
-      0%, 100% { transform: translateX(-50%) rotateY(0deg); }
-      25% { transform: translateX(-50%) rotateY(30deg); }
-      75% { transform: translateX(-50%) rotateY(-30deg); }
+      0% { transform: translateX(-50%) rotateY(0deg) scale(1); }
+      15% { transform: translateX(-50%) rotateY(25deg) scale(1.05); }
+      30% { transform: translateX(-50%) rotateY(-25deg) scale(1.05); }
+      45% { transform: translateX(-50%) rotateY(20deg) scale(1.03); }
+      60% { transform: translateX(-50%) rotateY(-15deg) scale(1.02); }
+      75% { transform: translateX(-50%) rotateY(10deg) scale(1.01); }
+      100% { transform: translateX(-50%) rotateY(0deg) scale(1); }
     }
     
-    @keyframes brush {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(-15px); }
-    }
-    
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
-      50% { transform: translateX(-50%) translateY(-30px) scale(1.1); }
-    }
-    
-    @keyframes celebrate {
-      0%, 100% { transform: translateX(-50%) translateY(0) rotateY(0deg) scale(1); }
-      50% { transform: translateX(-50%) translateY(-40px) rotateY(180deg) scale(1.1); }
+    /* 2. BREATHE - Reposo, respiración suave */
+    .anim-breathe {
+      animation: breathe 3s ease-in-out infinite;
     }
     
     @keyframes breathe {
-      0%, 100% { transform: translateX(-50%) scale(1); }
-      50% { transform: translateX(-50%) scale(1.02); }
+      0%, 100% { 
+        transform: translateX(-50%) scale(1) translateY(0);
+      }
+      50% { 
+        transform: translateX(-50%) scale(1.03) translateY(-8px);
+      }
     }
+    
+    /* 3. BRUSH - Cepillando con rebote y wiggle */
+    .anim-brush {
+      animation: brush 0.8s ease-in-out infinite;
+    }
+    
+    @keyframes brush {
+      0%, 100% { 
+        transform: translateX(-50%) translateY(0) rotateZ(0deg);
+      }
+      25% { 
+        transform: translateX(-50%) translateY(-12px) rotateZ(-8deg);
+      }
+      50% { 
+        transform: translateX(-50%) translateY(0) rotateZ(0deg);
+      }
+      75% { 
+        transform: translateX(-50%) translateY(-12px) rotateZ(8deg);
+      }
+    }
+    
+    /* 4. ENCOURAGE - Pequeño salto feliz */
+    .anim-encourage {
+      animation: encourage 1.5s ease-in-out;
+    }
+    
+    @keyframes encourage {
+      0% { transform: translateX(-50%) translateY(0) scale(1); }
+      30% { transform: translateX(-50%) translateY(-25px) scale(1.08); }
+      50% { transform: translateX(-50%) translateY(-35px) scale(1.12); }
+      70% { transform: translateX(-50%) translateY(-20px) scale(1.05); }
+      100% { transform: translateX(-50%) translateY(0) scale(1); }
+    }
+    
+    /* 5. BOUNCE - Fin de zona, saltito de celebración */
+    .anim-bounce {
+      animation: bounce 1.2s ease-in-out;
+    }
+    
+    @keyframes bounce {
+      0% { transform: translateX(-50%) translateY(0) scale(1); }
+      20% { transform: translateX(-50%) translateY(-40px) scale(1.15); }
+      40% { transform: translateX(-50%) translateY(0) scale(0.95); }
+      60% { transform: translateX(-50%) translateY(-25px) scale(1.08); }
+      80% { transform: translateX(-50%) translateY(0) scale(0.98); }
+      100% { transform: translateX(-50%) translateY(0) scale(1); }
+    }
+    
+    /* 6. CELEBRATE - Final, salta, gira y pulsa */
+    .anim-celebrate {
+      animation: celebrate 0.6s ease-in-out infinite;
+    }
+    
+    @keyframes celebrate {
+      0% { 
+        transform: translateX(-50%) translateY(0) rotateY(0deg) scale(1);
+      }
+      25% { 
+        transform: translateX(-50%) translateY(-50px) rotateY(90deg) scale(1.15);
+      }
+      50% { 
+        transform: translateX(-50%) translateY(-10px) rotateY(180deg) scale(1.1);
+      }
+      75% { 
+        transform: translateX(-50%) translateY(-50px) rotateY(270deg) scale(1.15);
+      }
+      100% { 
+        transform: translateX(-50%) translateY(0) rotateY(360deg) scale(1);
+      }
+    }
+    
+    /* ========== UI STYLES ========== */
     
     #loading {
       position: fixed;
@@ -286,7 +357,7 @@
   <button id="restart-btn">🔄 Jugar de nuevo</button>
   
   <script>
-    // Variables globales primero
+    // ===== ESTADO =====
     let lang = 'ES';
     let zone = 0;
     let seconds = 30;
@@ -295,6 +366,7 @@
     let musicPlaying = false;
     let melodyTimeout = null;
     let modelLoaded = false;
+    let currentAnim = null;
     
     // Elementos
     const loading = document.getElementById('loading');
@@ -309,38 +381,61 @@
     const restartBtn = document.getElementById('restart-btn');
     const musicBtn = document.getElementById('music-btn');
     
-    // Textos
+    // ===== ANIMACIONES =====
+    const ANIMS = ['wave', 'breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
+    
+    function setAnim(name, duration = null) {
+      // Limpiar todas las animaciones
+      ANIMS.forEach(a => tina.classList.remove('anim-' + a));
+      
+      // Añadir la nueva
+      if (name) {
+        tina.classList.add('anim-' + name);
+        currentAnim = name;
+        
+        // Si tiene duración, volver a breathe después
+        if (duration) {
+          setTimeout(() => {
+            if (currentAnim === name) {
+              setAnim('breathe');
+            }
+          }, duration);
+        }
+      }
+    }
+    
+    // ===== TEXTOS =====
     const T = {
       ES: {
-        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes!',
-        zone: 'Cepillemos la zona {z}. Inclina 45° y haz círculos.',
-        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!'],
-        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes! 🎉',
+        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
+        zone: 'Cepillemos la zona {z}. Inclina el cepillo 45° y haz círculos pequeños.',
+        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Genial!'],
+        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉',
         zones: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda']
       },
       EN: {
-        intro: 'Hi! I\'m Tina. Let\'s brush our teeth!',
-        zone: 'Let\'s brush {z}. Tilt 45° and make circles.',
-        encourage: ['Great!', 'Excellent!', 'Keep going!'],
-        celebrate: 'Fantastic! You brushed all your teeth! 🎉',
+        intro: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
+        zone: 'Let\'s brush the {z} area. Tilt 45° and make small circles.',
+        encourage: ['Great job!', 'Excellent!', 'Keep going!', 'Awesome!'],
+        celebrate: 'Fantastic! You brushed all your teeth like a champion! 🎉',
         zones: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left']
       },
       PT: {
-        intro: 'Olá! Sou Tina. Vamos escovar os dentes!',
-        zone: 'Vamos escovar {z}. Incline 45° e faça círculos.',
-        encourage: ['Muito bem!', 'Excelente!', 'Continue!'],
-        celebrate: 'Fantástico! Você escovou todos os dentes! 🎉',
+        intro: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
+        zone: 'Vamos escovar a área {z}. Incline 45° e faça círculos pequenos.',
+        encourage: ['Muito bem!', 'Excelente!', 'Continue!', 'Incrível!'],
+        celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉',
         zones: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda']
       }
     };
     
-    // Música
+    // ===== MÚSICA =====
     const NOTES = { C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25 };
     const MELODIES = {
-      1: { n: ['C4','E4','G4','C5','G4','E4','C4','G4'], d: [0.3,0.3,0.3,0.5,0.3,0.3,0.3,0.5] },
-      2: { n: ['G4','A4','B4','C5','D5','C5','B4','G4'], d: [0.25,0.25,0.25,0.25,0.5,0.25,0.25,0.5] },
-      3: { n: ['E4','G4','C5','B4','G4','A4','G4','C4'], d: [0.4,0.4,0.6,0.4,0.4,0.4,0.3,0.6] },
-      4: { n: ['C4','D4','E4','F4','G4','A4','B4','C5'], d: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.6] }
+      1: { n: ['C4','E4','G4','C5','G4','E4','C4','G4','E4','G4'], d: [0.3,0.3,0.3,0.5,0.3,0.3,0.3,0.3,0.3,0.5] },
+      2: { n: ['G4','A4','B4','C5','D5','C5','B4','A4','G4'], d: [0.25,0.25,0.25,0.25,0.5,0.25,0.25,0.25,0.5] },
+      3: { n: ['E4','G4','C5','B4','G4','A4','G4','E4','C4'], d: [0.4,0.4,0.6,0.4,0.4,0.4,0.3,0.3,0.6] },
+      4: { n: ['C4','D4','E4','F4','G4','A4','B4','C5','E5','C5','G4'], d: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.6] }
     };
     
     function playMelody(z) {
@@ -379,7 +474,7 @@
     
     musicBtn.onclick = toggleMusic;
     
-    // Cámara
+    // ===== CÁMARA =====
     async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -389,7 +484,7 @@
       }
     }
     
-    // Voz
+    // ===== VOZ =====
     function speak(text) {
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
@@ -400,35 +495,32 @@
       }
     }
     
-    // Animaciones
-    function setAnim(name) {
-      tina.className = '';
-      if (name) tina.classList.add('anim-' + name);
-    }
-    
-    // Iniciar
+    // ===== INICIO =====
     function startApp() {
       console.log('🦕 Starting app...');
       loading.style.opacity = '0';
       setTimeout(() => loading.style.display = 'none', 500);
       
-      setAnim('wave');
+      // 1. WAVE - Saludo al cargar
+      setAnim('wave', 3000);
       message.textContent = T[lang].intro;
       speak(T[lang].intro);
       
+      // 2. BREATHE - Reposo después del wave
       setTimeout(() => {
-        setAnim(null);
-        tina.style.animation = 'breathe 3s ease-in-out infinite';
+        setAnim('breathe');
       }, 3000);
       
+      // Iniciar música
       setTimeout(() => {
         if (!musicPlaying) toggleMusic();
       }, 1500);
       
+      // Ir a primera zona
       setTimeout(nextZone, 5000);
     }
     
-    // Siguiente zona
+    // ===== ZONAS =====
     function nextZone() {
       zone++;
       if (zone > 4) { celebrate(); return; }
@@ -444,7 +536,9 @@
       message.textContent = txt;
       speak(txt);
       
+      // 3. BRUSH - Cepillando
       setAnim('brush');
+      
       if (musicPlaying) { clearTimeout(melodyTimeout); playMelody(zone); }
       
       clearInterval(timer);
@@ -456,29 +550,36 @@
         timerProgress.style.strokeDashoffset = 339.292 * (1 - (30 - seconds) / 30);
         timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
         
+        // 4. ENCOURAGE - Cada 10 segundos
         if (seconds === 20 || seconds === 10) {
-          speak(T[lang].encourage[encI++ % 3]);
+          setAnim('encourage', 1500);
+          speak(T[lang].encourage[encI++ % 4]);
+          // Volver a brush después de encourage
+          setTimeout(() => setAnim('brush'), 1500);
         }
         
         if (seconds <= 0) {
           clearInterval(timer);
-          setAnim('bounce');
-          setTimeout(nextZone, 1500);
+          // 5. BOUNCE - Fin de zona
+          setAnim('bounce', 1200);
+          setTimeout(nextZone, 1200);
         }
       }, 1000);
     }
     
-    // Celebración
+    // ===== CELEBRACIÓN =====
     function celebrate() {
       zones.classList.add('hidden');
       timerEl.classList.add('hidden');
       
+      // 6. CELEBRATE - Final
       setAnim('celebrate');
       message.textContent = T[lang].celebrate;
       speak(T[lang].celebrate);
       
-      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98'];
-      for (let i = 0; i < 60; i++) {
+      // Confetti
+      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD'];
+      for (let i = 0; i < 80; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
         c.style.left = Math.random() * 100 + '%';
@@ -492,13 +593,13 @@
         musicPlaying = false;
         musicBtn.textContent = '🎵 Música';
         clearTimeout(melodyTimeout);
-        setAnim(null);
+        setAnim('breathe');
         restartBtn.style.display = 'block';
         restartBtn.textContent = T[lang].restart;
-      }, 2000);
+      }, 3000);
     }
     
-    // Idioma
+    // ===== IDIOMA =====
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.onclick = () => {
         lang = btn.dataset.lang;
@@ -509,17 +610,13 @@
     
     restartBtn.onclick = () => location.reload();
     
-    // ===== INICIALIZACIÓN =====
+    // ===== EVENTOS MODELO =====
     console.log('🦕 Initializing...');
-    
-    // Cargar cámara
     initCamera();
     
-    // Eventos del modelo
     tina.addEventListener('progress', (e) => {
       const p = Math.floor(e.detail.totalProgress * 100);
       loadingStatus.textContent = p + '%';
-      console.log('Loading:', p + '%');
     });
     
     tina.addEventListener('load', () => {
@@ -537,7 +634,6 @@
     setTimeout(() => {
       if (!modelLoaded) {
         console.log('⏰ Timeout - forcing start');
-        loadingStatus.textContent = 'Iniciando...';
         startApp();
       }
     }, 15000);
