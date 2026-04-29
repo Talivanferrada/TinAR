@@ -51,7 +51,7 @@ Una experiencia WebAR donde **Tina**, una amigable dinosauria, guía al niño a 
 ## 🚀 Cómo Usar
 
 ### Paso 1: Preparación
-1. **Imprime el marcador AR** disponible en `assets/images/marker.png` o usa una tarjeta impresa
+1. **Imprime el marcador AR** disponible en `assets/images/card_marker.png` ⚠️ **IMPORTANTE: Usar esta imagen específica**
 2. Asegúrate de tener buena iluminación en el área donde usarás la app
 
 ### Paso 2: Acceso
