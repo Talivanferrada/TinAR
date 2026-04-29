@@ -62,11 +62,21 @@
     
     <!-- Target -->
     <a-entity mindar-image-target="targetIndex: 0" id="target">
-      <!-- Tina Model - directly in HTML for reliable loading -->
+      <!-- Test: Simple colored cube to verify AR works -->
+      <a-box 
+        id="test-cube"
+        position="0 0.3 0"
+        scale="0.2 0.2 0.2"
+        rotation="0 45 0"
+        color="#4FC3F7"
+        material="color: #4FC3F7; metalness: 0.3; roughness: 0.7"
+      ></a-box>
+      
+      <!-- Tina Model - try loading after cube is visible -->
       <a-entity 
         id="tina" 
         gltf-model="#tina-model"
-        position="0 0.3 0"
+        position="0 0.5 0"
         scale="0.5 0.5 0.5"
         rotation="0 0 0"
         visible="true"
