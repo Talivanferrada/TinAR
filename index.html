@@ -443,7 +443,7 @@
       }
     }
     
-    // ===== IDLE CYCLE (5s static, 5s breathe) =====
+    // ===== IDLE CYCLE (3s static, 3s breathe) =====
     function startIdleCycle() {
       stopIdleCycle();
       isIdle = true;
@@ -460,7 +460,7 @@
           idlePhase = 'static';
           setAnim(null);
         }
-      }, 5000);
+      }, 3000);
     }
     
     function stopIdleCycle() {
@@ -477,34 +477,49 @@
     function resumeIdle() {
       isIdle = true;
       idlePhase = 'static';
-      setAnim(null);
+      setAnim(null); // Empieza con static
+      
+      // Reiniciar el timer si no existe
+      if (!idleTimer) {
+        idleTimer = setInterval(() => {
+          if (!isIdle) return;
+          
+          if (idlePhase === 'static') {
+            idlePhase = 'breathe';
+            setAnim('breathe');
+          } else {
+            idlePhase = 'static';
+            setAnim(null);
+          }
+        }, 3000);
+      }
     }
     
-    // ===== TEXTOS =====
+    // ===== TEXTOS (lenguaje infantil y motivante, sin emojis) =====
     const T = {
       ES: {
-        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
-        zone: 'Cepillemos la zona {z}. Inclina el cepillo 45° y haz círculos pequeños.',
-        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Genial!'],
-        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉',
-        zones: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda'],
-        restart: '🔄 Jugar de nuevo'
+        intro: 'Hola amiguitos, soy Tina la dinosaurio. Vamos a cepillar los dientes juntos, será divertido.',
+        zone: 'Ahora toca la zona {z}. Recuerda inclinar el cepillito y hacer circulitos suaves.',
+        encourage: ['Muy bien, sigue así.', 'Qué bien lo haces.', 'Eres un campeón.', 'Excelente trabajo.'],
+        celebrate: 'Lo lograste. Cepillaste todos tus dientes como un súper héroe. Estoy muy orgullosa de ti.',
+        zones: ['Arriba derecha', 'Arriba izquierda', 'Abajo derecha', 'Abajo izquierda'],
+        restart: 'Jugar de nuevo'
       },
       EN: {
-        intro: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
-        zone: 'Let\'s brush the {z} area. Tilt 45° and make small circles.',
-        encourage: ['Great job!', 'Excellent!', 'Keep going!', 'Awesome!'],
-        celebrate: 'Fantastic! You brushed all your teeth like a champion! 🎉',
-        zones: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left'],
-        restart: '🔄 Play again'
+        intro: 'Hi friends, I\'m Tina the dinosaur. Let\'s brush our teeth together, it will be fun.',
+        zone: 'Now it\'s time for the {z} area. Remember to tilt your toothbrush and make little circles.',
+        encourage: ['Great job, keep going.', 'You\'re doing so well.', 'You\'re a champion.', 'Awesome work.'],
+        celebrate: 'You did it. You brushed all your teeth like a super hero. I\'m so proud of you.',
+        zones: ['Top right', 'Top left', 'Bottom right', 'Bottom left'],
+        restart: 'Play again'
       },
       PT: {
-        intro: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
-        zone: 'Vamos escovar a área {z}. Incline 45° e faça círculos pequenos.',
-        encourage: ['Muito bem!', 'Excelente!', 'Continue!', 'Incrível!'],
-        celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉',
-        zones: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda'],
-        restart: '🔄 Jogar de novo'
+        intro: 'Oi amiguinhos, sou Tina a dinossauro. Vamos escovar os dentes juntos, vai ser divertido.',
+        zone: 'Agora é a vez da área {z}. Lembra de inclinar a escovinha e fazer circulinhos suaves.',
+        encourage: ['Muito bem, continue.', 'Você está indo super bem.', 'Você é um campeão.', 'Trabalho incrível.'],
+        celebrate: 'Você conseguiu. Escovou todos os dentes como um super herói. Estou muito orgulhosa de você.',
+        zones: ['Em cima direita', 'Em cima esquerda', 'Em baixo direita', 'Em baixo esquerda'],
+        restart: 'Jogar de novo'
       }
     };
     
@@ -725,8 +740,17 @@
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang === 'ES' ? 'es-ES' : lang === 'EN' ? 'en-US' : 'pt-PT';
-        u.rate = 0.85;
+        // Español latinoamericano, inglés y portugués
+        u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
+        u.rate = 0.9;
+        
+        // Intentar usar voz latina si está disponible
+        const voices = speechSynthesis.getVoices();
+        const latinVoice = voices.find(v => 
+          v.lang.includes('es-MX') || v.lang.includes('es-MX') || 
+          v.lang.includes('es-US') || v.lang.includes('Latin')
+        );
+        if (latinVoice && lang === 'ES') u.voice = latinVoice;
         
         // Animar mientras habla (ENCOURAGE = talking)
         setAnim('encourage');
@@ -749,6 +773,9 @@
       console.log('🦕 Starting app...');
       loading.style.opacity = '0';
       setTimeout(() => loading.style.display = 'none', 500);
+      
+      // Iniciar ciclo idle (3s static, 3s breathe)
+      startIdleCycle();
       
       // Intro con animación de hablar
       message.textContent = T[lang].intro;
