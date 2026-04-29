@@ -9,7 +9,6 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Model Viewer - Google's reliable 3D viewer -->
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
   
   <style>
@@ -31,72 +30,49 @@
       z-index: 1;
     }
     
-    #tina-container {
+    #tina-3d {
       position: fixed;
-      bottom: 8%;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
-      pointer-events: none;
-    }
-    
-    model-viewer {
       width: 400px;
       height: 500px;
       --poster-color: transparent;
     }
     
-    /* Animations for Tina */
-    #tina-container.wave model-viewer {
-      animation: wave-anim 3s ease-in-out;
+    /* Animations */
+    .anim-wave { animation: wave 3s ease-in-out; }
+    .anim-brush { animation: brush 1s ease-in-out infinite; }
+    .anim-bounce { animation: bounce 1s ease-in-out; }
+    .anim-celebrate { animation: celebrate 0.5s ease-in-out infinite; }
+    
+    @keyframes wave {
+      0%, 100% { transform: translateX(-50%) rotateY(0deg); }
+      25% { transform: translateX(-50%) rotateY(30deg); }
+      75% { transform: translateX(-50%) rotateY(-30deg); }
     }
     
-    #tina-container.brushing model-viewer {
-      animation: brush-anim 1s ease-in-out infinite;
+    @keyframes brush {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-15px); }
     }
     
-    #tina-container.celebrate model-viewer {
-      animation: celebrate-anim 0.5s ease-in-out infinite;
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+      50% { transform: translateX(-50%) translateY(-30px) scale(1.1); }
     }
     
-    #tina-container.bounce model-viewer {
-      animation: bounce-anim 1s ease-in-out;
-    }
-    
-    @keyframes wave-anim {
-      0%, 100% { transform: rotateY(0deg) scale(1); }
-      25% { transform: rotateY(30deg) scale(1.05); }
-      50% { transform: rotateY(-30deg) scale(1.05); }
-      75% { transform: rotateY(15deg) scale(1.02); }
-    }
-    
-    @keyframes brush-anim {
-      0%, 100% { transform: translateY(0) rotateZ(0deg); }
-      25% { transform: translateY(-10px) rotateZ(-5deg); }
-      75% { transform: translateY(-10px) rotateZ(5deg); }
-    }
-    
-    @keyframes celebrate-anim {
-      0%, 100% { transform: translateY(0) rotateY(0deg) scale(1); }
-      50% { transform: translateY(-40px) rotateY(180deg) scale(1.1); }
-    }
-    
-    @keyframes bounce-anim {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.1); }
-    }
-    
-    /* Idle breathing animation - always on */
-    #tina-container:not(.wave):not(.brushing):not(.celebrate):not(.bounce) model-viewer {
-      animation: breathe 3s ease-in-out infinite;
+    @keyframes celebrate {
+      0%, 100% { transform: translateX(-50%) translateY(0) rotateY(0deg) scale(1); }
+      50% { transform: translateX(-50%) translateY(-40px) rotateY(180deg) scale(1.1); }
     }
     
     @keyframes breathe {
-      0%, 100% { transform: scale(1) translateY(0); }
-      50% { transform: scale(1.02) translateY(-5px); }
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.02); }
     }
     
-    /* Loading */
     #loading {
       position: fixed;
       top: 0; left: 0;
@@ -120,20 +96,9 @@
     
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    #loading-text {
-      color: #FF69B4;
-      font-size: 26px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+    #loading-text { color: #FF69B4; font-size: 26px; margin-top: 20px; font-weight: bold; }
+    #loading-status { color: #FF69B4; font-size: 18px; margin-top: 10px; }
     
-    #loading-percent {
-      color: #FF69B4;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-    
-    /* UI */
     #lang-selector {
       position: fixed;
       top: 20px; right: 20px;
@@ -152,13 +117,9 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      font-family: inherit;
     }
     
-    .lang-btn.active {
-      background: white;
-      color: #FF69B4;
-    }
+    .lang-btn.active { background: white; color: #FF69B4; }
     
     #zones {
       position: fixed;
@@ -180,7 +141,6 @@
       font-size: 12px;
       font-weight: bold;
       color: white;
-      transition: all 0.3s;
     }
     
     .zone-dot.active {
@@ -201,7 +161,7 @@
     #timer svg { width: 100%; height: 100%; transform: rotate(-90deg); }
     #timer circle { fill: none; stroke-width: 8; }
     #timer .bg { stroke: rgba(255,255,255,0.3); }
-    #timer .progress { stroke: #FF69B4; stroke-linecap: round; }
+    #timer .progress { stroke: #FF69B4; stroke-linecap: round; stroke-dasharray: 339.292; }
     
     #timer-text {
       position: absolute;
@@ -220,8 +180,6 @@
       color: white;
       font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 1px;
-      white-space: nowrap;
     }
     
     #message {
@@ -236,7 +194,6 @@
       max-width: 90%;
       text-align: center;
       z-index: 100;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
     }
     
     #music-btn {
@@ -251,7 +208,6 @@
       font-size: 14px;
       cursor: pointer;
       z-index: 100;
-      font-family: inherit;
       font-weight: bold;
     }
     
@@ -268,9 +224,7 @@
       font-weight: bold;
       cursor: pointer;
       z-index: 200;
-      box-shadow: 0 5px 20px rgba(255,105,180,0.5);
       display: none;
-      font-family: inherit;
     }
     
     .confetti {
@@ -281,9 +235,7 @@
       z-index: 500;
     }
     
-    @keyframes fall {
-      to { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
+    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
     
     .hidden { display: none !important; }
   </style>
@@ -291,28 +243,22 @@
 <body>
   <video id="camera" autoplay playsinline muted></video>
   
-  <!-- Tina 3D Model Container -->
-  <div id="tina-container" class="hidden">
-    <model-viewer
-      id="tina-model"
-      src="assets/models/Tina_optimized.glb"
-      alt="Tina la dinosauria"
-      auto-rotate
-      rotation-per-second="30deg"
-      camera-controls="false"
-      disable-zoom
-      touch-action="none"
-    ></model-viewer>
-  </div>
+  <model-viewer
+    id="tina-3d"
+    src="assets/models/Tina_optimized.glb"
+    alt="Tina"
+    auto-rotate
+    rotation-per-second="30deg"
+    camera-controls="false"
+    disable-zoom
+  ></model-viewer>
   
-  <!-- Loading -->
   <div id="loading">
     <div class="spinner"></div>
     <div id="loading-text">Cargando a Tina...</div>
-    <div id="loading-percent">Preparando...</div>
+    <div id="loading-status">0%</div>
   </div>
   
-  <!-- UI -->
   <div id="lang-selector">
     <button class="lang-btn active" data-lang="ES">ES</button>
     <button class="lang-btn" data-lang="EN">EN</button>
@@ -329,7 +275,7 @@
   <div id="timer" class="hidden">
     <svg viewBox="0 0 120 120">
       <circle class="bg" cx="60" cy="60" r="54"/>
-      <circle class="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="0"/>
+      <circle class="progress" cx="60" cy="60" r="54" />
     </svg>
     <div id="timer-text">30</div>
     <div id="timer-label"></div>
@@ -340,7 +286,7 @@
   <button id="restart-btn">🔄 Jugar de nuevo</button>
   
   <script>
-    // ===== STATE =====
+    // Variables globales primero
     let lang = 'ES';
     let zone = 0;
     let seconds = 30;
@@ -348,211 +294,190 @@
     let audioCtx = null;
     let musicPlaying = false;
     let melodyTimeout = null;
+    let modelLoaded = false;
     
-    // Elements
-    const loadingEl = document.getElementById('loading');
-    const tinaContainer = document.getElementById('tina-container');
-    const tinaModel = document.getElementById('tina-model');
-    const zonesEl = document.getElementById('zones');
+    // Elementos
+    const loading = document.getElementById('loading');
+    const loadingStatus = document.getElementById('loading-status');
+    const tina = document.getElementById('tina-3d');
+    const zones = document.getElementById('zones');
     const timerEl = document.getElementById('timer');
     const timerText = document.getElementById('timer-text');
     const timerLabel = document.getElementById('timer-label');
     const timerProgress = document.querySelector('.progress');
-    const messageEl = document.getElementById('message');
+    const message = document.getElementById('message');
     const restartBtn = document.getElementById('restart-btn');
     const musicBtn = document.getElementById('music-btn');
     
-    // ===== ANIMATION HELPER =====
-    function playAnim(name, duration) {
-      tinaContainer.classList.remove('wave', 'brushing', 'celebrate', 'bounce');
-      tinaContainer.classList.add(name);
-      if (duration) {
-        setTimeout(() => {
-          tinaContainer.classList.remove(name);
-        }, duration * 1000);
-      }
-    }
-    
-    // ===== TEXTS =====
-    const TEXTS = {
+    // Textos
+    const T = {
       ES: {
-        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
-        zone: 'Cepillemos la zona {z}. Inclina el cepillo 45° y haz círculos.',
-        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!', '¡Genial!'],
+        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes!',
+        zone: 'Cepillemos la zona {z}. Inclina 45° y haz círculos.',
+        encourage: ['¡Muy bien!', '¡Excelente!', '¡Sigue así!'],
         celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes! 🎉',
-        zoneNames: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda']
+        zones: ['Sup. Derecha', 'Sup. Izquierda', 'Inf. Derecha', 'Inf. Izquierda']
       },
       EN: {
-        intro: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
-        zone: 'Let\'s brush the {z} area. Tilt 45° and make circles.',
-        encourage: ['Great job!', 'Excellent!', 'Keep going!', 'Awesome!'],
+        intro: 'Hi! I\'m Tina. Let\'s brush our teeth!',
+        zone: 'Let\'s brush {z}. Tilt 45° and make circles.',
+        encourage: ['Great!', 'Excellent!', 'Keep going!'],
         celebrate: 'Fantastic! You brushed all your teeth! 🎉',
-        zoneNames: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left']
+        zones: ['Upper Right', 'Upper Left', 'Lower Right', 'Lower Left']
       },
       PT: {
-        intro: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
-        zone: 'Vamos escovar a área {z}. Incline 45° e faça círculos.',
-        encourage: ['Muito bem!', 'Excelente!', 'Continue!', 'Incrível!'],
+        intro: 'Olá! Sou Tina. Vamos escovar os dentes!',
+        zone: 'Vamos escovar {z}. Incline 45° e faça círculos.',
+        encourage: ['Muito bem!', 'Excelente!', 'Continue!'],
         celebrate: 'Fantástico! Você escovou todos os dentes! 🎉',
-        zoneNames: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda']
+        zones: ['Sup. Direita', 'Sup. Esquerda', 'Inf. Direita', 'Inf. Esquerda']
       }
     };
     
-    // ===== MUSIC =====
-    const NOTES = {
-      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-      C5: 523.25, D5: 587.33, E5: 659.25, G5: 783.99
-    };
-    
+    // Música
+    const NOTES = { C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88, C5:523.25, D5:587.33, E5:659.25 };
     const MELODIES = {
-      1: { notes: ['C4','E4','G4','C5','G4','E4','C4','G4','E4','G4','C4'], dur: [0.3,0.3,0.3,0.5,0.3,0.3,0.3,0.3,0.3,0.3,0.5] },
-      2: { notes: ['G4','A4','B4','C5','D5','C5','B4','A4','G4'], dur: [0.25,0.25,0.25,0.25,0.5,0.25,0.25,0.25,0.5] },
-      3: { notes: ['E4','G4','C5','B4','G4','A4','G4','E4','C4'], dur: [0.4,0.4,0.6,0.4,0.4,0.4,0.3,0.3,0.6] },
-      4: { notes: ['C4','D4','E4','F4','G4','A4','B4','C5','E5','C5','G4','C5'], dur: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.3,0.3,0.3,0.3,0.6] }
+      1: { n: ['C4','E4','G4','C5','G4','E4','C4','G4'], d: [0.3,0.3,0.3,0.5,0.3,0.3,0.3,0.5] },
+      2: { n: ['G4','A4','B4','C5','D5','C5','B4','G4'], d: [0.25,0.25,0.25,0.25,0.5,0.25,0.25,0.5] },
+      3: { n: ['E4','G4','C5','B4','G4','A4','G4','C4'], d: [0.4,0.4,0.6,0.4,0.4,0.4,0.3,0.6] },
+      4: { n: ['C4','D4','E4','F4','G4','A4','B4','C5'], d: [0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.6] }
     };
-    
-    function getAudioContext() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      return audioCtx;
-    }
     
     function playMelody(z) {
       if (!musicPlaying) return;
-      const ctx = getAudioContext();
+      const ctx = audioCtx || (audioCtx = new (window.AudioContext || window.webkitAudioContext)());
       const m = MELODIES[z];
       let t = ctx.currentTime;
-      
-      m.notes.forEach((n, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.value = NOTES[n];
-        gain.gain.setValueAtTime(0, t);
-        gain.gain.linearRampToValueAtTime(0.12, t + 0.03);
-        gain.gain.linearRampToValueAtTime(0, t + m.dur[i]);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t + m.dur[i]);
-        t += m.dur[i];
+      m.n.forEach((n, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = 'sine';
+        o.frequency.value = NOTES[n];
+        g.gain.setValueAtTime(0, t);
+        g.gain.linearRampToValueAtTime(0.1, t + 0.02);
+        g.gain.linearRampToValueAtTime(0, t + m.d[i]);
+        o.connect(g);
+        g.connect(ctx.destination);
+        o.start(t);
+        o.stop(t + m.d[i]);
+        t += m.d[i];
       });
-      
-      const total = m.dur.reduce((a,b) => a+b) * 1000 + 500;
-      melodyTimeout = setTimeout(() => musicPlaying && playMelody(z), total);
+      melodyTimeout = setTimeout(() => musicPlaying && playMelody(z), t * 1000 + 500);
     }
     
-    function startMusic(z) {
-      musicPlaying = true;
-      musicBtn.textContent = '🔊 Música';
-      playMelody(z);
+    function toggleMusic() {
+      if (musicPlaying) {
+        musicPlaying = false;
+        musicBtn.textContent = '🎵 Música';
+        clearTimeout(melodyTimeout);
+      } else {
+        musicPlaying = true;
+        musicBtn.textContent = '🔊 Música';
+        playMelody(zone || 1);
+      }
     }
     
-    function stopMusic() {
-      musicPlaying = false;
-      musicBtn.textContent = '🎵 Música';
-      if (melodyTimeout) clearTimeout(melodyTimeout);
-    }
+    musicBtn.onclick = toggleMusic;
     
-    musicBtn.onclick = () => musicPlaying ? stopMusic() : startMusic(zone || 1);
-    
-    // ===== CAMERA =====
+    // Cámara
     async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
         document.getElementById('camera').srcObject = stream;
-        await document.getElementById('camera').play();
-        return true;
       } catch (e) {
-        document.getElementById('loading-text').textContent = 'Activa la cámara';
-        return false;
+        loadingStatus.textContent = 'Sin cámara';
       }
     }
     
-    // ===== SPEECH =====
+    // Voz
     function speak(text) {
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'ES' ? 'es-ES' : lang === 'EN' ? 'en-US' : 'pt-PT';
         u.rate = 0.85;
-        u.pitch = 1.15;
         speechSynthesis.speak(u);
       }
     }
     
-    function show(text) { messageEl.textContent = text; }
+    // Animaciones
+    function setAnim(name) {
+      tina.className = '';
+      if (name) tina.classList.add('anim-' + name);
+    }
     
-    // ===== FLOW =====
-    function start() {
-      loadingEl.classList.add('hidden');
-      tinaContainer.classList.remove('hidden');
+    // Iniciar
+    function startApp() {
+      console.log('🦕 Starting app...');
+      loading.style.opacity = '0';
+      setTimeout(() => loading.style.display = 'none', 500);
       
-      // Wave animation on start
-      playAnim('wave', 3);
-      show(TEXTS[lang].intro);
-      speak(TEXTS[lang].intro);
+      setAnim('wave');
+      message.textContent = T[lang].intro;
+      speak(T[lang].intro);
       
-      setTimeout(() => { if (!musicPlaying) startMusic(1); }, 1500);
+      setTimeout(() => {
+        setAnim(null);
+        tina.style.animation = 'breathe 3s ease-in-out infinite';
+      }, 3000);
+      
+      setTimeout(() => {
+        if (!musicPlaying) toggleMusic();
+      }, 1500);
+      
       setTimeout(nextZone, 5000);
     }
     
-    let encInterval = null;
-    
+    // Siguiente zona
     function nextZone() {
       zone++;
       if (zone > 4) { celebrate(); return; }
       
       seconds = 30;
-      zonesEl.classList.remove('hidden');
+      zones.classList.remove('hidden');
       timerEl.classList.remove('hidden');
-      timerLabel.textContent = TEXTS[lang].zoneNames[zone - 1];
+      timerLabel.textContent = T[lang].zones[zone - 1];
       
       document.querySelectorAll('.zone-dot').forEach((d, i) => d.classList.toggle('active', i + 1 === zone));
       
-      const txt = TEXTS[lang].zone.replace('{z}', TEXTS[lang].zoneNames[zone - 1].toLowerCase());
-      show(txt);
+      const txt = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
+      message.textContent = txt;
       speak(txt);
       
-      // Start brushing animation
-      playAnim('brushing');
-      
+      setAnim('brush');
       if (musicPlaying) { clearTimeout(melodyTimeout); playMelody(zone); }
       
-      clearInterval(timer); clearInterval(encInterval);
+      clearInterval(timer);
       
-      let enc = 0;
-      encInterval = setInterval(() => {
-        if (seconds > 5) {
-          speak(TEXTS[lang].encourage[enc % TEXTS[lang].encourage.length]);
-          enc++;
-        }
-      }, 7000);
-      
+      let encI = 0;
       timer = setInterval(() => {
         seconds--;
         timerText.textContent = seconds;
         timerProgress.style.strokeDashoffset = 339.292 * (1 - (30 - seconds) / 30);
         timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
+        
+        if (seconds === 20 || seconds === 10) {
+          speak(T[lang].encourage[encI++ % 3]);
+        }
+        
         if (seconds <= 0) {
           clearInterval(timer);
-          clearInterval(encInterval);
-          // Bounce animation on zone complete
-          tinaContainer.classList.remove('brushing');
-          playAnim('bounce', 1.5);
+          setAnim('bounce');
           setTimeout(nextZone, 1500);
         }
       }, 1000);
     }
     
+    // Celebración
     function celebrate() {
-      zonesEl.classList.add('hidden');
+      zones.classList.add('hidden');
       timerEl.classList.add('hidden');
       
-      playAnim('celebrate');
-      show(TEXTS[lang].celebrate);
-      speak(TEXTS[lang].celebrate);
+      setAnim('celebrate');
+      message.textContent = T[lang].celebrate;
+      speak(T[lang].celebrate);
       
-      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD'];
+      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98'];
       for (let i = 0; i < 60; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
@@ -564,14 +489,16 @@
       }
       
       setTimeout(() => {
-        stopMusic();
-        tinaContainer.classList.remove('celebrate');
+        musicPlaying = false;
+        musicBtn.textContent = '🎵 Música';
+        clearTimeout(melodyTimeout);
+        setAnim(null);
         restartBtn.style.display = 'block';
-        restartBtn.textContent = TEXTS[lang].restart;
+        restartBtn.textContent = T[lang].restart;
       }, 2000);
     }
     
-    // ===== LANGUAGE =====
+    // Idioma
     document.querySelectorAll('.lang-btn').forEach(btn => {
       btn.onclick = () => {
         lang = btn.dataset.lang;
@@ -582,25 +509,38 @@
     
     restartBtn.onclick = () => location.reload();
     
-    // ===== MODEL VIEWER EVENTS =====
-    tinaModel.addEventListener('progress', (e) => {
-      const p = Math.floor(e.detail.totalProgress * 100);
-      document.getElementById('loading-percent').textContent = p + '%';
-    });
+    // ===== INICIALIZACIÓN =====
+    console.log('🦕 Initializing...');
     
-    tinaModel.addEventListener('load', () => {
-      console.log('🦕 Tina loaded successfully!');
-      start();
-    });
-    
-    tinaModel.addEventListener('error', (e) => {
-      console.error('❌ Model error:', e);
-      document.getElementById('loading-text').textContent = 'Error cargando modelo';
-      document.getElementById('loading-percent').textContent = 'Recarga la página';
-    });
-    
-    // ===== INIT =====
+    // Cargar cámara
     initCamera();
+    
+    // Eventos del modelo
+    tina.addEventListener('progress', (e) => {
+      const p = Math.floor(e.detail.totalProgress * 100);
+      loadingStatus.textContent = p + '%';
+      console.log('Loading:', p + '%');
+    });
+    
+    tina.addEventListener('load', () => {
+      console.log('🦕 Model loaded!');
+      modelLoaded = true;
+      startApp();
+    });
+    
+    tina.addEventListener('error', (e) => {
+      console.error('❌ Error:', e);
+      loadingStatus.textContent = 'Error - recarga';
+    });
+    
+    // Timeout de seguridad
+    setTimeout(() => {
+      if (!modelLoaded) {
+        console.log('⏰ Timeout - forcing start');
+        loadingStatus.textContent = 'Iniciando...';
+        startApp();
+      }
+    }, 15000);
   </script>
 </body>
 </html>
