@@ -55,7 +55,7 @@ Una experiencia WebAR donde **Tina**, una amigable dinosauria, guía al niño a 
 2. Asegúrate de tener buena iluminación en el área donde usarás la app
 
 ### Paso 2: Acceso
-1. Abre la aplicación desde tu dispositivo móvil: **[TinAR en GitHub Pages](https://tu-usuario.github.io/TinAR/)**
+1. Abre la aplicación desde tu dispositivo móvil: **[TinAR en GitHub Pages](https://talivanferrada.github.io/TinAR/)**
 2. Permite el acceso a la cámara cuando el navegador lo solicite
 
 ### Paso 3: Experiencia AR
@@ -123,7 +123,7 @@ TinAR/
 │   │   └── Tina_optimized.glb  # Modelo 3D de Tina (2.1MB)
 │   ├── images/
 │   │   ├── marker.png      # Marcador AR imprimible
-│   │   └── qr-code.svg    # QR para acceso rápido
+│   │   └── qr-code.png    # QR para acceso rápido
 │   └── targets/
 │       └── marker.mind    # Target compilado para MindAR
 ├── Logo/
@@ -138,10 +138,10 @@ TinAR/
 Escanea el código QR para acceder directamente desde tu móvil:
 
 <p align="center">
-  <img src="assets/images/qr-code.svg" alt="QR Code TinAR" width="200">
+  <img src="assets/images/qr-code.png" alt="QR Code TinAR" width="200">
 </p>
 
-> **URL de acceso:** `https://tu-usuario.github.io/TinAR/`
+> **URL de acceso:** `https://talivanferrada.github.io/TinAR/`
 
 ---
 
