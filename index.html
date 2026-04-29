@@ -9,9 +9,6 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Model Viewer for 3D -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-  
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -19,7 +16,7 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Comic Sans MS', 'Chalkboard', cursive;
+      font-family: 'Comic Sans MS', cursive;
       background: #000;
     }
     
@@ -31,19 +28,15 @@
       z-index: 1;
     }
     
-    /* Tina 3D Model */
-    #tina-viewer {
+    #tina-canvas {
       position: fixed;
-      bottom: 5%;
+      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      width: 380px;
-      height: 500px;
       z-index: 10;
-      --poster-color: transparent;
+      pointer-events: none;
     }
     
-    /* Loading */
     #loading {
       position: fixed;
       top: 0; left: 0;
@@ -83,16 +76,14 @@
     /* UI */
     #lang-selector {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 20px; right: 20px;
       display: flex;
       gap: 10px;
       z-index: 100;
     }
     
     .lang-btn {
-      min-width: 50px;
-      min-height: 50px;
+      min-width: 50px; min-height: 50px;
       padding: 10px 16px;
       border: 3px solid white;
       background: rgba(255,105,180,0.85);
@@ -111,8 +102,7 @@
     
     #zones {
       position: fixed;
-      top: 20px;
-      left: 20px;
+      top: 20px; left: 20px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -120,8 +110,7 @@
     }
     
     .zone-dot {
-      width: 28px;
-      height: 28px;
+      width: 28px; height: 28px;
       border-radius: 50%;
       background: rgba(255,255,255,0.4);
       border: 3px solid white;
@@ -143,11 +132,9 @@
     
     #timer {
       position: fixed;
-      top: 100px;
-      left: 50%;
+      top: 100px; left: 50%;
       transform: translateX(-50%);
-      width: 120px;
-      height: 120px;
+      width: 120px; height: 120px;
       z-index: 100;
     }
     
@@ -168,8 +155,7 @@
     
     #timer-label {
       position: absolute;
-      bottom: 5px;
-      left: 50%;
+      bottom: 5px; left: 50%;
       transform: translateX(-50%);
       color: white;
       font-size: 10px;
@@ -180,8 +166,7 @@
     
     #message {
       position: fixed;
-      bottom: 70px;
-      left: 50%;
+      bottom: 60px; left: 50%;
       transform: translateX(-50%);
       background: rgba(255,105,180,0.95);
       color: white;
@@ -196,8 +181,7 @@
     
     #music-btn {
       position: fixed;
-      top: 80px;
-      left: 50%;
+      top: 80px; left: 50%;
       transform: translateX(-50%);
       padding: 10px 24px;
       background: rgba(255,105,180,0.9);
@@ -213,8 +197,7 @@
     
     #restart-btn {
       position: fixed;
-      bottom: 40px;
-      left: 50%;
+      bottom: 30px; left: 50%;
       transform: translateX(-50%);
       padding: 18px 40px;
       background: linear-gradient(135deg, #FF69B4, #FF1493);
@@ -232,8 +215,7 @@
     
     .confetti {
       position: fixed;
-      width: 12px;
-      height: 12px;
+      width: 12px; height: 12px;
       top: -20px;
       animation: fall 3s linear forwards;
       z-index: 500;
@@ -249,18 +231,8 @@
 <body>
   <video id="camera" autoplay playsinline muted></video>
   
-  <!-- Tina 3D Model -->
-  <model-viewer
-    id="tina-viewer"
-    src="assets/models/Tina_optimized.glb"
-    alt="Tina la dinosauria"
-    auto-rotate
-    rotation-per-second="45deg"
-    camera-controls="false"
-    disable-zoom
-    touch-action="none"
-    style="width: 380px; height: 500px;"
-  ></model-viewer>
+  <!-- Three.js Canvas -->
+  <canvas id="tina-canvas"></canvas>
   
   <!-- Loading -->
   <div id="loading">
@@ -296,7 +268,210 @@
   <div id="message"></div>
   <button id="restart-btn">🔄 Jugar de nuevo</button>
   
+  <!-- Three.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  
   <script>
+    // ===== THREE.JS SETUP =====
+    const canvas = document.getElementById('tina-canvas');
+    const containerWidth = Math.min(400, window.innerWidth * 0.9);
+    const containerHeight = Math.min(550, window.innerHeight * 0.65);
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+    
+    const scene = new THREE.Scene();
+    const camera3D = new THREE.PerspectiveCamera(40, containerWidth / containerHeight, 0.1, 100);
+    camera3D.position.set(0, 1.5, 4);
+    camera3D.lookAt(0, 1, 0);
+    
+    const renderer = new THREE.WebGLRenderer({ 
+      canvas, 
+      alpha: true, 
+      antialias: true 
+    });
+    renderer.setSize(containerWidth, containerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(ambientLight);
+    
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight1.position.set(2, 4, 2);
+    scene.add(dirLight1);
+    
+    const dirLight2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    dirLight2.position.set(-2, 2, -1);
+    scene.add(dirLight2);
+    
+    // Tina model
+    let tinaModel = null;
+    let currentAnimation = 'idle';
+    let animationTime = 0;
+    
+    // Animation state
+    const animState = {
+      baseY: 0,
+      baseRotation: 0,
+      baseScale: 1,
+      targetY: 0,
+      targetRotation: 0,
+      targetScale: 1
+    };
+    
+    // ===== ANIMATION DEFINITIONS =====
+    const ANIMATIONS = {
+      idle: {
+        update: (t) => {
+          // Gentle breathing
+          const breathe = Math.sin(t * 2) * 0.015;
+          const sway = Math.sin(t * 0.5) * 0.05;
+          return {
+            y: 0 + breathe,
+            rotation: sway,
+            scale: 1 + breathe * 0.5
+          };
+        },
+        duration: Infinity
+      },
+      wave: {
+        update: (t) => {
+          // Wave motion - rotate side to side quickly
+          const wave = Math.sin(t * 8) * 0.3 * Math.max(0, 1 - t * 0.3);
+          return {
+            y: 0,
+            rotation: wave,
+            scale: 1
+          };
+        },
+        duration: 3
+      },
+      brushing: {
+        update: (t) => {
+          // Energetic brushing motion
+          const bounce = Math.abs(Math.sin(t * 6)) * 0.1;
+          const wiggle = Math.sin(t * 10) * 0.15;
+          return {
+            y: bounce,
+            rotation: wiggle,
+            scale: 1
+          };
+        },
+        duration: Infinity
+      },
+      celebrate: {
+        update: (t) => {
+          // Jumping celebration
+          const jump = Math.abs(Math.sin(t * 4)) * 0.4;
+          const spin = t * 2;
+          const pulse = 1 + Math.sin(t * 8) * 0.1;
+          return {
+            y: jump,
+            rotation: spin,
+            scale: pulse
+          };
+        },
+        duration: 4
+      },
+      encouraging: {
+        update: (t) => {
+          // Small happy bounce
+          const bounce = Math.abs(Math.sin(t * 5)) * 0.08;
+          const tilt = Math.sin(t * 3) * 0.1;
+          return {
+            y: bounce,
+            rotation: tilt,
+            scale: 1
+          };
+        },
+        duration: 2
+      },
+      zoneComplete: {
+        update: (t) => {
+          // Quick jump
+          const jump = Math.sin(t * 6) * 0.25 * Math.max(0, 1 - t);
+          return {
+            y: Math.abs(jump),
+            rotation: 0,
+            scale: 1
+          };
+        },
+        duration: 1.5
+      }
+    };
+    
+    // ===== LOAD MODEL =====
+    const loader = new THREE.GLTFLoader();
+    
+    function loadTina() {
+      return new Promise((resolve, reject) => {
+        loader.load(
+          'assets/models/Tina_optimized.glb',
+          (gltf) => {
+            tinaModel = gltf.scene;
+            
+            // Find optimal scale
+            const box = new THREE.Box3().setFromObject(tinaModel);
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 2 / maxDim;
+            
+            tinaModel.scale.setScalar(scale);
+            tinaModel.position.set(0, 0, 0);
+            
+            scene.add(tinaModel);
+            console.log('🦕 Tina loaded!');
+            resolve();
+          },
+          (xhr) => {
+            const percent = Math.floor((xhr.loaded / xhr.total) * 100);
+            document.getElementById('loading-percent').textContent = percent + '%';
+          },
+          reject
+        );
+      });
+    }
+    
+    // ===== ANIMATION LOOP =====
+    let lastTime = 0;
+    
+    function animate(time) {
+      requestAnimationFrame(animate);
+      
+      const delta = (time - lastTime) / 1000;
+      lastTime = time;
+      
+      if (tinaModel) {
+        animationTime += delta;
+        
+        const anim = ANIMATIONS[currentAnimation];
+        if (anim) {
+          const values = anim.update(animationTime);
+          
+          // Apply with smoothing
+          tinaModel.position.y = values.y;
+          tinaModel.rotation.y = values.rotation;
+          tinaModel.scale.setScalar(values.scale * 0.5); // Base scale adjustment
+          
+          // Check if animation should end
+          if (anim.duration !== Infinity && animationTime > anim.duration) {
+            if (currentAnimation !== 'idle' && currentAnimation !== 'brushing') {
+              playAnimation('idle');
+            }
+          }
+        }
+      }
+      
+      renderer.render(scene, camera3D);
+    }
+    
+    function playAnimation(name) {
+      currentAnimation = name;
+      animationTime = 0;
+    }
+    
     // ===== STATE =====
     let lang = 'ES';
     let zone = 0;
@@ -307,11 +482,7 @@
     let melodyTimeout = null;
     
     // Elements
-    const camera = document.getElementById('camera');
-    const loading = document.getElementById('loading');
-    const loadingText = document.getElementById('loading-text');
-    const loadingPercent = document.getElementById('loading-percent');
-    const tinaViewer = document.getElementById('tina-viewer');
+    const loadingEl = document.getElementById('loading');
     const zonesEl = document.getElementById('zones');
     const timerEl = document.getElementById('timer');
     const timerText = document.getElementById('timer-text');
@@ -349,7 +520,7 @@
     // ===== MUSIC =====
     const NOTES = {
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99
+      C5: 523.25, D5: 587.33, E5: 659.25, G5: 783.99
     };
     
     const MELODIES = {
@@ -407,11 +578,10 @@
     async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-        camera.srcObject = stream;
-        await camera.play();
+        document.getElementById('camera').srcObject = stream;
+        await document.getElementById('camera').play();
         return true;
       } catch (e) {
-        loadingText.textContent = 'Activa la cámara';
         return false;
       }
     }
@@ -432,10 +602,12 @@
     
     // ===== FLOW =====
     function start() {
-      loading.classList.add('hidden');
-      tinaViewer.style.display = 'block';
+      loadingEl.classList.add('hidden');
+      playAnimation('wave');
       show(TEXTS[lang].intro);
       speak(TEXTS[lang].intro);
+      
+      setTimeout(() => playAnimation('idle'), 3000);
       setTimeout(() => { if (!musicPlaying) startMusic(1); }, 1500);
       setTimeout(nextZone, 5000);
     }
@@ -457,13 +629,21 @@
       show(txt);
       speak(txt);
       
+      // Start brushing animation
+      playAnimation('brushing');
+      
       if (musicPlaying) { clearTimeout(melodyTimeout); playMelody(zone); }
       
       clearInterval(timer); clearInterval(encInterval);
       
       let enc = 0;
       encInterval = setInterval(() => {
-        if (seconds > 5) speak(TEXTS[lang].encourage[enc++ % TEXTS[lang].encourage.length]);
+        if (seconds > 5) {
+          speak(TEXTS[lang].encourage[enc % TEXTS[lang].encourage.length]);
+          playAnimation('encouraging');
+          setTimeout(() => playAnimation('brushing'), 2000);
+          enc++;
+        }
       }, 7000);
       
       timer = setInterval(() => {
@@ -471,13 +651,20 @@
         timerText.textContent = seconds;
         timerProgress.style.strokeDashoffset = 339.292 * (1 - (30 - seconds) / 30);
         timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
-        if (seconds <= 0) { clearInterval(timer); clearInterval(encInterval); nextZone(); }
+        if (seconds <= 0) {
+          clearInterval(timer);
+          clearInterval(encInterval);
+          playAnimation('zoneComplete');
+          setTimeout(nextZone, 1500);
+        }
       }, 1000);
     }
     
     function celebrate() {
       zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
+      
+      playAnimation('celebrate');
       show(TEXTS[lang].celebrate);
       speak(TEXTS[lang].celebrate);
       
@@ -492,7 +679,12 @@
         setTimeout(() => c.remove(), 5000);
       }
       
-      setTimeout(() => { stopMusic(); restartBtn.style.display = 'block'; restartBtn.textContent = TEXTS[lang].restart; }, 2000);
+      setTimeout(() => {
+        stopMusic();
+        playAnimation('idle');
+        restartBtn.style.display = 'block';
+        restartBtn.textContent = TEXTS[lang].restart;
+      }, 2000);
     }
     
     // ===== LANGUAGE =====
@@ -507,22 +699,14 @@
     restartBtn.onclick = () => location.reload();
     
     // ===== INIT =====
-    initCamera();
-    
-    tinaViewer.addEventListener('progress', (e) => {
-      const p = Math.floor(e.detail.totalProgress * 100);
-      loadingPercent.textContent = p + '%';
-    });
-    
-    tinaViewer.addEventListener('load', () => {
-      console.log('🦕 Tina 3D loaded!');
+    async function init() {
+      await initCamera();
+      await loadTina();
+      animate(0);
       start();
-    });
+    }
     
-    tinaViewer.addEventListener('error', (e) => {
-      console.error('❌ Model error:', e);
-      loadingText.textContent = 'Error cargando modelo';
-    });
+    init();
   </script>
 </body>
 </html>
