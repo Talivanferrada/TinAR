@@ -6,93 +6,80 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#4FC3F7">
-  <meta name="description" content="Tina AR - Experiencia educativa de realidad aumentada para enseñar técnica de cepillado dental a niños">
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Google Model Viewer - Easy 3D model display -->
-  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       overflow: hidden;
-      background: transparent;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: #000;
     }
     
     /* Camera background */
-    #camera-container {
+    #camera {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 0;
-    }
-    
-    #camera-video {
-      width: 100%;
-      height: 100%;
       object-fit: cover;
+      z-index: 1;
     }
     
-    /* Tina 3D model */
-    #tina-viewer {
+    /* Tina character - animated */
+    #tina-container {
       position: fixed;
       bottom: 15%;
       left: 50%;
       transform: translateX(-50%);
-      width: 320px;
-      height: 420px;
       z-index: 10;
       pointer-events: none;
-      --poster-color: transparent;
+      animation: float 3s ease-in-out infinite;
     }
     
-    /* UI Layer */
-    #ui-layer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 100;
-      pointer-events: none;
+    #tina-img {
+      width: 280px;
+      height: auto;
+      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(-10px); }
     }
     
     /* Loading */
-    #loading-overlay {
+    #loading {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #4FC3F7 0%, #29B6F6 100%);
+      background: linear-gradient(135deg, #4FC3F7, #29B6F6);
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       z-index: 9999;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.5s;
     }
     
     .spinner {
       width: 60px;
       height: 60px;
-      border: 6px solid rgba(255, 255, 255, 0.3);
+      border: 6px solid rgba(255,255,255,0.3);
       border-top: 6px solid #FFB74D;
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
     
     @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+      to { transform: rotate(360deg); }
     }
     
     #loading-text {
@@ -102,28 +89,27 @@
     }
     
     /* Language selector */
-    #language-selector {
+    #lang-selector {
       position: fixed;
       top: 20px;
       right: 20px;
       display: flex;
       gap: 10px;
-      pointer-events: auto;
-      z-index: 200;
+      z-index: 100;
     }
     
     .lang-btn {
-      min-width: 48px;
-      min-height: 48px;
-      padding: 12px 18px;
+      min-width: 50px;
+      min-height: 50px;
+      padding: 10px 16px;
       border: 2px solid white;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0,0,0,0.6);
       color: white;
       border-radius: 25px;
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
     
     .lang-btn.active {
@@ -132,421 +118,369 @@
     }
     
     /* Zone indicators */
-    #zone-indicators {
+    #zones {
       position: fixed;
       top: 20px;
       left: 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      z-index: 160;
+      gap: 10px;
+      z-index: 100;
     }
     
     .zone-dot {
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      border: 2px solid rgba(255, 255, 255, 0.6);
-      transition: all 0.3s ease;
+      background: rgba(255,255,255,0.3);
+      border: 2px solid white;
+      transition: all 0.3s;
     }
     
     .zone-dot.active {
       background: #FFB74D;
-      border-color: white;
-      box-shadow: 0 0 12px rgba(255, 183, 77, 0.8);
       transform: scale(1.3);
+      box-shadow: 0 0 15px #FFB74D;
     }
     
     /* Timer */
-    #timer-container {
+    #timer {
       position: fixed;
       top: 100px;
       left: 50%;
       transform: translateX(-50%);
-      width: 100px;
-      height: 100px;
-      z-index: 150;
+      width: 120px;
+      height: 120px;
+      z-index: 100;
     }
     
-    .timer-svg {
+    #timer svg {
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
     }
     
-    .timer-bg {
+    #timer circle {
       fill: none;
-      stroke: rgba(255, 255, 255, 0.2);
       stroke-width: 8;
     }
     
-    .timer-progress {
-      fill: none;
-      stroke: #4CAF50;
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-dasharray: 339.292;
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 1s linear;
-    }
+    #timer .bg { stroke: rgba(255,255,255,0.2); }
+    #timer .progress { stroke: #4CAF50; stroke-linecap: round; }
     
-    .timer-content {
+    #timer-text {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      text-align: center;
-    }
-    
-    .timer-text {
-      font-size: 28px;
-      font-weight: bold;
       color: white;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      font-size: 36px;
+      font-weight: bold;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     
     /* Message */
-    #message-display {
+    #message {
       position: fixed;
-      bottom: 80px;
+      bottom: 100px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0,0,0,0.8);
       color: white;
       padding: 16px 32px;
       border-radius: 30px;
-      font-size: 16px;
-      max-width: 85%;
+      font-size: 18px;
+      max-width: 90%;
       text-align: center;
-      z-index: 180;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      z-index: 100;
+      backdrop-filter: blur(10px);
     }
     
-    .hidden { display: none !important; }
-    
     /* Restart button */
-    .restart-btn {
+    #restart-btn {
       position: fixed;
-      bottom: 30px;
+      bottom: 40px;
       left: 50%;
       transform: translateX(-50%);
-      padding: 16px 32px;
-      background: linear-gradient(135deg, #FFB74D 0%, #FF9800 100%);
+      padding: 18px 36px;
+      background: linear-gradient(135deg, #FFB74D, #FF9800);
       color: white;
       border: none;
       border-radius: 30px;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       cursor: pointer;
-      z-index: 600;
-      pointer-events: auto;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      display: none;
     }
     
-    /* Celebration particles */
-    .celebration-particles {
+    /* Confetti */
+    .confetti {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+      width: 12px;
+      height: 12px;
+      top: -20px;
+      animation: fall 3s linear forwards;
       z-index: 500;
     }
     
-    .confetti {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      border-radius: 2px;
-      animation: confetti-fall 3s linear forwards;
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
     }
     
-    @keyframes confetti-fall {
-      0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-    }
+    .hidden { display: none !important; }
   </style>
 </head>
 <body>
-  <!-- Camera Background -->
-  <div id="camera-container">
-    <video id="camera-video" autoplay playsinline muted></video>
+  <!-- Camera -->
+  <video id="camera" autoplay playsinline muted></video>
+  
+  <!-- Tina Character -->
+  <div id="tina-container" class="hidden">
+    <svg id="tina-img" viewBox="0 0 200 280" width="280">
+      <!-- Dinosaur body -->
+      <ellipse cx="100" cy="180" rx="60" ry="70" fill="#4FC3F7"/>
+      <!-- Head -->
+      <circle cx="100" cy="80" r="50" fill="#4FC3F7"/>
+      <!-- Eyes -->
+      <circle cx="80" cy="70" r="12" fill="white"/>
+      <circle cx="120" cy="70" r="12" fill="white"/>
+      <circle cx="82" cy="72" r="6" fill="#333"/>
+      <circle cx="122" cy="72" r="6" fill="#333"/>
+      <!-- Smile -->
+      <path d="M 70 95 Q 100 120 130 95" stroke="white" stroke-width="4" fill="none"/>
+      <!-- Teeth -->
+      <rect x="85" y="100" width="8" height="12" rx="2" fill="white"/>
+      <rect x="107" y="100" width="8" height="12" rx="2" fill="white"/>
+      <!-- Arms -->
+      <ellipse cx="50" cy="160" rx="15" ry="25" fill="#29B6F6"/>
+      <ellipse cx="150" cy="160" rx="15" ry="25" fill="#29B6F6"/>
+      <!-- Legs -->
+      <ellipse cx="70" cy="250" rx="20" ry="25" fill="#29B6F6"/>
+      <ellipse cx="130" cy="250" rx="20" ry="25" fill="#29B6F6"/>
+      <!-- Tail -->
+      <path d="M 160 180 Q 200 180 190 150 Q 180 120 200 100" stroke="#4FC3F7" stroke-width="20" fill="none" stroke-linecap="round"/>
+      <!-- Spikes -->
+      <polygon points="60,30 70,50 80,30" fill="#FFB74D"/>
+      <polygon points="90,20 100,45 110,20" fill="#FFB74D"/>
+      <polygon points="120,30 130,50 140,30" fill="#FFB74D"/>
+      <!-- Toothbrush -->
+      <rect x="35" y="135" width="40" height="8" rx="2" fill="#FF9800" transform="rotate(-30 55 139)"/>
+      <rect x="32" y="115" width="15" height="20" rx="2" fill="#4CAF50" transform="rotate(-30 40 125)"/>
+    </svg>
   </div>
   
-  <!-- Tina 3D Model using model-viewer -->
-  <model-viewer
-    id="tina-viewer"
-    src="assets/models/Tina_optimized.glb"
-    alt="Tina la dinosauria"
-    auto-rotate
-    camera-controls="false"
-    disable-zoom
-    rotation-per-second="30deg"
-    style="width: 320px; height: 420px;"
-  ></model-viewer>
-  
-  <!-- UI Layer -->
-  <div id="ui-layer">
-    <!-- Loading Overlay -->
-    <div id="loading-overlay">
-      <div class="spinner"></div>
-      <div id="loading-text">Cargando Tina...</div>
-    </div>
-    
-    <!-- Language Selector -->
-    <div id="language-selector">
-      <button class="lang-btn active" data-lang="ES">ES</button>
-      <button class="lang-btn" data-lang="EN">EN</button>
-      <button class="lang-btn" data-lang="PT">PT</button>
-    </div>
-    
-    <!-- Zone Indicators -->
-    <div id="zone-indicators" class="hidden">
-      <div class="zone-dot" data-zone="1"></div>
-      <div class="zone-dot" data-zone="2"></div>
-      <div class="zone-dot" data-zone="3"></div>
-      <div class="zone-dot" data-zone="4"></div>
-    </div>
-    
-    <!-- Timer -->
-    <div id="timer-container" class="hidden">
-      <svg class="timer-svg" viewBox="0 0 120 120">
-        <circle class="timer-bg" cx="60" cy="60" r="54"></circle>
-        <circle class="timer-progress" cx="60" cy="60" r="54"></circle>
-      </svg>
-      <div class="timer-content">
-        <div class="timer-text">30</div>
-      </div>
-    </div>
-    
-    <!-- Message Display -->
-    <div id="message-display"></div>
+  <!-- Loading -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <div id="loading-text">Cargando Tina...</div>
   </div>
   
-  <!-- App Script -->
+  <!-- UI -->
+  <div id="lang-selector">
+    <button class="lang-btn active" data-lang="ES">ES</button>
+    <button class="lang-btn" data-lang="EN">EN</button>
+    <button class="lang-btn" data-lang="PT">PT</button>
+  </div>
+  
+  <div id="zones" class="hidden">
+    <div class="zone-dot" data-zone="1"></div>
+    <div class="zone-dot" data-zone="2"></div>
+    <div class="zone-dot" data-zone="3"></div>
+    <div class="zone-dot" data-zone="4"></div>
+  </div>
+  
+  <div id="timer" class="hidden">
+    <svg viewBox="0 0 120 120">
+      <circle class="bg" cx="60" cy="60" r="54"/>
+      <circle class="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="0"/>
+    </svg>
+    <div id="timer-text">30</div>
+  </div>
+  
+  <div id="message"></div>
+  <button id="restart-btn">🔄 Jugar de nuevo</button>
+  
   <script>
-    // TinAR Simple App
-    const LANGUAGES = { ES: 'es-ES', EN: 'en-US', PT: 'pt-PT' };
-    const ZONE_NAMES = {
-      ES: ['superior derecho', 'superior izquierdo', 'inferior derecho', 'inferior izquierdo'],
-      EN: ['right upper', 'left upper', 'right lower', 'left lower'],
-      PT: ['superior direito', 'superior esquerdo', 'inferior direito', 'inferior esquerdo']
-    };
-    
-    let currentLanguage = 'ES';
-    let currentZone = 0;
-    let timerInterval = null;
-    let timerSeconds = 30;
-    let isLoaded = false;
+    // App State
+    let lang = 'ES';
+    let zone = 0;
+    let seconds = 30;
+    let timer = null;
     
     // Elements
-    const loadingOverlay = document.getElementById('loading-overlay');
-    const loadingText = document.getElementById('loading-text');
-    const tinaViewer = document.getElementById('tina-viewer');
-    const timerContainer = document.getElementById('timer-container');
-    const timerText = document.querySelector('.timer-text');
-    const timerProgress = document.querySelector('.timer-progress');
-    const zoneIndicators = document.getElementById('zone-indicators');
-    const messageDisplay = document.getElementById('message-display');
-    const video = document.getElementById('camera-video');
+    const camera = document.getElementById('camera');
+    const loading = document.getElementById('loading');
+    const tinaContainer = document.getElementById('tina-container');
+    const zonesEl = document.getElementById('zones');
+    const timerEl = document.getElementById('timer');
+    const timerText = document.getElementById('timer-text');
+    const timerProgress = document.querySelector('.progress');
+    const messageEl = document.getElementById('message');
+    const restartBtn = document.getElementById('restart-btn');
     
-    // Initialize
-    async function init() {
-      console.log('🦕 TinAR initializing...');
-      
-      // Setup camera
-      await setupCamera();
-      
-      // Wait for model to load
-      tinaViewer.addEventListener('load', () => {
-        console.log('🦕 Tina model loaded!');
-        hideLoading();
-        startExperience();
-      });
-      
-      // Handle load error
-      tinaViewer.addEventListener('error', (e) => {
-        console.error('❌ Model error:', e);
-        loadingText.textContent = 'Error cargando modelo';
-      });
-      
-      // Language buttons
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
-      });
-    }
+    // Texts
+    const TEXTS = {
+      ES: {
+        intro: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
+        zone: 'Ahora cepillemos la zona {z}. ¡Inclina el cepillo 45° y haz círculos!',
+        celebrate: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉',
+        restart: '🔄 Jugar de nuevo'
+      },
+      EN: {
+        intro: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
+        zone: 'Now let\'s brush the {z} area. Tilt the brush 45° and make circles!',
+        celebrate: 'Fantastic! You brushed all your teeth like a champion! 🎉',
+        restart: '🔄 Play again'
+      },
+      PT: {
+        intro: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
+        zone: 'Agora vamos escovar a área {z}. Incline a escova 45° e faça círculos!',
+        celebrate: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉',
+        restart: '🔄 Jogar de novo'
+      }
+    };
     
-    async function setupCamera() {
+    const ZONE_NAMES = {
+      ES: ['superior derecha', 'superior izquierda', 'inferior derecha', 'inferior izquierda'],
+      EN: ['right upper', 'left upper', 'right lower', 'left lower'],
+      PT: ['superior direita', 'superior esquerda', 'inferior direita', 'inferior esquerda']
+    };
+    
+    // Init camera
+    async function initCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'environment' }
         });
-        video.srcObject = stream;
-        await video.play();
-        console.log('✅ Camera started');
-      } catch (error) {
-        console.error('❌ Camera error:', error);
-        loadingText.textContent = 'Activa la cámara para continuar';
+        camera.srcObject = stream;
+        await camera.play();
+        console.log('✅ Camera OK');
+        return true;
+      } catch (e) {
+        console.error('❌ Camera error:', e);
+        document.getElementById('loading-text').textContent = 'Activa la cámara';
+        return false;
       }
     }
     
-    function hideLoading() {
-      loadingOverlay.style.opacity = '0';
-      setTimeout(() => loadingOverlay.style.display = 'none', 500);
+    // Speak
+    function speak(text) {
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = lang === 'ES' ? 'es-ES' : lang === 'EN' ? 'en-US' : 'pt-PT';
+        u.rate = 0.9;
+        speechSynthesis.speak(u);
+      }
     }
     
-    function startExperience() {
-      isLoaded = true;
-      showMessage(getText('INTRO'));
-      speak(getText('INTRO'));
-      
-      // Start brushing after intro
-      setTimeout(() => {
-        startZone(1);
-      }, 5000);
+    // Show message
+    function show(text) {
+      messageEl.textContent = text;
     }
     
-    function startZone(zone) {
-      currentZone = zone;
-      timerSeconds = 30;
+    // Start experience
+    function start() {
+      loading.classList.add('hidden');
+      tinaContainer.classList.remove('hidden');
       
-      // Show UI
-      timerContainer.classList.remove('hidden');
-      zoneIndicators.classList.remove('hidden');
+      show(TEXTS[lang].intro);
+      speak(TEXTS[lang].intro);
       
-      // Update zone indicators
+      setTimeout(() => nextZone(), 5000);
+    }
+    
+    // Next zone
+    function nextZone() {
+      zone++;
+      
+      if (zone > 4) {
+        celebrate();
+        return;
+      }
+      
+      seconds = 30;
+      zonesEl.classList.remove('hidden');
+      timerEl.classList.remove('hidden');
+      
+      // Update zone dots
       document.querySelectorAll('.zone-dot').forEach((dot, i) => {
         dot.classList.toggle('active', i + 1 === zone);
       });
       
-      // Show message
-      const zoneName = ZONE_NAMES[currentLanguage][zone - 1];
-      showMessage(getText('ZONE').replace('{zone}', zoneName));
-      speak(getText('ZONE').replace('{zone}', zoneName));
-      
-      // Update timer label
-      document.querySelector('.timer-content').innerHTML = `<div class="timer-text">${timerSeconds}</div>`;
+      const zoneName = ZONE_NAMES[lang][zone - 1];
+      const text = TEXTS[lang].zone.replace('{z}', zoneName);
+      show(text);
+      speak(text);
       
       // Start timer
-      clearInterval(timerInterval);
-      timerInterval = setInterval(() => {
-        timerSeconds--;
-        updateTimer();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        seconds--;
+        timerText.textContent = seconds;
         
-        if (timerSeconds <= 0) {
-          clearInterval(timerInterval);
-          if (currentZone < 4) {
-            startZone(currentZone + 1);
-          } else {
-            showCelebration();
-          }
+        // Update progress
+        const prog = (30 - seconds) / 30;
+        timerProgress.style.strokeDashoffset = 339.292 * (1 - prog);
+        
+        // Color
+        timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
+        
+        if (seconds <= 0) {
+          clearInterval(timer);
+          nextZone();
         }
       }, 1000);
     }
     
-    function updateTimer() {
-      timerText.textContent = timerSeconds;
+    // Celebrate
+    function celebrate() {
+      zonesEl.classList.add('hidden');
+      timerEl.classList.add('hidden');
       
-      const progress = (30 - timerSeconds) / 30;
-      const circumference = 2 * Math.PI * 54;
-      timerProgress.style.strokeDashoffset = circumference * (1 - progress);
-      
-      // Color change
-      if (timerSeconds > 10) {
-        timerProgress.style.stroke = '#4CAF50';
-      } else if (timerSeconds > 5) {
-        timerProgress.style.stroke = '#FFC107';
-      } else {
-        timerProgress.style.stroke = '#F44336';
-      }
-    }
-    
-    function showCelebration() {
-      timerContainer.classList.add('hidden');
-      zoneIndicators.classList.add('hidden');
-      
-      showMessage(getText('CELEBRATION'));
-      speak(getText('CELEBRATION'));
+      show(TEXTS[lang].celebrate);
+      speak(TEXTS[lang].celebrate);
       
       // Confetti
-      showConfetti();
+      const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#FFB74D', '#4FC3F7'];
+      for (let i = 0; i < 50; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 5000);
+      }
       
-      // Restart button
+      // Show restart
       setTimeout(() => {
-        const btn = document.createElement('button');
-        btn.className = 'restart-btn';
-        btn.textContent = currentLanguage === 'ES' ? '🔄 Jugar de nuevo' : 
-                          currentLanguage === 'EN' ? '🔄 Play again' : '🔄 Jogar de novo';
-        btn.onclick = () => location.reload();
-        document.body.appendChild(btn);
+        restartBtn.style.display = 'block';
+        restartBtn.textContent = TEXTS[lang].restart;
       }, 2000);
     }
     
-    function showConfetti() {
-      const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#95E1D3', '#FFB74D', '#4FC3F7'];
-      const container = document.createElement('div');
-      container.className = 'celebration-particles';
-      
-      for (let i = 0; i < 50; i++) {
-        const confetti = document.createElement('div');
-        confetti.className = 'confetti';
-        confetti.style.left = Math.random() * 100 + '%';
-        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-        confetti.style.animationDelay = Math.random() * 2 + 's';
-        container.appendChild(confetti);
-      }
-      
-      document.body.appendChild(container);
-      setTimeout(() => container.remove(), 5000);
-    }
-    
-    function showMessage(text) {
-      messageDisplay.textContent = text;
-      messageDisplay.style.display = 'block';
-    }
-    
-    function getText(key) {
-      const texts = {
-        ES: {
-          INTRO: '¡Hola! Soy Tina. ¡Vamos a cepillarnos los dientes juntos!',
-          ZONE: 'Ahora cepillemos la zona {zone}. ¡Inclina el cepillo 45° y haz círculos!',
-          CELEBRATION: '¡Fantástico! ¡Cepillaste todos tus dientes como un campeón! 🎉'
-        },
-        EN: {
-          INTRO: 'Hi! I\'m Tina. Let\'s brush our teeth together!',
-          ZONE: 'Now let\'s brush the {zone} area. Tilt the brush 45° and make circles!',
-          CELEBRATION: 'Fantastic! You brushed all your teeth like a champion! 🎉'
-        },
-        PT: {
-          INTRO: 'Olá! Sou Tina. Vamos escovar os dentes juntos!',
-          ZONE: 'Agora vamos escovar a área {zone}. Incline a escova 45° e faça círculos!',
-          CELEBRATION: 'Fantástico! Você escovou todos os dentes como um campeão! 🎉'
-        }
+    // Language buttons
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.onclick = () => {
+        lang = btn.dataset.lang;
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
       };
-      return texts[currentLanguage][key];
-    }
+    });
     
-    function speak(text) {
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = LANGUAGES[currentLanguage];
-        utterance.rate = 0.9;
-        speechSynthesis.speak(utterance);
-      }
-    }
+    // Restart
+    restartBtn.onclick = () => location.reload();
     
-    function setLanguage(lang) {
-      currentLanguage = lang;
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === lang);
-      });
-    }
-    
-    // Start
-    init();
+    // Init
+    initCamera().then(() => {
+      setTimeout(start, 1000);
+    });
   </script>
 </body>
 </html>
