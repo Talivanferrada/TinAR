@@ -124,8 +124,10 @@
     }
     
     #mouth-container {
-      width: 200px;
-      height: 180px;
+      width: 160px;
+      height: 145px;
+      max-width: 85vw;
+      max-height: 85vh;
       position: relative;
     }
     
@@ -133,26 +135,26 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: white;
-      padding: 4px 8px;
+      padding: 3px 6px;
       background: linear-gradient(135deg, #FF69B4, #FF1493);
-      border-radius: 10px;
+      border-radius: 8px;
       white-space: nowrap;
     }
     
-    .side-indicator.left { left: -50px; animation: pulse-l 1s ease-in-out infinite; }
-    .side-indicator.right { right: -50px; animation: pulse-r 1s ease-in-out infinite; }
+    .side-indicator.left { left: -40px; animation: pulse-l 1s ease-in-out infinite; }
+    .side-indicator.right { right: -40px; animation: pulse-r 1s ease-in-out infinite; }
     
-    @keyframes pulse-l { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-4px); } }
-    @keyframes pulse-r { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(4px); } }
+    @keyframes pulse-l { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-3px); } }
+    @keyframes pulse-r { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(3px); } }
     
     #dental-instruction {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: white;
-      margin-top: 12px;
+      margin-top: 10px;
       text-align: center;
       opacity: 0.9;
     }
@@ -294,42 +296,44 @@
       <div class="side-indicator left hidden" id="indicator-left">IZQ</div>
       <div class="side-indicator right hidden" id="indicator-right">DER</div>
       
-      <svg viewBox="0 0 200 180" style="width:100%;height:100%">
-        <ellipse cx="100" cy="90" rx="90" ry="85" fill="#6B2D2D"/>
-        <ellipse id="tongue" cx="100" cy="115" rx="45" ry="28" fill="#C85050"/>
-        <ellipse cx="100" cy="110" rx="32" ry="18" fill="#D86060" opacity="0.5"/>
-        <ellipse cx="100" cy="55" rx="65" ry="20" fill="#E89090"/>
-        <path d="M30 58 Q100 20 170 58 Q170 42 100 30 Q30 42 30 58" fill="#E88888"/>
+<svg viewBox="0 0 160 145" style="width:100%;height:100%">
+        <!-- Fondo boca -->
+        <ellipse cx="80" cy="72" rx="75" ry="70" fill="#6B2D2D"/>
+        <!-- Lengua -->
+        <ellipse id="tongue" cx="80" cy="92" rx="38" ry="24" fill="#C85050"/>
+        <ellipse cx="80" cy="88" rx="26" ry="15" fill="#D86060" opacity="0.5"/>
+        <!-- Paladar -->
+        <ellipse cx="80" cy="44" rx="55" ry="16" fill="#E89090"/>
+        <!-- Encías superiores -->
+        <path d="M20 46 Q80 15 140 46 Q140 34 80 24 Q20 34 20 46" fill="#E88888"/>
         
-        <!-- Dientes superiores - dentro del área de encías -->
+        <!-- Dientes superiores -->
         <g id="upper-teeth">
-          <!-- Lado derecho (3 dientes) -->
-          <path id="u1" class="tooth" d="M45 50 Q50 44 58 44 Q66 44 70 50 L70 65 Q66 70 58 70 Q50 70 45 65 Z"/>
-          <path id="u2" class="tooth" d="M74 48 Q79 40 88 40 Q97 40 102 48 L102 65 Q97 72 88 72 Q79 72 74 65 Z"/>
-          <path id="u3" class="tooth" d="M106 45 Q112 36 122 36 Q132 36 138 45 L138 68 Q132 76 122 76 Q112 76 106 68 Z"/>
-          <!-- Lado izquierdo (3 dientes) -->
-          <path id="u4" class="tooth" d="M142 48 Q148 40 157 40 Q166 40 171 48 L171 65 Q166 72 157 72 Q148 72 142 65 Z"/>
-          <path id="u5" class="tooth" d="M175 50 Q180 44 188 44 Q196 44 200 50 L200 65 Q196 70 188 70 Q180 70 175 65 Z"/>
+          <path id="u1" class="tooth" d="M36 40 Q40 34 48 34 Q54 34 58 40 L58 52 Q54 56 48 56 Q40 56 36 52 Z"/>
+          <path id="u2" class="tooth" d="M62 38 Q66 30 76 30 Q86 30 90 38 L90 54 Q86 60 76 60 Q66 60 62 54 Z"/>
+          <path id="u3" class="tooth" d="M94 36 Q100 28 112 28 Q124 28 130 36 L130 56 Q124 64 112 64 Q100 64 94 56 Z"/>
+          <path id="u4" class="tooth" d="M118 38 Q122 30 132 30 Q142 30 146 38 L146 54 Q142 60 132 60 Q122 60 118 54 Z"/>
+          <path id="u5" class="tooth" d="M140 40 Q144 34 152 34 Q158 34 162 40 L162 52 Q158 56 152 56 Q144 56 140 52 Z"/>
         </g>
         
-        <text x="100" y="12" text-anchor="middle" fill="white" font-size="10" font-weight="600">ARRIBA</text>
+        <text x="80" y="10" text-anchor="middle" fill="white" font-size="9" font-weight="600">ARRIBA</text>
         
-        <path d="M25 125 Q100 165 175 125 Q175 145 100 155 Q25 145 25 125" fill="#D87878"/>
+        <!-- Encías inferiores -->
+        <path d="M20 98 Q80 132 140 98 Q140 114 80 124 Q20 114 20 98" fill="#D87878"/>
         
-        <!-- Dientes inferiores - dentro del área de encías -->
+        <!-- Dientes inferiores -->
         <g id="lower-teeth">
-          <!-- Lado derecho (3 dientes) -->
-          <path id="l1" class="tooth" d="M45 125 Q50 118 58 118 Q66 118 70 125 L70 138 Q66 142 58 142 Q50 142 45 138 Z"/>
-          <path id="l2" class="tooth" d="M74 123 Q79 115 88 115 Q97 115 102 123 L102 140 Q97 147 88 147 Q79 147 74 140 Z"/>
-          <path id="l3" class="tooth" d="M106 120 Q112 110 122 110 Q132 110 138 120 L138 142 Q132 152 122 152 Q112 152 106 142 Z"/>
-          <!-- Lado izquierdo (3 dientes) -->
-          <path id="l4" class="tooth" d="M142 123 Q148 115 157 115 Q166 115 171 123 L171 140 Q166 147 157 147 Q148 147 142 140 Z"/>
-          <path id="l5" class="tooth" d="M175 125 Q180 118 188 118 Q196 118 200 125 L200 138 Q196 142 188 142 Q180 142 175 138 Z"/>
+          <path id="l1" class="tooth" d="M36 100 Q40 94 48 94 Q54 94 58 100 L58 112 Q54 116 48 116 Q40 116 36 112 Z"/>
+          <path id="l2" class="tooth" d="M62 98 Q66 90 76 90 Q86 90 90 98 L90 114 Q86 120 76 120 Q66 120 62 114 Z"/>
+          <path id="l3" class="tooth" d="M94 96 Q100 88 112 88 Q124 88 130 96 L130 118 Q124 126 112 126 Q100 126 94 118 Z"/>
+          <path id="l4" class="tooth" d="M118 98 Q122 90 132 90 Q142 90 146 98 L146 114 Q142 120 132 120 Q122 120 118 114 Z"/>
+          <path id="l5" class="tooth" d="M140 100 Q144 94 152 94 Q158 94 162 100 L162 112 Q158 116 152 116 Q144 116 140 112 Z"/>
         </g>
         
-        <text x="100" y="176" text-anchor="middle" fill="white" font-size="10" font-weight="600">ABAJO</text>
+        <text x="80" y="142" text-anchor="middle" fill="white" font-size="9" font-weight="600">ABAJO</text>
         
-        <path d="M15 90 Q100 -25 185 90 Q100 205 15 90" fill="none" stroke="#B05050" stroke-width="5" opacity="0.4"/>
+        <!-- Contorno labios -->
+        <path d="M8 72 Q80 -20 152 72 Q80 165 8 72" fill="none" stroke="#B05050" stroke-width="4" opacity="0.4"/>
       </svg>
     </div>
     
