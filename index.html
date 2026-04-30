@@ -9,6 +9,11 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
+  <!-- Google Fonts - Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+  
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
   
   <style>
@@ -18,7 +23,7 @@
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      font-family: 'Comic Sans MS', cursive;
+      font-family: 'Montserrat', sans-serif;
       background: #000;
     }
     
@@ -41,43 +46,28 @@
       --poster-color: transparent;
     }
     
-    /* ========== ANIMACIONES ========== */
+    /* ========== ANIMACIONES TINA ========== */
     
-    /* BREATHE - Reposo, respiración suave */
     .anim-breathe {
       animation: breathe 3s ease-in-out infinite;
     }
     
     @keyframes breathe {
-      0%, 100% { 
-        transform: translateX(-50%) scale(1) translateY(0);
-      }
-      50% { 
-        transform: translateX(-50%) scale(1.03) translateY(-8px);
-      }
+      0%, 100% { transform: translateX(-50%) scale(1) translateY(0); }
+      50% { transform: translateX(-50%) scale(1.03) translateY(-8px); }
     }
     
-    /* BRUSH - Cepillando con rebote y wiggle */
     .anim-brush {
       animation: brush 0.8s ease-in-out infinite;
     }
     
     @keyframes brush {
-      0%, 100% { 
-        transform: translateX(-50%) translateY(0) rotateZ(0deg);
-      }
-      25% { 
-        transform: translateX(-50%) translateY(-12px) rotateZ(-8deg);
-      }
-      50% { 
-        transform: translateX(-50%) translateY(0) rotateZ(0deg);
-      }
-      75% { 
-        transform: translateX(-50%) translateY(-12px) rotateZ(8deg);
-      }
+      0%, 100% { transform: translateX(-50%) translateY(0) rotateZ(0deg); }
+      25% { transform: translateX(-50%) translateY(-12px) rotateZ(-8deg); }
+      50% { transform: translateX(-50%) translateY(0) rotateZ(0deg); }
+      75% { transform: translateX(-50%) translateY(-12px) rotateZ(8deg); }
     }
     
-    /* ENCOURAGE - Hablando/talking animation */
     .anim-encourage {
       animation: encourage 0.8s ease-in-out infinite;
     }
@@ -90,7 +80,6 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* BOUNCE - Fin de zona, saltito de celebración */
     .anim-bounce {
       animation: bounce 1.2s ease-in-out;
     }
@@ -104,27 +93,95 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* CELEBRATE - Final, salta feliz sin giro 360 */
     .anim-celebrate {
       animation: celebrate 0.5s ease-in-out infinite;
     }
     
     @keyframes celebrate {
-      0% { 
-        transform: translateX(-50%) translateY(0) scale(1);
-      }
-      30% { 
-        transform: translateX(-50%) translateY(-45px) scale(1.18);
-      }
-      50% { 
-        transform: translateX(-50%) translateY(-15px) scale(1.1);
-      }
-      70% { 
-        transform: translateX(-50%) translateY(-40px) scale(1.15);
-      }
-      100% { 
-        transform: translateX(-50%) translateY(0) scale(1);
-      }
+      0% { transform: translateX(-50%) translateY(0) scale(1); }
+      30% { transform: translateX(-50%) translateY(-45px) scale(1.18); }
+      50% { transform: translateX(-50%) translateY(-15px) scale(1.1); }
+      70% { transform: translateX(-50%) translateY(-40px) scale(1.15); }
+      100% { transform: translateX(-50%) translateY(0) scale(1); }
+    }
+    
+    /* ========== ARCADAS DENTALES ========== */
+    
+    #dental-arch-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 150;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    #dental-arch-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    
+    #arch-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    #arch-zone-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 36px;
+      font-weight: 800;
+      color: #FFD700;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    }
+    
+    .arch-svg {
+      width: 300px;
+      height: 200px;
+    }
+    
+    .arch-svg.lower {
+      transform: scaleY(-1);
+    }
+    
+    .tooth {
+      fill: white;
+      stroke: #ccc;
+      stroke-width: 1;
+      transition: all 0.3s;
+    }
+    
+    .tooth.highlight {
+      fill: #FFD700;
+      stroke: #FF69B4;
+      stroke-width: 3;
+      filter: drop-shadow(0 0 10px #FFD700);
+      animation: tooth-pulse 0.8s ease-in-out infinite;
+    }
+    
+    @keyframes tooth-pulse {
+      0%, 100% { filter: drop-shadow(0 0 10px #FFD700); }
+      50% { filter: drop-shadow(0 0 25px #FFD700); }
+    }
+    
+    #arch-instruction {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      color: white;
+      margin-top: 20px;
+      text-align: center;
+      opacity: 0.9;
     }
     
     /* ========== UI STYLES ========== */
@@ -152,10 +209,21 @@
     
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    #loading-text { color: #FF69B4; font-size: 26px; margin-top: 20px; font-weight: bold; }
-    #loading-status { color: #FF69B4; font-size: 18px; margin-top: 10px; }
+    #loading-text { 
+      font-family: 'Montserrat', sans-serif;
+      color: #FF69B4; 
+      font-size: 26px; 
+      margin-top: 20px; 
+      font-weight: 700;
+    }
+    #loading-status { 
+      font-family: 'Montserrat', sans-serif;
+      color: #FF69B4; 
+      font-size: 18px; 
+      margin-top: 10px; 
+      font-weight: 600;
+    }
     
-    /* Dropdown de idioma - pequeño en esquina */
     .dropdown-container {
       position: fixed;
       top: 15px;
@@ -171,7 +239,8 @@
       background: rgba(255,105,180,0.9);
       color: white;
       font-size: 14px;
-      font-weight: bold;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -188,7 +257,7 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      min-width: 100px;
+      min-width: 120px;
     }
     
     .dropdown-content.show {
@@ -196,10 +265,11 @@
     }
     
     .dropdown-item {
+      font-family: 'Montserrat', sans-serif;
       padding: 12px 20px;
       color: white;
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       border-bottom: 1px solid rgba(255,255,255,0.2);
       text-align: center;
@@ -228,15 +298,16 @@
     }
     
     .zone-dot {
-      width: 28px; height: 28px;
+      width: 32px; height: 32px;
       border-radius: 50%;
       background: rgba(255,255,255,0.4);
       border: 3px solid white;
       display: flex;
       align-items: center;
       justify-content: center;
+      font-family: 'Montserrat', sans-serif;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 700;
       color: white;
     }
     
@@ -264,9 +335,10 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
+      font-family: 'Montserrat', sans-serif;
       color: white;
       font-size: 36px;
-      font-weight: bold;
+      font-weight: 800;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     
@@ -274,8 +346,10 @@
       position: absolute;
       bottom: 5px; left: 50%;
       transform: translateX(-50%);
+      font-family: 'Montserrat', sans-serif;
       color: white;
-      font-size: 10px;
+      font-size: 11px;
+      font-weight: 600;
       text-transform: uppercase;
     }
     
@@ -287,7 +361,9 @@
       color: white;
       padding: 16px 30px;
       border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
       font-size: 18px;
+      font-weight: 600;
       max-width: 90%;
       text-align: center;
       z-index: 100;
@@ -321,8 +397,9 @@
       color: white;
       border: none;
       border-radius: 30px;
+      font-family: 'Montserrat', sans-serif;
       font-size: 20px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
       z-index: 200;
       display: none;
@@ -360,7 +437,39 @@
     <div id="loading-status">0%</div>
   </div>
   
-  <!-- Dropdown de idioma -->
+  <!-- Overlay Arcada Dental -->
+  <div id="dental-arch-overlay">
+    <div id="arch-title">Prepárate para cepillar</div>
+    <div id="arch-zone-name">Zona Superior Derecha</div>
+    <svg class="arch-svg" id="upper-arch" viewBox="0 0 300 120">
+      <!-- Arcada superior -->
+      <path d="M30 100 Q150 -20 270 100" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+      <!-- Dientes superiores (8 dientes) -->
+      <rect class="tooth" id="t1" x="35" y="30" width="25" height="35" rx="5"/>
+      <rect class="tooth" id="t2" x="65" y="20" width="25" height="40" rx="5"/>
+      <rect class="tooth" id="t3" x="95" y="15" width="25" height="42" rx="5"/>
+      <rect class="tooth" id="t4" x="125" y="12" width="25" height="45" rx="5"/>
+      <rect class="tooth" id="t5" x="155" y="12" width="25" height="45" rx="5"/>
+      <rect class="tooth" id="t6" x="185" y="15" width="25" height="42" rx="5"/>
+      <rect class="tooth" id="t7" x="215" y="20" width="25" height="40" rx="5"/>
+      <rect class="tooth" id="t8" x="245" y="30" width="25" height="35" rx="5"/>
+    </svg>
+    <svg class="arch-svg lower hidden" id="lower-arch" viewBox="0 0 300 120">
+      <!-- Arcada inferior -->
+      <path d="M30 20 Q150 140 270 20" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
+      <!-- Dientes inferiores (8 dientes) -->
+      <rect class="tooth" id="t9" x="35" y="55" width="25" height="35" rx="5"/>
+      <rect class="tooth" id="t10" x="65" y="50" width="25" height="40" rx="5"/>
+      <rect class="tooth" id="t11" x="95" y="45" width="25" height="42" rx="5"/>
+      <rect class="tooth" id="t12" x="125" y="43" width="25" height="45" rx="5"/>
+      <rect class="tooth" id="t13" x="155" y="43" width="25" height="45" rx="5"/>
+      <rect class="tooth" id="t14" x="185" y="45" width="25" height="42" rx="5"/>
+      <rect class="tooth" id="t15" x="215" y="50" width="25" height="40" rx="5"/>
+      <rect class="tooth" id="t16" x="245" y="55" width="25" height="35" rx="5"/>
+    </svg>
+    <div id="arch-instruction">Haz circulitos suaves en esta zona</div>
+  </div>
+  
   <div class="dropdown-container">
     <button class="dropdown-btn" id="lang-btn">ES</button>
     <div class="dropdown-content" id="lang-dropdown">
@@ -375,6 +484,7 @@
     <div class="zone-dot" data-zone="2">2</div>
     <div class="zone-dot" data-zone="3">3</div>
     <div class="zone-dot" data-zone="4">4</div>
+    <div class="zone-dot" data-zone="5">5</div>
   </div>
   
   <div id="timer" class="hidden">
@@ -403,9 +513,8 @@
     let currentAnim = null;
     let idleTimer = null;
     let isIdle = true;
-    let idlePhase = 'static'; // 'static' or 'breathe'
+    let idlePhase = 'static';
     
-    // Elementos
     const loading = document.getElementById('loading');
     const loadingStatus = document.getElementById('loading-status');
     const tina = document.getElementById('tina-3d');
@@ -419,25 +528,24 @@
     const musicBtn = document.getElementById('music-btn');
     const langBtn = document.getElementById('lang-btn');
     const langDropdown = document.getElementById('lang-dropdown');
+    const archOverlay = document.getElementById('dental-arch-overlay');
+    const archTitle = document.getElementById('arch-title');
+    const archZoneName = document.getElementById('arch-zone-name');
+    const upperArch = document.getElementById('upper-arch');
+    const lowerArch = document.getElementById('lower-arch');
+    const archInstruction = document.getElementById('arch-instruction');
     
-    // ===== ANIMACIONES =====
+    // ===== ANIMACIONES TINA =====
     const ANIMS = ['breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
     
     function setAnim(name, duration = null) {
-      // Limpiar todas las animaciones
       ANIMS.forEach(a => tina.classList.remove('anim-' + a));
-      
-      // Añadir la nueva
       if (name) {
         tina.classList.add('anim-' + name);
         currentAnim = name;
-        
-        // Si tiene duración, volver a breathe después
         if (duration) {
           setTimeout(() => {
-            if (currentAnim === name) {
-              setAnim('breathe');
-            }
+            if (currentAnim === name) setAnim('breathe');
           }, duration);
         }
       }
@@ -448,11 +556,10 @@
       stopIdleCycle();
       isIdle = true;
       idlePhase = 'static';
-      setAnim(null); // Sin animación = static
+      setAnim(null);
       
       idleTimer = setInterval(() => {
         if (!isIdle) return;
-        
         if (idlePhase === 'static') {
           idlePhase = 'breathe';
           setAnim('breathe');
@@ -470,20 +577,15 @@
       }
     }
     
-    function pauseIdle() {
-      isIdle = false;
-    }
+    function pauseIdle() { isIdle = false; }
     
     function resumeIdle() {
       isIdle = true;
       idlePhase = 'static';
-      setAnim(null); // Empieza con static
-      
-      // Reiniciar el timer si no existe
+      setAnim(null);
       if (!idleTimer) {
         idleTimer = setInterval(() => {
           if (!isIdle) return;
-          
           if (idlePhase === 'static') {
             idlePhase = 'breathe';
             setAnim('breathe');
@@ -495,134 +597,152 @@
       }
     }
     
-    // ===== TEXTOS (lenguaje infantil y motivante, sin emojis) =====
+    // ===== TEXTOS =====
     const T = {
       ES: {
         intro: 'Hola amiguitos, soy Tina la dinosaurio. Vamos a cepillar los dientes juntos, será divertido.',
         zone: 'Ahora toca la zona {z}. Recuerda inclinar el cepillito y hacer circulitos suaves.',
+        zonePrep: 'Prepárate para cepillar {z}',
+        tongue: 'Ahora vamos a cepillar la lengüita. Es muy importante para tener un aliento fresco.',
         encourage: ['Muy bien, sigue así.', 'Qué bien lo haces.', 'Eres un campeón.', 'Excelente trabajo.'],
-        celebrate: 'Lo lograste. Cepillaste todos tus dientes como un súper héroe. Estoy muy orgullosa de ti.',
-        zones: ['Arriba derecha', 'Arriba izquierda', 'Abajo derecha', 'Abajo izquierda'],
+        celebrate: 'Lo lograste. Cepillaste todos tus dientes y tu lengua como un súper héroe. Estoy muy orgullosa de ti.',
+        zones: ['Arriba a la derecha', 'Arriba a la izquierda', 'Abajo a la derecha', 'Abajo a la izquierda', 'La lengüita'],
         restart: 'Jugar de nuevo'
       },
       EN: {
         intro: 'Hi friends, I\'m Tina the dinosaur. Let\'s brush our teeth together, it will be fun.',
         zone: 'Now it\'s time for the {z} area. Remember to tilt your toothbrush and make little circles.',
+        zonePrep: 'Get ready to brush {z}',
+        tongue: 'Now let\'s brush your tongue. It\'s very important for fresh breath.',
         encourage: ['Great job, keep going.', 'You\'re doing so well.', 'You\'re a champion.', 'Awesome work.'],
-        celebrate: 'You did it. You brushed all your teeth like a super hero. I\'m so proud of you.',
-        zones: ['Top right', 'Top left', 'Bottom right', 'Bottom left'],
+        celebrate: 'You did it. You brushed all your teeth and tongue like a super hero. I\'m so proud of you.',
+        zones: ['Top right side', 'Top left side', 'Bottom right side', 'Bottom left side', 'Your tongue'],
         restart: 'Play again'
       },
       PT: {
         intro: 'Oi amiguinhos, sou Tina a dinossauro. Vamos escovar os dentes juntos, vai ser divertido.',
         zone: 'Agora é a vez da área {z}. Lembra de inclinar a escovinha e fazer circulinhos suaves.',
+        zonePrep: 'Prepare-se para escovar {z}',
+        tongue: 'Agora vamos escovar a língua. É muito importante para ter um hálito fresco.',
         encourage: ['Muito bem, continue.', 'Você está indo super bem.', 'Você é um campeão.', 'Trabalho incrível.'],
-        celebrate: 'Você conseguiu. Escovou todos os dentes como um super herói. Estou muito orgulhosa de você.',
-        zones: ['Em cima direita', 'Em cima esquerda', 'Em baixo direita', 'Em baixo esquerda'],
+        celebrate: 'Você conseguiu. Escovou todos os dentes e a língua como um super herói. Estou muito orgulhosa de você.',
+        zones: ['Em cima à direita', 'Em cima à esquerda', 'Em baixo à direita', 'Em baixo à esquerda', 'A língua'],
         restart: 'Jogar de novo'
       }
     };
     
-    // ===== MÚSICA MEJORADA (30s por zona) =====
-    // Notas con frecuencias
+    // ===== MÚSICA MEJORADA =====
     const NOTES = {
       C3: 130.81, D3: 146.83, E3: 164.81, F3: 174.61, G3: 196.00, A3: 220.00, B3: 246.94,
       C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77
+      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
+      C6: 1046.50, D6: 1174.66, E6: 1318.51
     };
     
-    // Melodías completas (~30 segundos cada una) - diferentes estilos por zona
+    // 5 melodías diferentes - una por cada fase
     const ZONE_MELODIES = {
-      // Zona 1: Melodía alegre tipo "mañana feliz" - Do mayor
+      // Zona 1: Melodía alegre y energética - Do mayor
       1: [
-        // Frase 1 (8s)
-        {n:'C4',d:0.4},{n:'E4',d:0.4},{n:'G4',d:0.4},{n:'C5',d:0.6},{n:'B4',d:0.3},{n:'A4',d:0.3},
-        {n:'G4',d:0.5},{n:'F4',d:0.3},{n:'E4',d:0.3},{n:'D4',d:0.5},{n:'C4',d:0.6},
-        // Frase 2 (8s)
-        {n:'E4',d:0.4},{n:'G4',d:0.4},{n:'A4',d:0.5},{n:'G4',d:0.3},{n:'F4',d:0.3},{n:'E4',d:0.5},
-        {n:'D4',d:0.4},{n:'E4',d:0.4},{n:'F4',d:0.5},{n:'E4',d:0.3},{n:'D4',d:0.3},{n:'C4',d:0.6},
-        // Frase 3 (8s)
-        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.5},{n:'B4',d:0.3},{n:'A4',d:0.3},
-        {n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.4},{n:'D4',d:0.5},{n:'C4',d:0.6},
-        // Frase 4 (6s)
-        {n:'C4',d:0.4},{n:'E4',d:0.4},{n:'G4',d:0.4},{n:'C5',d:0.8},{n:'G4',d:0.4},{n:'E4',d:0.4},{n:'C4',d:0.8}
+        {n:'C4',d:0.35},{n:'E4',d:0.35},{n:'G4',d:0.35},{n:'C5',d:0.5},{n:'G4',d:0.25},{n:'E4',d:0.25},
+        {n:'C4',d:0.4},{n:'D4',d:0.3},{n:'E4',d:0.3},{n:'F4',d:0.35},{n:'G4',d:0.5},
+        {n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.35},{n:'E4',d:0.35},{n:'D4',d:0.4},{n:'C4',d:0.5},
+        {n:'E4',d:0.35},{n:'G4',d:0.35},{n:'C5',d:0.5},{n:'B4',d:0.25},{n:'A4',d:0.25},
+        {n:'G4',d:0.35},{n:'F4',d:0.35},{n:'E4',d:0.35},{n:'D4',d:0.35},{n:'C4',d:0.6},
+        {n:'G4',d:0.4},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.5},{n:'D5',d:0.35},
+        {n:'E5',d:0.5},{n:'D5',d:0.3},{n:'C5',d:0.3},{n:'B4',d:0.35},{n:'A4',d:0.35},{n:'G4',d:0.5},
+        {n:'C4',d:0.35},{n:'E4',d:0.35},{n:'G4',d:0.35},{n:'C5',d:0.7},{n:'G4',d:0.35},{n:'E4',d:0.35},{n:'C4',d:0.7}
       ],
       
-      // Zona 2: Melodía suave tipo "canción de cuna" - Sol mayor
+      // Zona 2: Melodía suave y relajante - Sol mayor
       2: [
-        // Frase 1
-        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'D5',d:0.6},{n:'C5',d:0.4},{n:'B4',d:0.4},
-        {n:'A4',d:0.5},{n:'G4',d:0.3},{n:'F4',d:0.3},{n:'E4',d:0.5},{n:'D4',d:0.6},
-        // Frase 2
-        {n:'B4',d:0.4},{n:'C5',d:0.4},{n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},{n:'A4',d:0.5},
-        {n:'G4',d:0.4},{n:'A4',d:0.4},{n:'B4',d:0.5},{n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.5},
-        // Frase 3
-        {n:'E4',d:0.4},{n:'F4',d:0.4},{n:'G4',d:0.5},{n:'A4',d:0.4},{n:'B4',d:0.4},{n:'C5',d:0.5},
-        {n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},{n:'A4',d:0.5},{n:'G4',d:0.6},
-        // Frase 4
-        {n:'G4',d:0.5},{n:'B4',d:0.5},{n:'D5',d:0.7},{n:'B4',d:0.4},{n:'G4',d:0.4},{n:'D4',d:0.8}
+        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.5},{n:'D5',d:0.4},{n:'B4',d:0.3},
+        {n:'G4',d:0.5},{n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.4},{n:'E4',d:0.4},{n:'D4',d:0.5},
+        {n:'E4',d:0.4},{n:'F4',d:0.3},{n:'G4',d:0.3},{n:'A4',d:0.5},{n:'B4',d:0.35},{n:'C5',d:0.35},
+        {n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},{n:'A4',d:0.4},{n:'G4',d:0.5},
+        {n:'D4',d:0.4},{n:'E4',d:0.3},{n:'F4',d:0.3},{n:'G4',d:0.5},{n:'A4',d:0.35},{n:'B4',d:0.35},
+        {n:'C5',d:0.5},{n:'B4',d:0.3},{n:'A4',d:0.3},{n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.5},
+        {n:'G4',d:0.5},{n:'B4',d:0.5},{n:'D5',d:0.8},{n:'G4',d:0.4},{n:'B4',d:0.4},{n:'G4',d:0.8}
       ],
       
       // Zona 3: Melodía juguetona - Re mayor
       3: [
-        // Frase 1
-        {n:'D4',d:0.4},{n:'F4',d:0.4},{n:'A4',d:0.4},{n:'D5',d:0.5},{n:'C5',d:0.3},{n:'B4',d:0.3},
-        {n:'A4',d:0.4},{n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.5},{n:'D4',d:0.6},
-        // Frase 2
-        {n:'A4',d:0.4},{n:'B4',d:0.4},{n:'C5',d:0.5},{n:'D5',d:0.4},{n:'C5',d:0.3},{n:'B4',d:0.3},
-        {n:'A4',d:0.4},{n:'G4',d:0.4},{n:'F4',d:0.4},{n:'E4',d:0.5},{n:'D4',d:0.5},
-        // Frase 3
-        {n:'F4',d:0.4},{n:'G4',d:0.4},{n:'A4',d:0.5},{n:'B4',d:0.4},{n:'C5',d:0.4},{n:'D5',d:0.5},
-        {n:'E5',d:0.4},{n:'D5',d:0.3},{n:'C5',d:0.3},{n:'B4',d:0.5},{n:'A4',d:0.5},
-        // Frase 4
-        {n:'D4',d:0.4},{n:'F4',d:0.4},{n:'A4',d:0.5},{n:'D5',d:0.7},{n:'A4',d:0.5},{n:'D4',d:0.8}
+        {n:'D4',d:0.35},{n:'E4',d:0.25},{n:'F4',d:0.25},{n:'G4',d:0.35},{n:'A4',d:0.35},{n:'B4',d:0.35},
+        {n:'C5',d:0.35},{n:'D5',d:0.5},{n:'C5',d:0.25},{n:'B4',d:0.25},{n:'A4',d:0.35},{n:'G4',d:0.35},
+        {n:'F4',d:0.35},{n:'E4',d:0.35},{n:'D4',d:0.5},{n:'F4',d:0.35},{n:'A4',d:0.35},{n:'D5',d:0.6},
+        {n:'A4',d:0.35},{n:'F4',d:0.35},{n:'D4',d:0.5},{n:'E4',d:0.35},{n:'G4',d:0.35},{n:'B4',d:0.5},
+        {n:'D5',d:0.35},{n:'B4',d:0.35},{n:'G4',d:0.35},{n:'E4',d:0.35},{n:'D4',d:0.5},
+        {n:'G4',d:0.4},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.4},{n:'D5',d:0.5},
+        {n:'E5',d:0.35},{n:'D5',d:0.35},{n:'C5',d:0.35},{n:'B4',d:0.35},{n:'A4',d:0.35},{n:'G4',d:0.5},
+        {n:'D4',d:0.35},{n:'F4',d:0.35},{n:'A4',d:0.35},{n:'D5',d:0.8},{n:'A4',d:0.4},{n:'D4',d:0.8}
       ],
       
-      // Zona 4: Melodía triunfal/celebración - Do mayor con más energía
+      // Zona 4: Melodía triunfal - Fa mayor
       4: [
-        // Frase 1 - apertura triunfal
-        {n:'C4',d:0.3},{n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.5},{n:'B4',d:0.2},{n:'A4',d:0.2},
-        {n:'G4',d:0.4},{n:'F4',d:0.3},{n:'E4',d:0.3},{n:'D4',d:0.4},{n:'C4',d:0.5},
-        // Frase 2 - subida
-        {n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.4},{n:'E5',d:0.5},{n:'D5',d:0.3},{n:'C5',d:0.3},
-        {n:'B4',d:0.4},{n:'A4',d:0.3},{n:'G4',d:0.3},{n:'F4',d:0.4},{n:'E4',d:0.5},
-        // Frase 3 - clímax
-        {n:'G4',d:0.3},{n:'A4',d:0.3},{n:'B4',d:0.3},{n:'C5',d:0.4},{n:'D5',d:0.3},{n:'E5',d:0.4},
-        {n:'F5',d:0.3},{n:'E5',d:0.3},{n:'D5',d:0.3},{n:'C5',d:0.4},{n:'B4',d:0.3},{n:'A4',d:0.3},{n:'G4',d:0.5},
-        // Frase 4 - resolución
-        {n:'C4',d:0.3},{n:'E4',d:0.3},{n:'G4',d:0.3},{n:'C5',d:0.6},{n:'G4',d:0.4},{n:'E4',d:0.4},{n:'C4',d:0.8}
+        {n:'F4',d:0.35},{n:'A4',d:0.35},{n:'C5',d:0.35},{n:'F5',d:0.5},{n:'E5',d:0.25},{n:'D5',d:0.25},
+        {n:'C5',d:0.35},{n:'B4',d:0.25},{n:'A4',d:0.25},{n:'G4',d:0.35},{n:'A4',d:0.35},{n:'B4',d:0.35},
+        {n:'C5',d:0.5},{n:'A4',d:0.35},{n:'F4',d:0.5},{n:'G4',d:0.35},{n:'A4',d:0.35},{n:'B4',d:0.35},
+        {n:'C5',d:0.5},{n:'D5',d:0.35},{n:'E5',d:0.35},{n:'F5',d:0.5},{n:'E5',d:0.25},{n:'D5',d:0.25},
+        {n:'C5',d:0.35},{n:'B4',d:0.25},{n:'A4',d:0.25},{n:'G4',d:0.35},{n:'F4',d:0.5},
+        {n:'A4',d:0.4},{n:'C5',d:0.4},{n:'F5',d:0.6},{n:'E5',d:0.3},{n:'D5',d:0.3},
+        {n:'C5',d:0.35},{n:'A4',d:0.35},{n:'F4',d:0.35},{n:'G4',d:0.35},{n:'A4',d:0.35},{n:'B4',d:0.35},
+        {n:'F4',d:0.35},{n:'A4',d:0.35},{n:'C5',d:0.35},{n:'F5',d:0.8},{n:'C5',d:0.4},{n:'F4',d:0.8}
+      ],
+      
+      // Zona 5 (lengua): Melodía corta y divertida - Mi mayor (10 segundos)
+      5: [
+        {n:'E4',d:0.3},{n:'G4',d:0.25},{n:'B4',d:0.25},{n:'E5',d:0.4},{n:'D5',d:0.2},{n:'C5',d:0.2},
+        {n:'B4',d:0.3},{n:'A4',d:0.2},{n:'G4',d:0.2},{n:'F4',d:0.25},{n:'E4',d:0.25},
+        {n:'G4',d:0.3},{n:'B4',d:0.3},{n:'D5',d:0.4},{n:'E5',d:0.3},{n:'D5',d:0.2},{n:'C5',d:0.2},
+        {n:'B4',d:0.25},{n:'A4',d:0.25},{n:'G4',d:0.25},{n:'F4',d:0.25},{n:'E4',d:0.4},
+        {n:'B4',d:0.3},{n:'C5',d:0.25},{n:'D5',d:0.25},{n:'E5',d:0.5},{n:'B4',d:0.3},{n:'E4',d:0.5}
       ]
     };
     
-    // Acordes de acompañamiento por zona
+    // Acordes por zona
     const ZONE_CHORDS = {
-      1: [
-        {notes:['C4','E4','G4'], d:2},
-        {notes:['F4','A4','C5'], d:2},
-        {notes:['G4','B4','D5'], d:2},
-        {notes:['C4','E4','G4'], d:2}
-      ],
-      2: [
-        {notes:['G4','B4','D5'], d:2},
-        {notes:['C4','E4','G4'], d:2},
-        {notes:['D4','F4','A4'], d:2},
-        {notes:['G4','B4','D5'], d:2}
-      ],
-      3: [
-        {notes:['D4','F4','A4'], d:2},
-        {notes:['G4','B4','D5'], d:2},
-        {notes:['A4','C5','E5'], d:2},
-        {notes:['D4','F4','A4'], d:2}
-      ],
-      4: [
-        {notes:['C4','E4','G4'], d:2},
-        {notes:['F4','A4','C5'], d:2},
-        {notes:['G4','B4','D5'], d:2},
-        {notes:['C4','E4','G4','C5'], d:2}
-      ]
+      1: [{notes:['C4','E4','G4'], d:1.8},{notes:['F4','A4','C5'], d:1.8},{notes:['G4','B4','D5'], d:1.8},{notes:['C4','E4','G4'], d:1.8}],
+      2: [{notes:['G4','B4','D5'], d:1.8},{notes:['C4','E4','G4'], d:1.8},{notes:['D4','F4','A4'], d:1.8},{notes:['G4','B4','D5'], d:1.8}],
+      3: [{notes:['D4','F4','A4'], d:1.5},{notes:['G4','B4','D5'], d:1.5},{notes:['A4','C5','E5'], d:1.5},{notes:['D4','F4','A4'], d:1.5}],
+      4: [{notes:['F4','A4','C5'], d:1.5},{notes:['B4','D5','F5'], d:1.5},{notes:['C4','E4','G4'], d:1.5},{notes:['F4','A4','C5'], d:1.5}],
+      5: [{notes:['E4','G4','B4'], d:1.5},{notes:['A4','C5','E5'], d:1.5},{notes:['E4','G4','B4'], d:1.5},{notes:['A4','C5','E5'], d:1.5}]
+    };
+    
+    // Melodías de transición entre fases
+    const TRANSITION_MELODIES = {
+      to1: [{n:'C4',d:0.2},{n:'E4',d:0.2},{n:'G4',d:0.3}],
+      to2: [{n:'G4',d:0.2},{n:'B4',d:0.2},{n:'D5',d:0.3}],
+      to3: [{n:'D4',d:0.2},{n:'F4',d:0.2},{n:'A4',d:0.3}],
+      to4: [{n:'F4',d:0.2},{n:'A4',d:0.2},{n:'C5',d:0.3}],
+      to5: [{n:'E4',d:0.2},{n:'G4',d:0.2},{n:'B4',d:0.3}],
+      end: [{n:'C5',d:0.15},{n:'E5',d:0.15},{n:'G5',d:0.15},{n:'C6',d:0.4}]
     };
     
     let musicStopRequested = false;
+    
+    function playTransition(key) {
+      if (!musicPlaying) return;
+      const ctx = audioCtx || (audioCtx = new (window.AudioContext || window.webkitAudioContext)());
+      const melody = TRANSITION_MELODIES[key];
+      if (!melody) return;
+      
+      let t = ctx.currentTime + 0.05;
+      melody.forEach(note => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = NOTES[note.n];
+        gain.gain.setValueAtTime(0, t);
+        gain.gain.linearRampToValueAtTime(0.2, t + 0.03);
+        gain.gain.setValueAtTime(0.2, t + note.d * 0.6);
+        gain.gain.linearRampToValueAtTime(0, t + note.d);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + note.d);
+        musicOscillators.push(osc);
+        t += note.d;
+      });
+    }
     
     function playZoneMusic(zoneNum) {
       if (!musicPlaying) return;
@@ -633,78 +753,82 @@
       const melody = ZONE_MELODIES[zoneNum];
       const chords = ZONE_CHORDS[zoneNum];
       
-      // Master gain
+      if (!melody) return;
+      
       const masterGain = ctx.createGain();
-      masterGain.gain.value = 0.3;
+      masterGain.gain.value = 0.35;
       masterGain.connect(ctx.destination);
       
-      // === MELODÍA (onda sinusoidal suave) ===
+      // Melodía principal
       let melodyTime = ctx.currentTime + 0.1;
       melody.forEach((note, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
+        // Nota principal
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.type = 'sine';
+        osc1.frequency.value = NOTES[note.n];
+        gain1.gain.setValueAtTime(0, melodyTime);
+        gain1.gain.linearRampToValueAtTime(0.22, melodyTime + 0.04);
+        gain1.gain.setValueAtTime(0.22, melodyTime + note.d * 0.65);
+        gain1.gain.linearRampToValueAtTime(0, melodyTime + note.d);
+        osc1.connect(gain1);
+        gain1.connect(masterGain);
+        osc1.start(melodyTime);
+        osc1.stop(melodyTime + note.d);
+        musicOscillators.push(osc1);
         
-        osc.type = 'sine';
-        osc.frequency.value = NOTES[note.n];
-        
-        // Envelope suave (ADSR)
-        gain.gain.setValueAtTime(0, melodyTime);
-        gain.gain.linearRampToValueAtTime(0.25, melodyTime + 0.05);
-        gain.gain.setValueAtTime(0.25, melodyTime + note.d * 0.7);
-        gain.gain.linearRampToValueAtTime(0, melodyTime + note.d);
-        
-        osc.connect(gain);
-        gain.connect(masterGain);
-        osc.start(melodyTime);
-        osc.stop(melodyTime + note.d);
-        musicOscillators.push(osc);
+        // Octava superior (más suave) para cuerpo
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.type = 'triangle';
+        osc2.frequency.value = NOTES[note.n] * 2; // octava arriba
+        gain2.gain.setValueAtTime(0, melodyTime);
+        gain2.gain.linearRampToValueAtTime(0.08, melodyTime + 0.03);
+        gain2.gain.setValueAtTime(0.08, melodyTime + note.d * 0.6);
+        gain2.gain.linearRampToValueAtTime(0, melodyTime + note.d);
+        osc2.connect(gain2);
+        gain2.connect(masterGain);
+        osc2.start(melodyTime);
+        osc2.stop(melodyTime + note.d);
+        musicOscillators.push(osc2);
         
         melodyTime += note.d;
       });
       
-      // === ACORDES (onda triangular, más suave) ===
+      // Acordes
       let chordTime = ctx.currentTime + 0.1;
       let chordIndex = 0;
-      
-      while (chordTime < melodyTime && !musicStopRequested) {
+      while (chordTime < melodyTime - 1 && !musicStopRequested) {
         const chord = chords[chordIndex % chords.length];
-        
         chord.notes.forEach(noteName => {
           const osc = ctx.createOscillator();
           const gain = ctx.createGain();
-          
-          osc.type = 'triangle';
+          osc.type = 'sine';
           osc.frequency.value = NOTES[noteName];
-          
           gain.gain.setValueAtTime(0, chordTime);
-          gain.gain.linearRampToValueAtTime(0.12, chordTime + 0.15);
-          gain.gain.setValueAtTime(0.12, chordTime + chord.d * 0.8);
+          gain.gain.linearRampToValueAtTime(0.1, chordTime + 0.12);
+          gain.gain.setValueAtTime(0.1, chordTime + chord.d * 0.75);
           gain.gain.linearRampToValueAtTime(0, chordTime + chord.d);
-          
           osc.connect(gain);
           gain.connect(masterGain);
           osc.start(chordTime);
           osc.stop(chordTime + chord.d);
           musicOscillators.push(osc);
         });
-        
         chordTime += chord.d;
         chordIndex++;
       }
       
-      // Repetir cuando termine la melodía (~30s)
       const totalDuration = melodyTime - ctx.currentTime;
       setTimeout(() => {
         if (musicPlaying && !musicStopRequested) {
           playZoneMusic(zoneNum);
         }
-      }, totalDuration * 1000 + 500);
+      }, totalDuration * 1000 + 300);
     }
     
     function stopAllOscillators() {
-      musicOscillators.forEach(osc => {
-        try { osc.stop(); } catch(e) {}
-      });
+      musicOscillators.forEach(osc => { try { osc.stop(); } catch(e) {} });
       musicOscillators = [];
     }
     
@@ -733,39 +857,83 @@
       }
     }
     
-    // ===== VOZ CON ANIMACIÓN DE HABLAR =====
+    // ===== VOZ =====
     function speak(text) {
-      pauseIdle(); // Pausar el ciclo idle
-      
+      pauseIdle();
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        // Español latinoamericano, inglés y portugués
         u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
         u.rate = 0.9;
-        
-        // Intentar usar voz latina si está disponible
         const voices = speechSynthesis.getVoices();
         const latinVoice = voices.find(v => 
-          v.lang.includes('es-MX') || v.lang.includes('es-MX') || 
-          v.lang.includes('es-US') || v.lang.includes('Latin')
+          v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('Latin')
         );
         if (latinVoice && lang === 'ES') u.voice = latinVoice;
-        
-        // Animar mientras habla (ENCOURAGE = talking)
         setAnim('encourage');
-        
         u.onend = () => {
-          // Volver al ciclo idle cuando termine de hablar
-          if (zone > 0 && zone <= 4) {
-            setAnim('brush'); // Durante zona activa, volver a brush
+          if (zone > 0 && zone <= 5) {
+            setAnim('brush');
           } else {
-            resumeIdle(); // Fuera de zona, volver a idle cycle
+            resumeIdle();
           }
         };
-        
         speechSynthesis.speak(u);
       }
+    }
+    
+    // ===== ARCADAS DENTALES =====
+    function showDentalArch(zoneNum) {
+      // Determinar si es arcada superior o inferior
+      const isUpper = zoneNum === 1 || zoneNum === 2;
+      const isRight = zoneNum === 1 || zoneNum === 3;
+      
+      // Mostrar arcada correcta
+      upperArch.classList.toggle('hidden', !isUpper);
+      lowerArch.classList.toggle('hidden', isUpper);
+      
+      // Resaltar dientes según zona
+      document.querySelectorAll('.tooth').forEach(t => t.classList.remove('highlight'));
+      
+      if (isUpper) {
+        if (isRight) {
+          document.getElementById('t1').classList.add('highlight');
+          document.getElementById('t2').classList.add('highlight');
+          document.getElementById('t3').classList.add('highlight');
+          document.getElementById('t4').classList.add('highlight');
+        } else {
+          document.getElementById('t5').classList.add('highlight');
+          document.getElementById('t6').classList.add('highlight');
+          document.getElementById('t7').classList.add('highlight');
+          document.getElementById('t8').classList.add('highlight');
+        }
+      } else {
+        if (isRight) {
+          document.getElementById('t9').classList.add('highlight');
+          document.getElementById('t10').classList.add('highlight');
+          document.getElementById('t11').classList.add('highlight');
+          document.getElementById('t12').classList.add('highlight');
+        } else {
+          document.getElementById('t13').classList.add('highlight');
+          document.getElementById('t14').classList.add('highlight');
+          document.getElementById('t15').classList.add('highlight');
+          document.getElementById('t16').classList.add('highlight');
+        }
+      }
+      
+      // Actualizar textos
+      archTitle.textContent = T[lang].zonePrep.replace('{z}', '');
+      archZoneName.textContent = T[lang].zones[zoneNum - 1];
+      archInstruction.textContent = zoneNum === 5 ? 
+        'Cepilla suavemente de adentro hacia afuera' : 
+        'Haz circulitos suaves en esta zona';
+      
+      // Mostrar overlay
+      archOverlay.classList.add('show');
+    }
+    
+    function hideDentalArch() {
+      archOverlay.classList.remove('show');
     }
     
     // ===== INICIO =====
@@ -774,38 +942,71 @@
       loading.style.opacity = '0';
       setTimeout(() => loading.style.display = 'none', 500);
       
-      // Iniciar ciclo idle (3s static, 3s breathe)
       startIdleCycle();
-      
-      // Intro con animación de hablar
       message.textContent = T[lang].intro;
       speak(T[lang].intro);
       
-      // Iniciar música
       setTimeout(() => {
         if (!musicPlaying) toggleMusic();
       }, 1500);
       
-      // Ir a primera zona
-      setTimeout(nextZone, 6000);
+      // Más tiempo antes de empezar (10 segundos)
+      setTimeout(nextZone, 10000);
     }
     
     // ===== ZONAS =====
     function nextZone() {
       zone++;
-      if (zone > 4) { celebrate(); return; }
+      if (zone > 5) { celebrate(); return; }
       
-      stopIdleCycle(); // Detener idle durante zona activa
-      seconds = 30;
+      // Reproducir melodía de transición
+      const transitionKey = 'to' + zone;
+      playTransition(transitionKey);
+      
+      // Mostrar arcada dental ANTES de empezar
+      if (zone <= 4) {
+        showDentalArch(zone);
+        
+        // Decir preparación
+        const prepText = T[lang].zonePrep.replace('{z}', T[lang].zones[zone - 1]);
+        message.textContent = prepText;
+        speak(prepText);
+        
+        // Esperar 3 segundos en la arcada
+        setTimeout(() => {
+          hideDentalArch();
+          startZoneTimer();
+        }, 3500);
+      } else {
+        // Zona 5: Lengua
+        message.textContent = T[lang].tongue;
+        speak(T[lang].tongue);
+        setTimeout(startZoneTimer, 3000);
+      }
+    }
+    
+    function startZoneTimer() {
+      stopIdleCycle();
+      
+      // Duración según zona (30s zonas 1-4, 10s zona 5)
+      seconds = zone === 5 ? 10 : 30;
+      
       zonesEl.classList.remove('hidden');
       timerEl.classList.remove('hidden');
       timerLabel.textContent = T[lang].zones[zone - 1];
       
-      document.querySelectorAll('.zone-dot').forEach((d, i) => d.classList.toggle('active', i + 1 === zone));
+      document.querySelectorAll('.zone-dot').forEach((d, i) => {
+        d.classList.toggle('active', i + 1 === zone);
+      });
       
-      const txt = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
-      message.textContent = txt;
-      speak(txt);
+      // Mensaje de zona
+      if (zone === 5) {
+        message.textContent = T[lang].tongue;
+      } else {
+        const txt = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
+        message.textContent = txt;
+      }
+      speak(message.textContent);
       
       // Música para esta zona
       if (musicPlaying) {
@@ -818,35 +1019,38 @@
       
       let encI = 0;
       let returnedToBrush = false;
+      const duration = zone === 5 ? 10 : 30;
       
       timer = setInterval(() => {
         seconds--;
         timerText.textContent = seconds;
-        timerProgress.style.strokeDashoffset = 339.292 * (1 - (30 - seconds) / 30);
-        timerProgress.style.stroke = seconds > 10 ? '#4CAF50' : seconds > 5 ? '#FFC107' : '#F44336';
+        timerProgress.style.strokeDashoffset = 339.292 * (1 - (duration - seconds) / duration);
         
-        // ENCOURAGE cada 10 segundos (hablando)
-        if (seconds === 20 || seconds === 10) {
+        const threshold = zone === 5 ? 5 : 10;
+        timerProgress.style.stroke = seconds > threshold ? '#4CAF50' : seconds > 3 ? '#FFC107' : '#F44336';
+        
+        // ENCOURAGE cada intervalo
+        const encourageTime = zone === 5 ? 5 : 20;
+        const encourageTime2 = zone === 5 ? 3 : 10;
+        
+        if (seconds === encourageTime || seconds === encourageTime2) {
           const encText = T[lang].encourage[encI++ % 4];
           message.textContent = encText;
           speak(encText);
           returnedToBrush = false;
         }
         
-        // Volver a BRUSH después de que termine de hablar
         if (!speechSynthesis.speaking && !returnedToBrush && currentAnim === 'encourage') {
           setAnim('brush');
           returnedToBrush = true;
         }
         
-        // BRUSH durante la zona (por defecto cuando no habla)
         if (!speechSynthesis.speaking && currentAnim !== 'brush' && currentAnim !== 'encourage') {
           setAnim('brush');
         }
         
         if (seconds <= 0) {
           clearInterval(timer);
-          // BOUNCE - Fin de zona
           setAnim('bounce', 1200);
           setTimeout(nextZone, 1200);
         }
@@ -858,14 +1062,13 @@
       zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
       
-      // CELEBRATE - Final (sin giro 360)
+      playTransition('end');
       setAnim('celebrate');
       message.textContent = T[lang].celebrate;
       speak(T[lang].celebrate);
       
-      // Confetti
       const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD'];
-      for (let i = 0; i < 80; i++) {
+      for (let i = 0; i < 100; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
         c.style.left = Math.random() * 100 + '%';
@@ -880,10 +1083,10 @@
         musicStopRequested = true;
         musicBtn.textContent = '🎵';
         stopAllOscillators();
-        startIdleCycle(); // Volver a idle cycle
+        startIdleCycle();
         restartBtn.style.display = 'block';
         restartBtn.textContent = T[lang].restart;
-      }, 3000);
+      }, 4000);
     }
     
     // ===== DROPDOWN IDIOMA =====
@@ -898,13 +1101,10 @@
         document.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         langDropdown.classList.remove('show');
-        
-        // Actualizar textos
         message.textContent = T[lang].intro;
       };
     });
     
-    // Cerrar dropdown al hacer clic fuera
     document.onclick = (e) => {
       if (!e.target.closest('.dropdown-container')) {
         langDropdown.classList.remove('show');
@@ -916,6 +1116,9 @@
     // ===== EVENTOS MODELO =====
     console.log('🦕 Initializing...');
     initCamera();
+    
+    // Precargar voces
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     
     tina.addEventListener('progress', (e) => {
       const p = Math.floor(e.detail.totalProgress * 100);
@@ -933,7 +1136,6 @@
       loadingStatus.textContent = 'Error - recarga';
     });
     
-    // Timeout de seguridad
     setTimeout(() => {
       if (!modelLoaded) {
         console.log('⏰ Timeout - forcing start');
