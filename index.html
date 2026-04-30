@@ -9,13 +9,11 @@
   
   <title>Tina AR - Doctora Dentina</title>
   
-  <!-- Google Fonts - Montserrat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-  <!-- Tone.js para audio de calidad -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
   
   <style>
@@ -50,19 +48,13 @@
     
     /* ========== ANIMACIONES TINA ========== */
     
-    .anim-breathe {
-      animation: breathe 3s ease-in-out infinite;
-    }
-    
+    .anim-breathe { animation: breathe 3s ease-in-out infinite; }
     @keyframes breathe {
       0%, 100% { transform: translateX(-50%) scale(1) translateY(0); }
       50% { transform: translateX(-50%) scale(1.03) translateY(-8px); }
     }
     
-    .anim-brush {
-      animation: brush 0.8s ease-in-out infinite;
-    }
-    
+    .anim-brush { animation: brush 0.8s ease-in-out infinite; }
     @keyframes brush {
       0%, 100% { transform: translateX(-50%) translateY(0) rotateZ(0deg); }
       25% { transform: translateX(-50%) translateY(-12px) rotateZ(-8deg); }
@@ -70,10 +62,7 @@
       75% { transform: translateX(-50%) translateY(-12px) rotateZ(8deg); }
     }
     
-    .anim-encourage {
-      animation: encourage 0.8s ease-in-out infinite;
-    }
-    
+    .anim-encourage { animation: encourage 0.8s ease-in-out infinite; }
     @keyframes encourage {
       0% { transform: translateX(-50%) translateY(0) scale(1); }
       25% { transform: translateX(-50%) translateY(-15px) scale(1.05); }
@@ -82,10 +71,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    .anim-bounce {
-      animation: bounce 1.2s ease-in-out;
-    }
-    
+    .anim-bounce { animation: bounce 1.2s ease-in-out; }
     @keyframes bounce {
       0% { transform: translateX(-50%) translateY(0) scale(1); }
       20% { transform: translateX(-50%) translateY(-40px) scale(1.15); }
@@ -95,10 +81,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    .anim-celebrate {
-      animation: celebrate 0.5s ease-in-out infinite;
-    }
-    
+    .anim-celebrate { animation: celebrate 0.5s ease-in-out infinite; }
     @keyframes celebrate {
       0% { transform: translateX(-50%) translateY(0) scale(1); }
       30% { transform: translateX(-50%) translateY(-45px) scale(1.18); }
@@ -107,13 +90,13 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* ========== ARCADAS DENTALES ========== */
+    /* ========== OVERLAY BOCA ANIMADA ========== */
     
-    #dental-arch-overlay {
+    #dental-overlay {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.9);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -121,69 +104,172 @@
       z-index: 150;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.3s;
+      transition: opacity 0.4s;
     }
     
-    #dental-arch-overlay.show {
+    #dental-overlay.show {
       opacity: 1;
       pointer-events: auto;
     }
     
-    #arch-title {
+    #dental-title {
       font-family: 'Montserrat', sans-serif;
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 700;
       color: white;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-align: center;
     }
     
-    #arch-zone-name {
+    #dental-zone {
       font-family: 'Montserrat', sans-serif;
-      font-size: 36px;
+      font-size: 42px;
       font-weight: 800;
       color: #FFD700;
-      margin-bottom: 30px;
+      margin-bottom: 25px;
       text-align: center;
-      text-shadow: 0 0 20px rgba(255,215,0,0.5);
+      text-shadow: 0 0 25px rgba(255,215,0,0.6);
     }
     
-    .arch-svg {
-      width: 300px;
-      height: 200px;
+    #mouth-container {
+      position: relative;
+      width: 320px;
+      height: 280px;
     }
     
-    .arch-svg.lower {
-      transform: scaleY(-1);
+    /* Boca completa */
+    .mouth {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
     }
     
+    /* Labios */
+    .lips-outer {
+      fill: #E8A0A0;
+      stroke: #C08080;
+      stroke-width: 2;
+    }
+    
+    .lips-inner {
+      fill: #D07070;
+    }
+    
+    /* Encías */
+    .gums-upper {
+      fill: #F5A0A0;
+    }
+    
+    .gums-lower {
+      fill: #E89090;
+    }
+    
+    /* Dientes */
     .tooth {
-      fill: white;
-      stroke: #ccc;
-      stroke-width: 1;
-      transition: all 0.3s;
+      fill: #FFFFFF;
+      stroke: #DDDDDD;
+      stroke-width: 1.5;
+      transition: all 0.3s ease;
     }
     
     .tooth.highlight {
       fill: #FFD700;
       stroke: #FF69B4;
       stroke-width: 3;
-      filter: drop-shadow(0 0 10px #FFD700);
-      animation: tooth-pulse 0.8s ease-in-out infinite;
+      filter: drop-shadow(0 0 12px #FFD700);
+      animation: tooth-glow 0.6s ease-in-out infinite;
     }
     
-    @keyframes tooth-pulse {
-      0%, 100% { filter: drop-shadow(0 0 10px #FFD700); }
-      50% { filter: drop-shadow(0 0 25px #FFD700); }
+    @keyframes tooth-glow {
+      0%, 100% { filter: drop-shadow(0 0 12px #FFD700); transform: translateY(0); }
+      50% { filter: drop-shadow(0 0 25px #FFD700); transform: translateY(-2px); }
     }
     
-    #arch-instruction {
+    /* Lengua */
+    .tongue {
+      fill: #D06060;
+      transition: all 0.5s ease;
+    }
+    
+    .tongue.highlight {
+      fill: #FF6B6B;
+      filter: drop-shadow(0 0 15px #FF6B6B);
+      animation: tongue-pulse 1s ease-in-out infinite;
+    }
+    
+    @keyframes tongue-pulse {
+      0%, 100% { filter: drop-shadow(0 0 15px #FF6B6B); }
+      50% { filter: drop-shadow(0 0 30px #FF6B6B); }
+    }
+    
+    /* Indicador de lado */
+    .side-indicator {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      padding: 8px 16px;
+      background: rgba(255,105,180,0.9);
+      border-radius: 20px;
+      animation: bounce-arrow 1s ease-in-out infinite;
+    }
+    
+    .side-indicator.left { left: -80px; }
+    .side-indicator.right { right: -80px; }
+    
+    @keyframes bounce-arrow {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      50% { transform: translateY(-50%) translateX(5px); }
+    }
+    
+    .side-indicator.left {
+      animation-name: bounce-arrow-left;
+    }
+    
+    @keyframes bounce-arrow-left {
+      0%, 100% { transform: translateY(-50%) translateX(0); }
+      50% { transform: translateY(-50%) translateX(-5px); }
+    }
+    
+    /* Cepillo animado */
+    .brush-indicator {
+      position: absolute;
+      width: 60px;
+      height: 120px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .brush-indicator.show {
+      opacity: 1;
+      animation: brush-move 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes brush-move {
+      0%, 100% { transform: translateX(0) rotate(-15deg); }
+      50% { transform: translateX(15px) rotate(15deg); }
+    }
+    
+    #dental-instruction {
       font-family: 'Montserrat', sans-serif;
       font-size: 18px;
+      font-weight: 600;
       color: white;
-      margin-top: 20px;
+      margin-top: 25px;
       text-align: center;
-      opacity: 0.9;
+      opacity: 0.95;
+    }
+    
+    /* Etiqueta ARRIBA/ABAJO */
+    .arch-label {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      fill: white;
+      text-anchor: middle;
     }
     
     /* ========== UI STYLES ========== */
@@ -208,7 +294,6 @@
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
-    
     @keyframes spin { to { transform: rotate(360deg); } }
     
     #loading-text { 
@@ -262,9 +347,7 @@
       min-width: 120px;
     }
     
-    .dropdown-content.show {
-      display: block;
-    }
+    .dropdown-content.show { display: block; }
     
     .dropdown-item {
       font-family: 'Montserrat', sans-serif;
@@ -277,18 +360,9 @@
       text-align: center;
     }
     
-    .dropdown-item:last-child {
-      border-bottom: none;
-    }
-    
-    .dropdown-item:hover {
-      background: rgba(255,255,255,0.2);
-    }
-    
-    .dropdown-item.active {
-      background: white;
-      color: #FF69B4;
-    }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: rgba(255,255,255,0.2); }
+    .dropdown-item.active { background: white; color: #FF69B4; }
     
     #zones {
       position: fixed;
@@ -439,33 +513,67 @@
     <div id="loading-status">0%</div>
   </div>
   
-  <!-- Overlay Arcada Dental -->
-  <div id="dental-arch-overlay">
-    <div id="arch-title">Prepárate para cepillar</div>
-    <div id="arch-zone-name">Zona Superior Derecha</div>
-    <svg class="arch-svg" id="upper-arch" viewBox="0 0 300 120">
-      <path d="M30 100 Q150 -20 270 100" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
-      <rect class="tooth" id="t1" x="35" y="30" width="25" height="35" rx="5"/>
-      <rect class="tooth" id="t2" x="65" y="20" width="25" height="40" rx="5"/>
-      <rect class="tooth" id="t3" x="95" y="15" width="25" height="42" rx="5"/>
-      <rect class="tooth" id="t4" x="125" y="12" width="25" height="45" rx="5"/>
-      <rect class="tooth" id="t5" x="155" y="12" width="25" height="45" rx="5"/>
-      <rect class="tooth" id="t6" x="185" y="15" width="25" height="42" rx="5"/>
-      <rect class="tooth" id="t7" x="215" y="20" width="25" height="40" rx="5"/>
-      <rect class="tooth" id="t8" x="245" y="30" width="25" height="35" rx="5"/>
-    </svg>
-    <svg class="arch-svg lower hidden" id="lower-arch" viewBox="0 0 300 120">
-      <path d="M30 20 Q150 140 270 20" fill="none" stroke="white" stroke-width="2" opacity="0.3"/>
-      <rect class="tooth" id="t9" x="35" y="55" width="25" height="35" rx="5"/>
-      <rect class="tooth" id="t10" x="65" y="50" width="25" height="40" rx="5"/>
-      <rect class="tooth" id="t11" x="95" y="45" width="25" height="42" rx="5"/>
-      <rect class="tooth" id="t12" x="125" y="43" width="25" height="45" rx="5"/>
-      <rect class="tooth" id="t13" x="155" y="43" width="25" height="45" rx="5"/>
-      <rect class="tooth" id="t14" x="185" y="45" width="25" height="42" rx="5"/>
-      <rect class="tooth" id="t15" x="215" y="50" width="25" height="40" rx="5"/>
-      <rect class="tooth" id="t16" x="245" y="55" width="25" height="35" rx="5"/>
-    </svg>
-    <div id="arch-instruction">Haz circulitos suaves en esta zona</div>
+  <!-- Overlay Boca Animada para Niños -->
+  <div id="dental-overlay">
+    <div id="dental-title">Prepárate para cepillar</div>
+    <div id="dental-zone">Arriba a la derecha</div>
+    
+    <div id="mouth-container">
+      <!-- Indicadores de lado -->
+      <div class="side-indicator left hidden" id="indicator-left">IZQUIERDA</div>
+      <div class="side-indicator right hidden" id="indicator-right">DERECHA</div>
+      
+      <!-- SVG de la boca completa -->
+      <svg class="mouth" viewBox="0 0 320 280">
+        <!-- Sombra interior de la boca -->
+        <ellipse cx="160" cy="140" rx="140" ry="130" fill="#8B4040"/>
+        
+        <!-- Lengua (visible siempre, se destaca en zona 5) -->
+        <ellipse class="tongue" id="tongue" cx="160" cy="185" rx="80" ry="50"/>
+        
+        <!-- Encías superiores -->
+        <path class="gums-upper" d="M40 100 Q160 20 280 100 Q280 60 160 40 Q40 60 40 100"/>
+        
+        <!-- Dientes superiores -->
+        <g id="upper-teeth">
+          <rect class="tooth" id="u1" x="45" y="55" width="28" height="38" rx="6"/>
+          <rect class="tooth" id="u2" x="78" y="48" width="28" height="45" rx="6"/>
+          <rect class="tooth" id="u3" x="111" y="43" width="28" height="50" rx="6"/>
+          <rect class="tooth" id="u4" x="144" y="40" width="28" height="53" rx="6"/>
+          <rect class="tooth" id="u5" x="177" y="40" width="28" height="53" rx="6"/>
+          <rect class="tooth" id="u6" x="210" y="43" width="28" height="50" rx="6"/>
+          <rect class="tooth" id="u7" x="243" y="48" width="28" height="45" rx="6"/>
+          <rect class="tooth" id="u8" x="276" y="55" width="28" height="38" rx="6"/>
+        </g>
+        
+        <!-- Etiqueta ARRIBA -->
+        <text class="arch-label" x="160" y="25">ARRIBA</text>
+        
+        <!-- Encías inferiores -->
+        <path class="gums-lower" d="M40 180 Q160 260 280 180 Q280 220 160 240 Q40 220 40 180"/>
+        
+        <!-- Dientes inferiores -->
+        <g id="lower-teeth">
+          <rect class="tooth" id="l1" x="45" y="185" width="28" height="35" rx="6"/>
+          <rect class="tooth" id="l2" x="78" y="182" width="28" height="40" rx="6"/>
+          <rect class="tooth" id="l3" x="111" y="180" width="28" height="44" rx="6"/>
+          <rect class="tooth" id="l4" x="144" y="178" width="28" height="48" rx="6"/>
+          <rect class="tooth" id="l5" x="177" y="178" width="28" height="48" rx="6"/>
+          <rect class="tooth" id="l6" x="210" y="180" width="28" height="44" rx="6"/>
+          <rect class="tooth" id="l7" x="243" y="182" width="28" height="40" rx="6"/>
+          <rect class="tooth" id="l8" x="276" y="185" width="28" height="35" rx="6"/>
+        </g>
+        
+        <!-- Etiqueta ABAJO -->
+        <text class="arch-label" x="160" y="268">ABAJO</text>
+        
+        <!-- Labios -->
+        <path class="lips-outer" d="M20 140 Q160 -20 300 140 Q160 300 20 140"/>
+        <path class="lips-inner" d="M50 140 Q160 60 270 140 Q160 220 50 140"/>
+      </svg>
+    </div>
+    
+    <div id="dental-instruction">Haz circulitos suaves en esta zona</div>
   </div>
   
   <div class="dropdown-container">
@@ -511,8 +619,8 @@
     let idlePhase = 'static';
     let musicPlaying = false;
     let currentLoop = null;
+    let speaking = false;
     
-    // Synths de Tone.js
     let melodySynth = null;
     let bassSynth = null;
     let padSynth = null;
@@ -532,12 +640,13 @@
     const musicBtn = document.getElementById('music-btn');
     const langBtn = document.getElementById('lang-btn');
     const langDropdown = document.getElementById('lang-dropdown');
-    const archOverlay = document.getElementById('dental-arch-overlay');
-    const archTitle = document.getElementById('arch-title');
-    const archZoneName = document.getElementById('arch-zone-name');
-    const upperArch = document.getElementById('upper-arch');
-    const lowerArch = document.getElementById('lower-arch');
-    const archInstruction = document.getElementById('arch-instruction');
+    const dentalOverlay = document.getElementById('dental-overlay');
+    const dentalTitle = document.getElementById('dental-title');
+    const dentalZone = document.getElementById('dental-zone');
+    const dentalInstruction = document.getElementById('dental-instruction');
+    const indicatorLeft = document.getElementById('indicator-left');
+    const indicatorRight = document.getElementById('indicator-right');
+    const tongue = document.getElementById('tongue');
     
     // ===== ANIMACIONES TINA =====
     const ANIMS = ['breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
@@ -548,55 +657,34 @@
         tina.classList.add('anim-' + name);
         currentAnim = name;
         if (duration) {
-          setTimeout(() => {
-            if (currentAnim === name) setAnim('breathe');
-          }, duration);
+          setTimeout(() => { if (currentAnim === name) setAnim('breathe'); }, duration);
         }
       }
     }
     
-    // ===== IDLE CYCLE (3s static, 3s breathe) =====
+    // ===== IDLE CYCLE =====
     function startIdleCycle() {
       stopIdleCycle();
       isIdle = true;
       idlePhase = 'static';
       setAnim(null);
-      
       idleTimer = setInterval(() => {
         if (!isIdle) return;
-        if (idlePhase === 'static') {
-          idlePhase = 'breathe';
-          setAnim('breathe');
-        } else {
-          idlePhase = 'static';
-          setAnim(null);
-        }
+        if (idlePhase === 'static') { idlePhase = 'breathe'; setAnim('breathe'); }
+        else { idlePhase = 'static'; setAnim(null); }
       }, 3000);
     }
     
-    function stopIdleCycle() {
-      if (idleTimer) {
-        clearInterval(idleTimer);
-        idleTimer = null;
-      }
-    }
-    
+    function stopIdleCycle() { if (idleTimer) { clearInterval(idleTimer); idleTimer = null; } }
     function pauseIdle() { isIdle = false; }
     
     function resumeIdle() {
-      isIdle = true;
-      idlePhase = 'static';
-      setAnim(null);
+      isIdle = true; idlePhase = 'static'; setAnim(null);
       if (!idleTimer) {
         idleTimer = setInterval(() => {
           if (!isIdle) return;
-          if (idlePhase === 'static') {
-            idlePhase = 'breathe';
-            setAnim('breathe');
-          } else {
-            idlePhase = 'static';
-            setAnim(null);
-          }
+          if (idlePhase === 'static') { idlePhase = 'breathe'; setAnim('breathe'); }
+          else { idlePhase = 'static'; setAnim(null); }
         }, 3000);
       }
     }
@@ -606,28 +694,31 @@
       ES: {
         intro: 'Hola amiguitos, soy Tina la dinosaurio. Vamos a cepillar los dientes juntos, será divertido.',
         zone: 'Ahora toca la zona {z}. Recuerda inclinar el cepillito y hacer circulitos suaves.',
-        zonePrep: 'Prepárate para cepillar {z}',
+        zonePrep: 'Vamos a cepillar',
         tongue: 'Ahora vamos a cepillar la lengüita. Es muy importante para tener un aliento fresco.',
+        tonguePrep: 'Vamos a cepillar la lengua',
         encourage: ['Muy bien, sigue así.', 'Qué bien lo haces.', 'Eres un campeón.', 'Excelente trabajo.'],
         celebrate: 'Lo lograste. Cepillaste todos tus dientes y tu lengua como un súper héroe. Estoy muy orgullosa de ti.',
-        zones: ['Arriba a la derecha', 'Arriba a la izquierda', 'Abajo a la derecha', 'Abajo a la izquierda', 'La lengüita'],
+        zones: ['Arriba a la derecha', 'Arriba a la izquierda', 'Abajo a la derecha', 'Abajo a la izquierda', 'La lengua'],
         restart: 'Jugar de nuevo'
       },
       EN: {
         intro: 'Hi friends, I\'m Tina the dinosaur. Let\'s brush our teeth together, it will be fun.',
         zone: 'Now it\'s time for the {z} area. Remember to tilt your toothbrush and make little circles.',
-        zonePrep: 'Get ready to brush {z}',
+        zonePrep: 'Let\'s brush',
         tongue: 'Now let\'s brush your tongue. It\'s very important for fresh breath.',
+        tonguePrep: 'Let\'s brush the tongue',
         encourage: ['Great job, keep going.', 'You\'re doing so well.', 'You\'re a champion.', 'Awesome work.'],
         celebrate: 'You did it. You brushed all your teeth and tongue like a super hero. I\'m so proud of you.',
-        zones: ['Top right side', 'Top left side', 'Bottom right side', 'Bottom left side', 'Your tongue'],
+        zones: ['Top right side', 'Top left side', 'Bottom right side', 'Bottom left side', 'The tongue'],
         restart: 'Play again'
       },
       PT: {
         intro: 'Oi amiguinhos, sou Tina a dinossauro. Vamos escovar os dentes juntos, vai ser divertido.',
         zone: 'Agora é a vez da área {z}. Lembra de inclinar a escovinha e fazer circulinhos suaves.',
-        zonePrep: 'Prepare-se para escovar {z}',
+        zonePrep: 'Vamos escovar',
         tongue: 'Agora vamos escovar a língua. É muito importante para ter um hálito fresco.',
+        tonguePrep: 'Vamos escovar a língua',
         encourage: ['Muito bem, continue.', 'Você está indo super bem.', 'Você é um campeão.', 'Trabalho incrível.'],
         celebrate: 'Você conseguiu. Escovou todos os dentes e a língua como um super herói. Estou muito orgulhosa de você.',
         zones: ['Em cima à direita', 'Em cima à esquerda', 'Em baixo à direita', 'Em baixo à esquerda', 'A língua'],
@@ -635,238 +726,93 @@
       }
     };
     
-    // ===== MÚSICA CON TONE.JS (Sonido Natural) =====
-    
-    // Inicializar synths con efectos
+    // ===== MÚSICA CON TONE.JS =====
     async function initAudio() {
       await Tone.start();
+      reverb = new Tone.Reverb({ decay: 2.5, wet: 0.35 }).toDestination();
+      delay = new Tone.FeedbackDelay({ delayTime: '8n.', feedback: 0.2, wet: 0.15 }).connect(reverb);
+      const lowPass = new Tone.Filter({ type: 'lowpass', frequency: 4000, Q: 1 }).connect(delay);
       
-      // Reverb para dar espacialidad
-      reverb = new Tone.Reverb({
-        decay: 2.5,
-        wet: 0.35
-      }).toDestination();
-      
-      // Delay suave
-      delay = new Tone.FeedbackDelay({
-        delayTime: '8n.',
-        feedback: 0.2,
-        wet: 0.15
-      }).connect(reverb);
-      
-      // Filtro low-pass para suavizar
-      const lowPass = new Tone.Filter({
-        type: 'lowpass',
-        frequency: 4000,
-        Q: 1
-      }).connect(delay);
-      
-      // Synth principal - sonido de piano/campana suave
       melodySynth = new Tone.PolySynth(Tone.Synth, {
         oscillator: { type: 'triangle8' },
-        envelope: {
-          attack: 0.08,
-          decay: 0.3,
-          sustain: 0.4,
-          release: 0.8
-        }
+        envelope: { attack: 0.08, decay: 0.3, sustain: 0.4, release: 0.8 }
       }).connect(lowPass);
       melodySynth.volume.value = -6;
       
-      // Bass suave
       bassSynth = new Tone.MonoSynth({
         oscillator: { type: 'sine' },
-        envelope: {
-          attack: 0.1,
-          decay: 0.4,
-          sustain: 0.3,
-          release: 1
-        }
+        envelope: { attack: 0.1, decay: 0.4, sustain: 0.3, release: 1 }
       }).connect(reverb);
       bassSynth.volume.value = -12;
       
-      // Pad para acordes
       padSynth = new Tone.PolySynth(Tone.Synth, {
         oscillator: { type: 'sine4' },
-        envelope: {
-          attack: 0.3,
-          decay: 0.5,
-          sustain: 0.5,
-          release: 1.5
-        }
+        envelope: { attack: 0.3, decay: 0.5, sustain: 0.5, release: 1.5 }
       }).connect(reverb);
       padSynth.volume.value = -14;
     }
     
-    // Notas
-    const N = {
-      C3: 'C3', D3: 'D3', E3: 'E3', F3: 'F3', G3: 'G3', A3: 'A3', B3: 'B3',
-      C4: 'C4', D4: 'D4', E4: 'E4', F4: 'F4', G4: 'G4', A4: 'A4', B4: 'B4',
-      C5: 'C5', D5: 'D5', E5: 'E5', F5: 'F5', G5: 'G5', A5: 'A5', B5: 'B5',
-      C6: 'C6', D6: 'D6', E6: 'E6'
-    };
-    
-    // 5 melodías diferentes con estructura musical completa
     const MELODIES = {
-      // Zona 1: Alegre y energética - Do mayor (estilo "Twinkle Twinkle" / canción infantil)
-      1: {
-        tempo: 100,
-        melody: [
-          {n: 'C4', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'G4', d: '4n'},
-          {n: 'A4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'G4', d: '2n'},
-          {n: 'F4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'E4', d: '4n'}, {n: 'E4', d: '4n'},
-          {n: 'D4', d: '4n'}, {n: 'D4', d: '4n'}, {n: 'C4', d: '2n'},
-          {n: 'G4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'F4', d: '4n'},
-          {n: 'E4', d: '4n'}, {n: 'E4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'G4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'F4', d: '4n'},
-          {n: 'E4', d: '4n'}, {n: 'E4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'C4', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'G4', d: '4n'},
-          {n: 'A4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'G4', d: '2n'},
-          {n: 'F4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'E4', d: '4n'}, {n: 'E4', d: '4n'},
-          {n: 'D4', d: '4n'}, {n: 'D4', d: '4n'}, {n: 'C4', d: '2n'}
-        ],
-        bass: [
-          {n: 'C3', d: '1m'}, {n: 'F3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'C3', d: '1m'},
-          {n: 'F3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'C3', d: '1m'}
-        ],
-        chords: [
-          {notes: ['C4', 'E4', 'G4'], d: '1m'},
-          {notes: ['F4', 'A4', 'C5'], d: '1m'},
-          {notes: ['G4', 'B4', 'D5'], d: '1m'},
-          {notes: ['C4', 'E4', 'G4'], d: '1m'}
-        ]
-      },
-      
-      // Zona 2: Suave y relajante - Sol mayor (estilo canción de cuna)
-      2: {
-        tempo: 80,
-        melody: [
-          {n: 'D4', d: '4n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '8n'}, {n: 'B3', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'A3', d: '2n'},
-          {n: 'D4', d: '4n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '8n'}, {n: 'B3', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'A3', d: '2n'},
-          {n: 'A3', d: '4n'}, {n: 'B3', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'A3', d: '4n'},
-          {n: 'G3', d: '4n'}, {n: 'A3', d: '4n'}, {n: 'B3', d: '2n'},
-          {n: 'D4', d: '4n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '8n'}, {n: 'B3', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'A3', d: '2n'},
-          {n: 'G3', d: '4n'}, {n: 'A3', d: '4n'}, {n: 'B3', d: '4n'}, {n: 'C4', d: '4n'},
-          {n: 'D4', d: '4n'}, {n: 'E4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'G4', d: '4n'}, {n: 'F4', d: '8n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '4n'}, {n: 'C4', d: '4n'}, {n: 'B3', d: '2n'},
-          {n: 'G3', d: '4n'}, {n: 'G3', d: '4n'}, {n: 'G3', d: '2n'}
-        ],
-        bass: [
-          {n: 'G2', d: '1m'}, {n: 'C3', d: '1m'}, {n: 'D3', d: '1m'}, {n: 'G3', d: '1m'},
-          {n: 'E3', d: '1m'}, {n: 'A3', d: '1m'}, {n: 'D3', d: '1m'}, {n: 'G2', d: '1m'}
-        ],
-        chords: [
-          {notes: ['G3', 'B3', 'D4'], d: '1m'},
-          {notes: ['C4', 'E4', 'G4'], d: '1m'},
-          {notes: ['D4', 'F4', 'A4'], d: '1m'},
-          {notes: ['G3', 'B3', 'D4'], d: '1m'}
-        ]
-      },
-      
-      // Zona 3: Juguetona - Re mayor (estilo juego/animación)
-      3: {
-        tempo: 110,
-        melody: [
-          {n: 'D4', d: '8n'}, {n: 'E4', d: '8n'}, {n: 'F4', d: '4n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '8n'},
-          {n: 'C4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'E4', d: '8n'}, {n: 'F4', d: '8n'}, {n: 'G4', d: '4n'}, {n: 'F4', d: '8n'}, {n: 'E4', d: '8n'},
-          {n: 'D4', d: '4n'}, {n: 'E4', d: '2n'},
-          {n: 'A4', d: '4n'}, {n: 'G4', d: '8n'}, {n: 'F4', d: '8n'}, {n: 'E4', d: '4n'}, {n: 'D4', d: '4n'},
-          {n: 'C4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'D4', d: '8n'}, {n: 'E4', d: '8n'}, {n: 'F4', d: '4n'}, {n: 'E4', d: '8n'}, {n: 'D4', d: '8n'},
-          {n: 'C4', d: '4n'}, {n: 'D4', d: '2n'},
-          {n: 'A4', d: '4n'}, {n: 'G4', d: '8n'}, {n: 'A4', d: '8n'}, {n: 'B4', d: '4n'}, {n: 'A4', d: '4n'},
-          {n: 'G4', d: '4n'}, {n: 'F4', d: '2n'},
-          {n: 'D4', d: '4n'}, {n: 'D4', d: '4n'}, {n: 'D4', d: '2n'}
-        ],
-        bass: [
-          {n: 'D3', d: '1m'}, {n: 'A3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'D3', d: '1m'},
-          {n: 'B3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'A3', d: '1m'}, {n: 'D3', d: '1m'}
-        ],
-        chords: [
-          {notes: ['D4', 'F4', 'A4'], d: '1m'},
-          {notes: ['G4', 'B4', 'D5'], d: '1m'},
-          {notes: ['A4', 'C5', 'E5'], d: '1m'},
-          {notes: ['D4', 'F4', 'A4'], d: '1m'}
-        ]
-      },
-      
-      // Zona 4: Triunfal - Fa mayor (estilo victoria/logro)
-      4: {
-        tempo: 95,
-        melody: [
-          {n: 'F4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'C5', d: '4n'}, {n: 'A4', d: '4n'},
-          {n: 'F4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'C5', d: '2n'},
-          {n: 'C5', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'A4', d: '4n'},
-          {n: 'G4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'B4', d: '2n'},
-          {n: 'C5', d: '4n'}, {n: 'D5', d: '8n'}, {n: 'C5', d: '8n'}, {n: 'A4', d: '4n'}, {n: 'F4', d: '4n'},
-          {n: 'G4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'G4', d: '2n'},
-          {n: 'F4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'C5', d: '4n'}, {n: 'A4', d: '4n'},
-          {n: 'F4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'A4', d: '2n'},
-          {n: 'C5', d: '4n'}, {n: 'A4', d: '8n'}, {n: 'G4', d: '8n'}, {n: 'F4', d: '4n'}, {n: 'E4', d: '4n'},
-          {n: 'F4', d: '4n'}, {n: 'F4', d: '4n'}, {n: 'F4', d: '2n'}
-        ],
-        bass: [
-          {n: 'F3', d: '1m'}, {n: 'C3', d: '1m'}, {n: 'B3', d: '1m'}, {n: 'F3', d: '1m'},
-          {n: 'A3', d: '1m'}, {n: 'G3', d: '1m'}, {n: 'C4', d: '1m'}, {n: 'F3', d: '1m'}
-        ],
-        chords: [
-          {notes: ['F4', 'A4', 'C5'], d: '1m'},
-          {notes: ['C4', 'E4', 'G4'], d: '1m'},
-          {notes: ['B4', 'D5', 'F5'], d: '1m'},
-          {notes: ['F4', 'A4', 'C5'], d: '1m'}
-        ]
-      },
-      
-      // Zona 5: Lengua - Corta y divertida - Mi mayor (10 segundos)
-      5: {
-        tempo: 120,
-        melody: [
-          {n: 'E4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'B4', d: '4n'}, {n: 'E5', d: '2n'},
-          {n: 'D5', d: '4n'}, {n: 'C5', d: '4n'}, {n: 'B4', d: '4n'}, {n: 'A4', d: '2n'},
-          {n: 'G4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'B4', d: '4n'}, {n: 'C5', d: '2n'},
-          {n: 'B4', d: '4n'}, {n: 'A4', d: '4n'}, {n: 'G4', d: '4n'}, {n: 'E4', d: '2n'}
-        ],
-        bass: [
-          {n: 'E3', d: '1m'}, {n: 'A3', d: '1m'}, {n: 'B3', d: '1m'}, {n: 'E3', d: '1m'}
-        ],
-        chords: [
-          {notes: ['E4', 'G4', 'B4'], d: '1m'},
-          {notes: ['A4', 'C5', 'E5'], d: '1m'},
-          {notes: ['B4', 'D5', 'G5'], d: '1m'},
-          {notes: ['E4', 'G4', 'B4'], d: '1m'}
-        ]
-      }
+      1: { tempo: 100, melody: [
+        {n:'C4',d:'4n'},{n:'C4',d:'4n'},{n:'G4',d:'4n'},{n:'G4',d:'4n'},
+        {n:'A4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'},
+        {n:'F4',d:'4n'},{n:'F4',d:'4n'},{n:'E4',d:'4n'},{n:'E4',d:'4n'},
+        {n:'D4',d:'4n'},{n:'D4',d:'4n'},{n:'C4',d:'2n'},
+        {n:'G4',d:'4n'},{n:'G4',d:'4n'},{n:'F4',d:'4n'},{n:'F4',d:'4n'},
+        {n:'E4',d:'4n'},{n:'E4',d:'4n'},{n:'D4',d:'2n'},
+        {n:'C4',d:'4n'},{n:'C4',d:'4n'},{n:'G4',d:'4n'},{n:'G4',d:'4n'},
+        {n:'A4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'},
+        {n:'F4',d:'4n'},{n:'F4',d:'4n'},{n:'E4',d:'4n'},{n:'E4',d:'4n'},
+        {n:'D4',d:'4n'},{n:'D4',d:'4n'},{n:'C4',d:'2n'}
+      ], chords: [{notes:['C4','E4','G4'],d:'1m'},{notes:['F4','A4','C5'],d:'1m'},{notes:['G4','B4','D5'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'}]},
+      2: { tempo: 80, melody: [
+        {n:'D4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'2n'},
+        {n:'D4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'2n'},
+        {n:'A3',d:'4n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'4n'},
+        {n:'G3',d:'4n'},{n:'A3',d:'4n'},{n:'B3',d:'2n'},
+        {n:'G4',d:'2n'},{n:'D4',d:'2n'},{n:'G3',d:'2n'}
+      ], chords: [{notes:['G3','B3','D4'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'},{notes:['D4','F4','A4'],d:'1m'},{notes:['G3','B3','D4'],d:'1m'}]},
+      3: { tempo: 110, melody: [
+        {n:'D4',d:'8n'},{n:'E4',d:'8n'},{n:'F4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},
+        {n:'C4',d:'4n'},{n:'D4',d:'2n'},
+        {n:'E4',d:'8n'},{n:'F4',d:'8n'},{n:'G4',d:'4n'},{n:'F4',d:'8n'},{n:'E4',d:'8n'},
+        {n:'D4',d:'4n'},{n:'E4',d:'2n'},
+        {n:'A4',d:'4n'},{n:'G4',d:'8n'},{n:'F4',d:'8n'},{n:'E4',d:'4n'},{n:'D4',d:'4n'},
+        {n:'C4',d:'4n'},{n:'D4',d:'2n'}
+      ], chords: [{notes:['D4','F4','A4'],d:'1m'},{notes:['G4','B4','D5'],d:'1m'},{notes:['A4','C5','E5'],d:'1m'},{notes:['D4','F4','A4'],d:'1m'}]},
+      4: { tempo: 95, melody: [
+        {n:'F4',d:'4n'},{n:'A4',d:'4n'},{n:'C5',d:'4n'},{n:'A4',d:'4n'},
+        {n:'F4',d:'4n'},{n:'A4',d:'4n'},{n:'C5',d:'2n'},
+        {n:'C5',d:'4n'},{n:'A4',d:'4n'},{n:'F4',d:'4n'},{n:'A4',d:'4n'},
+        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'B4',d:'2n'},
+        {n:'C5',d:'4n'},{n:'D5',d:'8n'},{n:'C5',d:'8n'},{n:'A4',d:'4n'},{n:'F4',d:'4n'},
+        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'}
+      ], chords: [{notes:['F4','A4','C5'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'},{notes:['B4','D5','F5'],d:'1m'},{notes:['F4','A4','C5'],d:'1m'}]},
+      5: { tempo: 120, melody: [
+        {n:'E4',d:'4n'},{n:'G4',d:'4n'},{n:'B4',d:'4n'},{n:'E5',d:'2n'},
+        {n:'D5',d:'4n'},{n:'C5',d:'4n'},{n:'B4',d:'4n'},{n:'A4',d:'2n'},
+        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'B4',d:'4n'},{n:'C5',d:'2n'},
+        {n:'B4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'4n'},{n:'E4',d:'2n'}
+      ], chords: [{notes:['E4','G4','B4'],d:'1m'},{notes:['A4','C5','E5'],d:'1m'},{notes:['B4','D5','G5'],d:'1m'},{notes:['E4','G4','B4'],d:'1m'}]}
     };
     
-    // Transiciones entre zonas
     const TRANSITIONS = {
-      to1: [{n: 'C4', d: '8n'}, {n: 'E4', d: '8n'}, {n: 'G4', d: '4n'}],
-      to2: [{n: 'G4', d: '8n'}, {n: 'B4', d: '8n'}, {n: 'D5', d: '4n'}],
-      to3: [{n: 'D4', d: '8n'}, {n: 'F4', d: '8n'}, {n: 'A4', d: '4n'}],
-      to4: [{n: 'F4', d: '8n'}, {n: 'A4', d: '8n'}, {n: 'C5', d: '4n'}],
-      to5: [{n: 'E4', d: '8n'}, {n: 'G4', d: '8n'}, {n: 'B4', d: '4n'}],
-      end: [{n: 'C5', d: '16n'}, {n: 'E5', d: '16n'}, {n: 'G5', d: '16n'}, {n: 'C6', d: '2n'}]
+      to1: [{n:'C4',d:'8n'},{n:'E4',d:'8n'},{n:'G4',d:'4n'}],
+      to2: [{n:'G4',d:'8n'},{n:'B4',d:'8n'},{n:'D5',d:'4n'}],
+      to3: [{n:'D4',d:'8n'},{n:'F4',d:'8n'},{n:'A4',d:'4n'}],
+      to4: [{n:'F4',d:'8n'},{n:'A4',d:'8n'},{n:'C5',d:'4n'}],
+      to5: [{n:'E4',d:'8n'},{n:'G4',d:'8n'},{n:'B4',d:'4n'}],
+      end: [{n:'C5',d:'16n'},{n:'E5',d:'16n'},{n:'G5',d:'16n'},{n:'C6',d:'2n'}]
     };
     
-    // Reproducir melodía de zona
     function playZoneMusic(zoneNum) {
       if (!musicPlaying || !melodySynth) return;
-      
       const music = MELODIES[zoneNum];
       if (!music) return;
       
-      // Detener loop anterior
-      if (currentLoop) {
-        currentLoop.stop();
-        currentLoop.dispose();
-      }
-      
-      // Configurar tempo
+      if (currentLoop) { currentLoop.stop(); currentLoop.dispose(); }
       Tone.Transport.bpm.value = music.tempo;
       
-      // Crear secuencia de melodía
-      let melodyTime = 0;
       const melodyPart = new Tone.Part((time, note) => {
         melodySynth.triggerAttackRelease(note.n, note.d, time);
       }, music.melody.map((n, i) => ({
@@ -874,167 +820,133 @@
         n: n
       })));
       melodyPart.loop = true;
-      
-      // Calcular duración total
       const melodyDuration = music.melody.reduce((acc, n) => acc + Tone.Time(n.d).toSeconds(), 0);
       melodyPart.loopEnd = melodyDuration + 's';
       
-      // Acordes/pad
-      let chordTime = 0;
       const chordPart = new Tone.Part((time, chord) => {
         padSynth.triggerAttackRelease(chord.notes, chord.d, time);
       }, music.chords.map((c, i) => ({
         time: Tone.Time(music.chords.slice(0, i).reduce((acc, c) => acc + Tone.Time(c.d).toSeconds(), 0) + 's'),
-        notes: c.notes,
-        d: c.d
+        notes: c.notes, d: c.d
       })));
       chordPart.loop = true;
       const chordDuration = music.chords.reduce((acc, c) => acc + Tone.Time(c.d).toSeconds(), 0);
       chordPart.loopEnd = chordDuration + 's';
       
-      // Bass
-      const bassPart = new Tone.Part((time, note) => {
-        bassSynth.triggerAttackRelease(note.n, note.d, time);
-      }, music.bass.map((b, i) => ({
-        time: Tone.Time(music.bass.slice(0, i).reduce((acc, b) => acc + Tone.Time(b.d).toSeconds(), 0) + 's'),
-        n: b
-      })));
-      bassPart.loop = true;
-      const bassDuration = music.bass.reduce((acc, b) => acc + Tone.Time(b.d).toSeconds(), 0);
-      bassPart.loopEnd = bassDuration + 's';
-      
-      // Iniciar
       Tone.Transport.start();
       melodyPart.start(0);
       chordPart.start(0);
-      bassPart.start(0);
       
       currentLoop = {
-        stop: () => {
-          melodyPart.stop();
-          chordPart.stop();
-          bassPart.stop();
-        },
-        dispose: () => {
-          melodyPart.dispose();
-          chordPart.dispose();
-          bassPart.dispose();
-        }
+        stop: () => { melodyPart.stop(); chordPart.stop(); },
+        dispose: () => { melodyPart.dispose(); chordPart.dispose(); }
       };
     }
     
-    // Reproducir transición
     function playTransition(key) {
       if (!melodySynth) return;
       const notes = TRANSITIONS[key];
       if (!notes) return;
-      
       let t = Tone.now();
-      notes.forEach(note => {
-        melodySynth.triggerAttackRelease(note.n, note.d, t);
-        t += Tone.Time(note.d).toSeconds();
-      });
+      notes.forEach(note => { melodySynth.triggerAttackRelease(note.n, note.d, t); t += Tone.Time(note.d).toSeconds(); });
     }
     
-    // Detener música
     function stopMusic() {
-      if (currentLoop) {
-        currentLoop.stop();
-        currentLoop.dispose();
-        currentLoop = null;
-      }
+      if (currentLoop) { currentLoop.stop(); currentLoop.dispose(); currentLoop = null; }
       Tone.Transport.stop();
     }
     
-    // Toggle música
     async function toggleMusic() {
-      if (!melodySynth) {
-        await initAudio();
-      }
-      
-      if (musicPlaying) {
-        musicPlaying = false;
-        musicBtn.textContent = '🎵';
-        stopMusic();
-      } else {
-        musicPlaying = true;
-        musicBtn.textContent = '🔊';
-        playZoneMusic(zone || 1);
-      }
+      if (!melodySynth) await initAudio();
+      if (musicPlaying) { musicPlaying = false; musicBtn.textContent = '🎵'; stopMusic(); }
+      else { musicPlaying = true; musicBtn.textContent = '🔊'; playZoneMusic(zone || 1); }
     }
     
     musicBtn.onclick = toggleMusic;
     
     // ===== CÁMARA =====
     async function initCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-        document.getElementById('camera').srcObject = stream;
-      } catch (e) {
-        loadingStatus.textContent = 'Sin cámara';
-      }
+      try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); document.getElementById('camera').srcObject = stream; }
+      catch (e) { loadingStatus.textContent = 'Sin cámara'; }
     }
     
-    // ===== VOZ =====
-    function speak(text) {
+    // ===== VOZ CON ESPACIOS ENTRE DIÁLOGOS =====
+    function speak(text, onEndCallback = null) {
       pauseIdle();
+      speaking = true;
+      
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
         u.rate = 0.9;
         const voices = speechSynthesis.getVoices();
-        const latinVoice = voices.find(v => 
-          v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('Latin')
-        );
+        const latinVoice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('Latin'));
         if (latinVoice && lang === 'ES') u.voice = latinVoice;
+        
         setAnim('encourage');
+        
         u.onend = () => {
+          speaking = false;
           if (zone > 0 && zone <= 5) {
             setAnim('brush');
           } else {
             resumeIdle();
           }
+          // Callback después de un pequeño espacio
+          if (onEndCallback) {
+            setTimeout(onEndCallback, 300);
+          }
         };
+        
         speechSynthesis.speak(u);
       }
     }
     
-    // ===== ARCADAS DENTALES =====
-    function showDentalArch(zoneNum) {
-      const isUpper = zoneNum === 1 || zoneNum === 2;
-      const isRight = zoneNum === 1 || zoneNum === 3;
-      
-      upperArch.classList.toggle('hidden', !isUpper);
-      lowerArch.classList.toggle('hidden', isUpper);
-      
+    // ===== BOCA ANIMADA =====
+    function showDentalOverlay(zoneNum) {
+      // Limpiar highlights anteriores
       document.querySelectorAll('.tooth').forEach(t => t.classList.remove('highlight'));
+      tongue.classList.remove('highlight');
+      indicatorLeft.classList.add('hidden');
+      indicatorRight.classList.add('hidden');
       
-      if (isUpper) {
-        if (isRight) {
-          ['t1', 't2', 't3', 't4'].forEach(id => document.getElementById(id).classList.add('highlight'));
-        } else {
-          ['t5', 't6', 't7', 't8'].forEach(id => document.getElementById(id).classList.add('highlight'));
-        }
+      if (zoneNum === 5) {
+        // Lengua - destacar la lengua
+        tongue.classList.add('highlight');
+        dentalTitle.textContent = T[lang].tonguePrep;
+        dentalZone.textContent = T[lang].zones[4];
+        dentalInstruction.textContent = lang === 'ES' ? 'Cepilla suavemente de adentro hacia afuera' :
+                                         lang === 'EN' ? 'Brush gently from back to front' :
+                                         'Escove suavemente de dentro para fora';
       } else {
-        if (isRight) {
-          ['t9', 't10', 't11', 't12'].forEach(id => document.getElementById(id).classList.add('highlight'));
-        } else {
-          ['t13', 't14', 't15', 't16'].forEach(id => document.getElementById(id).classList.add('highlight'));
-        }
+        // Dientes
+        const isUpper = zoneNum === 1 || zoneNum === 2;
+        const isRight = zoneNum === 1 || zoneNum === 3;
+        
+        // Mostrar indicador de lado
+        if (isRight) indicatorRight.classList.remove('hidden');
+        else indicatorLeft.classList.remove('hidden');
+        
+        // Resaltar dientes
+        const toothIds = isUpper ? 
+          (isRight ? ['u1','u2','u3','u4'] : ['u5','u6','u7','u8']) :
+          (isRight ? ['l1','l2','l3','l4'] : ['l5','l6','l7','l8']);
+        
+        toothIds.forEach(id => document.getElementById(id).classList.add('highlight'));
+        
+        dentalTitle.textContent = T[lang].zonePrep;
+        dentalZone.textContent = T[lang].zones[zoneNum - 1];
+        dentalInstruction.textContent = lang === 'ES' ? 'Haz circulitos suaves en esta zona' :
+                                         lang === 'EN' ? 'Make small circles in this area' :
+                                         'Faça circulinhos suaves nesta área';
       }
       
-      archTitle.textContent = T[lang].zonePrep.replace('{z}', '');
-      archZoneName.textContent = T[lang].zones[zoneNum - 1];
-      archInstruction.textContent = zoneNum === 5 ? 
-        'Cepilla suavemente de adentro hacia afuera' : 
-        'Haz circulitos suaves en esta zona';
-      
-      archOverlay.classList.add('show');
+      dentalOverlay.classList.add('show');
     }
     
-    function hideDentalArch() {
-      archOverlay.classList.remove('show');
+    function hideDentalOverlay() {
+      dentalOverlay.classList.remove('show');
     }
     
     // ===== INICIO =====
@@ -1047,11 +959,10 @@
       message.textContent = T[lang].intro;
       speak(T[lang].intro);
       
-      setTimeout(() => {
-        if (!musicPlaying) toggleMusic();
-      }, 1500);
+      setTimeout(() => { if (!musicPlaying) toggleMusic(); }, 2000);
       
-      setTimeout(nextZone, 10000);
+      // Más tiempo antes de empezar
+      setTimeout(nextZone, 12000);
     }
     
     // ===== ZONAS =====
@@ -1059,57 +970,50 @@
       zone++;
       if (zone > 5) { celebrate(); return; }
       
-      const transitionKey = 'to' + zone;
-      playTransition(transitionKey);
+      // Transición musical
+      playTransition('to' + zone);
       
-      if (zone <= 4) {
-        showDentalArch(zone);
-        
-        const prepText = T[lang].zonePrep.replace('{z}', T[lang].zones[zone - 1]);
-        message.textContent = prepText;
-        speak(prepText);
-        
+      // Mostrar animación de boca
+      showDentalOverlay(zone);
+      
+      // Decir preparación y esperar a que termine
+      const prepText = zone === 5 ? T[lang].tonguePrep : T[lang].zonePrep + ' ' + T[lang].zones[zone - 1];
+      message.textContent = prepText;
+      speak(prepText, () => {
+        // Esperar un momento después de hablar
         setTimeout(() => {
-          hideDentalArch();
+          hideDentalOverlay();
           startZoneTimer();
-        }, 3500);
-      } else {
-        message.textContent = T[lang].tongue;
-        speak(T[lang].tongue);
-        setTimeout(startZoneTimer, 3000);
-      }
+        }, 1500);
+      });
     }
     
     function startZoneTimer() {
       stopIdleCycle();
-      
       seconds = zone === 5 ? 10 : 30;
       
       zonesEl.classList.remove('hidden');
       timerEl.classList.remove('hidden');
       timerLabel.textContent = T[lang].zones[zone - 1];
       
-      document.querySelectorAll('.zone-dot').forEach((d, i) => {
-        d.classList.toggle('active', i + 1 === zone);
-      });
+      document.querySelectorAll('.zone-dot').forEach((d, i) => d.classList.toggle('active', i + 1 === zone));
       
-      if (zone === 5) {
-        message.textContent = T[lang].tongue;
-      } else {
-        const txt = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
-        message.textContent = txt;
-      }
-      speak(message.textContent);
+      // Mensaje de zona después de un espacio
+      setTimeout(() => {
+        if (zone === 5) {
+          message.textContent = T[lang].tongue;
+        } else {
+          message.textContent = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
+        }
+        speak(message.textContent);
+      }, 500);
       
-      if (musicPlaying) {
-        stopMusic();
-        setTimeout(() => playZoneMusic(zone), 100);
-      }
+      // Música
+      if (musicPlaying) { stopMusic(); setTimeout(() => playZoneMusic(zone), 100); }
       
       clearInterval(timer);
       
       let encI = 0;
-      let returnedToBrush = false;
       const duration = zone === 5 ? 10 : 30;
       
       timer = setInterval(() => {
@@ -1120,29 +1024,25 @@
         const threshold = zone === 5 ? 5 : 10;
         timerProgress.style.stroke = seconds > threshold ? '#4CAF50' : seconds > 3 ? '#FFC107' : '#F44336';
         
+        // ENCOURAGE solo cuando NO está hablando
         const encourageTime = zone === 5 ? 5 : 20;
         const encourageTime2 = zone === 5 ? 3 : 10;
         
-        if (seconds === encourageTime || seconds === encourageTime2) {
+        if (!speaking && (seconds === encourageTime || seconds === encourageTime2)) {
           const encText = T[lang].encourage[encI++ % 4];
           message.textContent = encText;
           speak(encText);
-          returnedToBrush = false;
         }
         
-        if (!speechSynthesis.speaking && !returnedToBrush && currentAnim === 'encourage') {
-          setAnim('brush');
-          returnedToBrush = true;
-        }
-        
-        if (!speechSynthesis.speaking && currentAnim !== 'brush' && currentAnim !== 'encourage') {
+        // Actualizar animación
+        if (!speaking && currentAnim !== 'brush') {
           setAnim('brush');
         }
         
         if (seconds <= 0) {
           clearInterval(timer);
           setAnim('bounce', 1200);
-          setTimeout(nextZone, 1200);
+          setTimeout(nextZone, 1500); // Más tiempo entre zonas
         }
       }, 1000);
     }
@@ -1179,9 +1079,7 @@
     }
     
     // ===== DROPDOWN IDIOMA =====
-    langBtn.onclick = () => {
-      langDropdown.classList.toggle('show');
-    };
+    langBtn.onclick = () => langDropdown.classList.toggle('show');
     
     document.querySelectorAll('.dropdown-item').forEach(item => {
       item.onclick = () => {
@@ -1195,9 +1093,7 @@
     });
     
     document.onclick = (e) => {
-      if (!e.target.closest('.dropdown-container')) {
-        langDropdown.classList.remove('show');
-      }
+      if (!e.target.closest('.dropdown-container')) langDropdown.classList.remove('show');
     };
     
     restartBtn.onclick = () => location.reload();
@@ -1205,31 +1101,13 @@
     // ===== EVENTOS MODELO =====
     console.log('🦕 Initializing...');
     initCamera();
-    
     speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     
-    tina.addEventListener('progress', (e) => {
-      const p = Math.floor(e.detail.totalProgress * 100);
-      loadingStatus.textContent = p + '%';
-    });
+    tina.addEventListener('progress', (e) => { loadingStatus.textContent = Math.floor(e.detail.totalProgress * 100) + '%'; });
+    tina.addEventListener('load', () => { console.log('🦕 Model loaded!'); modelLoaded = true; startApp(); });
+    tina.addEventListener('error', (e) => { console.error('❌ Error:', e); loadingStatus.textContent = 'Error - recarga'; });
     
-    tina.addEventListener('load', () => {
-      console.log('🦕 Model loaded!');
-      modelLoaded = true;
-      startApp();
-    });
-    
-    tina.addEventListener('error', (e) => {
-      console.error('❌ Error:', e);
-      loadingStatus.textContent = 'Error - recarga';
-    });
-    
-    setTimeout(() => {
-      if (!modelLoaded) {
-        console.log('⏰ Timeout - forcing start');
-        startApp();
-      }
-    }, 15000);
+    setTimeout(() => { if (!modelLoaded) { console.log('⏰ Timeout - forcing start'); startApp(); } }, 15000);
   </script>
 </body>
 </html>
