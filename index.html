@@ -14,7 +14,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
   
   <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -113,7 +112,6 @@
     }
     
     #dental-title {
-      font-family: 'Montserrat', sans-serif;
       font-size: 32px;
       font-weight: 700;
       color: white;
@@ -122,7 +120,6 @@
     }
     
     #dental-zone {
-      font-family: 'Montserrat', sans-serif;
       font-size: 42px;
       font-weight: 800;
       color: #FFD700;
@@ -137,34 +134,6 @@
       height: 280px;
     }
     
-    /* Boca completa */
-    .mouth {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-    }
-    
-    /* Labios */
-    .lips-outer {
-      fill: #E8A0A0;
-      stroke: #C08080;
-      stroke-width: 2;
-    }
-    
-    .lips-inner {
-      fill: #D07070;
-    }
-    
-    /* Encías */
-    .gums-upper {
-      fill: #F5A0A0;
-    }
-    
-    .gums-lower {
-      fill: #E89090;
-    }
-    
-    /* Dientes */
     .tooth {
       fill: #FFFFFF;
       stroke: #DDDDDD;
@@ -185,7 +154,6 @@
       50% { filter: drop-shadow(0 0 25px #FFD700); transform: translateY(-2px); }
     }
     
-    /* Lengua */
     .tongue {
       fill: #D06060;
       transition: all 0.5s ease;
@@ -202,74 +170,38 @@
       50% { filter: drop-shadow(0 0 30px #FF6B6B); }
     }
     
-    /* Indicador de lado */
     .side-indicator {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-family: 'Montserrat', sans-serif;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 700;
       color: white;
-      padding: 8px 16px;
+      padding: 8px 14px;
       background: rgba(255,105,180,0.9);
       border-radius: 20px;
-      animation: bounce-arrow 1s ease-in-out infinite;
     }
     
-    .side-indicator.left { left: -80px; }
-    .side-indicator.right { right: -80px; }
+    .side-indicator.left { left: -70px; animation: bounce-left 1s ease-in-out infinite; }
+    .side-indicator.right { right: -70px; animation: bounce-right 1s ease-in-out infinite; }
     
-    @keyframes bounce-arrow {
-      0%, 100% { transform: translateY(-50%) translateX(0); }
-      50% { transform: translateY(-50%) translateX(5px); }
-    }
+    @keyframes bounce-left { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-5px); } }
+    @keyframes bounce-right { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(5px); } }
     
-    .side-indicator.left {
-      animation-name: bounce-arrow-left;
-    }
-    
-    @keyframes bounce-arrow-left {
-      0%, 100% { transform: translateY(-50%) translateX(0); }
-      50% { transform: translateY(-50%) translateX(-5px); }
-    }
-    
-    /* Cepillo animado */
-    .brush-indicator {
-      position: absolute;
-      width: 60px;
-      height: 120px;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    
-    .brush-indicator.show {
-      opacity: 1;
-      animation: brush-move 1.5s ease-in-out infinite;
-    }
-    
-    @keyframes brush-move {
-      0%, 100% { transform: translateX(0) rotate(-15deg); }
-      50% { transform: translateX(15px) rotate(15deg); }
+    .arch-label {
+      font-size: 16px;
+      font-weight: 700;
+      fill: white;
+      text-anchor: middle;
     }
     
     #dental-instruction {
-      font-family: 'Montserrat', sans-serif;
       font-size: 18px;
       font-weight: 600;
       color: white;
       margin-top: 25px;
       text-align: center;
       opacity: 0.95;
-    }
-    
-    /* Etiqueta ARRIBA/ABAJO */
-    .arch-label {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 16px;
-      font-weight: 700;
-      fill: white;
-      text-anchor: middle;
     }
     
     /* ========== UI STYLES ========== */
@@ -296,19 +228,26 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
     
-    #loading-text { 
-      font-family: 'Montserrat', sans-serif;
-      color: #FF69B4; 
-      font-size: 26px; 
-      margin-top: 20px; 
+    #loading-text { color: #FF69B4; font-size: 26px; margin-top: 20px; font-weight: 700; }
+    #loading-status { color: #FF69B4; font-size: 18px; margin-top: 10px; font-weight: 600; }
+    
+    /* Botón de inicio para iOS */
+    #start-btn {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding: 20px 50px;
+      font-size: 24px;
       font-weight: 700;
-    }
-    #loading-status { 
-      font-family: 'Montserrat', sans-serif;
-      color: #FF69B4; 
-      font-size: 18px; 
-      margin-top: 10px; 
-      font-weight: 600;
+      background: linear-gradient(135deg, #FF69B4, #FF1493);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 10000;
+      display: none;
+      box-shadow: 0 4px 20px rgba(255,105,180,0.5);
     }
     
     .dropdown-container {
@@ -326,7 +265,6 @@
       background: rgba(255,105,180,0.9);
       color: white;
       font-size: 14px;
-      font-family: 'Montserrat', sans-serif;
       font-weight: 700;
       cursor: pointer;
       display: flex;
@@ -350,7 +288,6 @@
     .dropdown-content.show { display: block; }
     
     .dropdown-item {
-      font-family: 'Montserrat', sans-serif;
       padding: 12px 20px;
       color: white;
       font-size: 14px;
@@ -381,7 +318,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Montserrat', sans-serif;
       font-size: 12px;
       font-weight: 700;
       color: white;
@@ -411,7 +347,6 @@
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      font-family: 'Montserrat', sans-serif;
       color: white;
       font-size: 36px;
       font-weight: 800;
@@ -422,7 +357,6 @@
       position: absolute;
       bottom: 5px; left: 50%;
       transform: translateX(-50%);
-      font-family: 'Montserrat', sans-serif;
       color: white;
       font-size: 11px;
       font-weight: 600;
@@ -437,7 +371,6 @@
       color: white;
       padding: 16px 30px;
       border-radius: 30px;
-      font-family: 'Montserrat', sans-serif;
       font-size: 18px;
       font-weight: 600;
       max-width: 90%;
@@ -473,7 +406,6 @@
       color: white;
       border: none;
       border-radius: 30px;
-      font-family: 'Montserrat', sans-serif;
       font-size: 20px;
       font-weight: 700;
       cursor: pointer;
@@ -513,28 +445,23 @@
     <div id="loading-status">0%</div>
   </div>
   
-  <!-- Overlay Boca Animada para Niños -->
+  <!-- Botón para iniciar audio en iOS -->
+  <button id="start-btn">Toca para empezar</button>
+  
+  <!-- Overlay Boca Animada -->
   <div id="dental-overlay">
     <div id="dental-title">Prepárate para cepillar</div>
     <div id="dental-zone">Arriba a la derecha</div>
     
     <div id="mouth-container">
-      <!-- Indicadores de lado -->
       <div class="side-indicator left hidden" id="indicator-left">IZQUIERDA</div>
       <div class="side-indicator right hidden" id="indicator-right">DERECHA</div>
       
-      <!-- SVG de la boca completa -->
-      <svg class="mouth" viewBox="0 0 320 280">
-        <!-- Sombra interior de la boca -->
+      <svg viewBox="0 0 320 280">
         <ellipse cx="160" cy="140" rx="140" ry="130" fill="#8B4040"/>
-        
-        <!-- Lengua (visible siempre, se destaca en zona 5) -->
         <ellipse class="tongue" id="tongue" cx="160" cy="185" rx="80" ry="50"/>
+        <path fill="#F5A0A0" d="M40 100 Q160 20 280 100 Q280 60 160 40 Q40 60 40 100"/>
         
-        <!-- Encías superiores -->
-        <path class="gums-upper" d="M40 100 Q160 20 280 100 Q280 60 160 40 Q40 60 40 100"/>
-        
-        <!-- Dientes superiores -->
         <g id="upper-teeth">
           <rect class="tooth" id="u1" x="45" y="55" width="28" height="38" rx="6"/>
           <rect class="tooth" id="u2" x="78" y="48" width="28" height="45" rx="6"/>
@@ -546,13 +473,10 @@
           <rect class="tooth" id="u8" x="276" y="55" width="28" height="38" rx="6"/>
         </g>
         
-        <!-- Etiqueta ARRIBA -->
         <text class="arch-label" x="160" y="25">ARRIBA</text>
         
-        <!-- Encías inferiores -->
-        <path class="gums-lower" d="M40 180 Q160 260 280 180 Q280 220 160 240 Q40 220 40 180"/>
+        <path fill="#E89090" d="M40 180 Q160 260 280 180 Q280 220 160 240 Q40 220 40 180"/>
         
-        <!-- Dientes inferiores -->
         <g id="lower-teeth">
           <rect class="tooth" id="l1" x="45" y="185" width="28" height="35" rx="6"/>
           <rect class="tooth" id="l2" x="78" y="182" width="28" height="40" rx="6"/>
@@ -564,12 +488,10 @@
           <rect class="tooth" id="l8" x="276" y="185" width="28" height="35" rx="6"/>
         </g>
         
-        <!-- Etiqueta ABAJO -->
         <text class="arch-label" x="160" y="268">ABAJO</text>
         
-        <!-- Labios -->
-        <path class="lips-outer" d="M20 140 Q160 -20 300 140 Q160 300 20 140"/>
-        <path class="lips-inner" d="M50 140 Q160 60 270 140 Q160 220 50 140"/>
+        <path fill="#E8A0A0" stroke="#C08080" stroke-width="2" d="M20 140 Q160 -20 300 140 Q160 300 20 140"/>
+        <path fill="#D07070" d="M50 140 Q160 60 270 140 Q160 220 50 140"/>
       </svg>
     </div>
     
@@ -618,14 +540,10 @@
     let isIdle = true;
     let idlePhase = 'static';
     let musicPlaying = false;
-    let currentLoop = null;
     let speaking = false;
-    
-    let melodySynth = null;
-    let bassSynth = null;
-    let padSynth = null;
-    let reverb = null;
-    let delay = null;
+    let audioReady = false;
+    let audioContext = null;
+    let currentMusicInterval = null;
     
     const loading = document.getElementById('loading');
     const loadingStatus = document.getElementById('loading-status');
@@ -647,6 +565,7 @@
     const indicatorLeft = document.getElementById('indicator-left');
     const indicatorRight = document.getElementById('indicator-right');
     const tongue = document.getElementById('tongue');
+    const startBtn = document.getElementById('start-btn');
     
     // ===== ANIMACIONES TINA =====
     const ANIMS = ['breathe', 'brush', 'encourage', 'bounce', 'celebrate'];
@@ -656,9 +575,7 @@
       if (name) {
         tina.classList.add('anim-' + name);
         currentAnim = name;
-        if (duration) {
-          setTimeout(() => { if (currentAnim === name) setAnim('breathe'); }, duration);
-        }
+        if (duration) setTimeout(() => { if (currentAnim === name) setAnim('breathe'); }, duration);
       }
     }
     
@@ -726,151 +643,199 @@
       }
     };
     
-    // ===== MÚSICA CON TONE.JS =====
-    async function initAudio() {
-      await Tone.start();
-      reverb = new Tone.Reverb({ decay: 2.5, wet: 0.35 }).toDestination();
-      delay = new Tone.FeedbackDelay({ delayTime: '8n.', feedback: 0.2, wet: 0.15 }).connect(reverb);
-      const lowPass = new Tone.Filter({ type: 'lowpass', frequency: 4000, Q: 1 }).connect(delay);
+    // ===== MÚSICA CON WEB AUDIO API (Simple y confiable) =====
+    
+    // Frecuencias de notas
+    const FREQ = {
+      C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00, B3:246.94,
+      C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00, B4:493.88,
+      C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99, A5:880.00, B5:987.77
+    };
+    
+    // Melodías por zona (notas y duraciones en ms)
+    const MELODIES = {
+      1: { // Zona 1 - Alegre (Twinkle Twinkle style)
+        notes: ['C4','C4','G4','G4','A4','A4','G4', 'F4','F4','E4','E4','D4','D4','C4', 
+                'G4','G4','F4','F4','E4','E4','D4', 'G4','G4','F4','F4','E4','E4','D4',
+                'C4','C4','G4','G4','A4','A4','G4', 'F4','F4','E4','E4','D4','D4','C4'],
+        durations: [400,400,400,400,400,400,800, 400,400,400,400,400,400,800,
+                    400,400,400,400,400,400,800, 400,400,400,400,400,400,800,
+                    400,400,400,400,400,400,800, 400,400,400,400,400,400,800],
+        bpm: 100
+      },
+      2: { // Zona 2 - Suave (canción de cuna)
+        notes: ['G4','A4','G4','F4','E4','D4', 'D4','E4','F4','G4','A4','B4','G4',
+                'G4','A4','G4','F4','E4','D4', 'E4','F4','G4','A4','G4'],
+        durations: [600,400,600,500,500,1000, 600,400,400,500,500,500,1000,
+                    600,400,600,500,500,1000, 600,400,500,500,1000],
+        bpm: 80
+      },
+      3: { // Zona 3 - Juguetona
+        notes: ['D4','E4','F4','G4','A4','B4','C5','D5', 'C5','B4','A4','G4','F4','E4','D4',
+                'D4','E4','F4','G4','A4','B4','C5','D5', 'A4','G4','F4','E4','D4'],
+        durations: [300,300,300,300,300,300,300,600, 300,300,300,300,300,300,600,
+                    300,300,300,300,300,300,300,600, 400,400,400,400,600],
+        bpm: 110
+      },
+      4: { // Zona 4 - Triunfal
+        notes: ['F4','A4','C5','A4','F4','A4','C5', 'C5','A4','F4','A4','G4','A4','B4',
+                'C5','D5','C5','A4','F4','G4','A4','G4', 'F4','F4','F4'],
+        durations: [400,400,400,400,400,400,800, 400,400,400,400,400,400,800,
+                    400,400,400,400,400,400,800, 400,400,800],
+        bpm: 95
+      },
+      5: { // Zona 5 - Lengua (corta)
+        notes: ['E4','G4','B4','E5','D5','C5','B4','A4', 'G4','A4','B4','C5','B4','A4','G4','E4'],
+        durations: [400,400,400,800,400,400,400,800, 400,400,400,800,400,400,400,800],
+        bpm: 120
+      }
+    };
+    
+    function initAudio() {
+      if (audioContext) return;
       
-      melodySynth = new Tone.PolySynth(Tone.Synth, {
-        oscillator: { type: 'triangle8' },
-        envelope: { attack: 0.08, decay: 0.3, sustain: 0.4, release: 0.8 }
-      }).connect(lowPass);
-      melodySynth.volume.value = -6;
-      
-      bassSynth = new Tone.MonoSynth({
-        oscillator: { type: 'sine' },
-        envelope: { attack: 0.1, decay: 0.4, sustain: 0.3, release: 1 }
-      }).connect(reverb);
-      bassSynth.volume.value = -12;
-      
-      padSynth = new Tone.PolySynth(Tone.Synth, {
-        oscillator: { type: 'sine4' },
-        envelope: { attack: 0.3, decay: 0.5, sustain: 0.5, release: 1.5 }
-      }).connect(reverb);
-      padSynth.volume.value = -14;
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // iOS necesita resumir el contexto
+        if (audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        
+        audioReady = true;
+        console.log('🔊 Audio initialized');
+      } catch (e) {
+        console.error('Error initializing audio:', e);
+      }
     }
     
-    const MELODIES = {
-      1: { tempo: 100, melody: [
-        {n:'C4',d:'4n'},{n:'C4',d:'4n'},{n:'G4',d:'4n'},{n:'G4',d:'4n'},
-        {n:'A4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'},
-        {n:'F4',d:'4n'},{n:'F4',d:'4n'},{n:'E4',d:'4n'},{n:'E4',d:'4n'},
-        {n:'D4',d:'4n'},{n:'D4',d:'4n'},{n:'C4',d:'2n'},
-        {n:'G4',d:'4n'},{n:'G4',d:'4n'},{n:'F4',d:'4n'},{n:'F4',d:'4n'},
-        {n:'E4',d:'4n'},{n:'E4',d:'4n'},{n:'D4',d:'2n'},
-        {n:'C4',d:'4n'},{n:'C4',d:'4n'},{n:'G4',d:'4n'},{n:'G4',d:'4n'},
-        {n:'A4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'},
-        {n:'F4',d:'4n'},{n:'F4',d:'4n'},{n:'E4',d:'4n'},{n:'E4',d:'4n'},
-        {n:'D4',d:'4n'},{n:'D4',d:'4n'},{n:'C4',d:'2n'}
-      ], chords: [{notes:['C4','E4','G4'],d:'1m'},{notes:['F4','A4','C5'],d:'1m'},{notes:['G4','B4','D5'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'}]},
-      2: { tempo: 80, melody: [
-        {n:'D4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'2n'},
-        {n:'D4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'2n'},
-        {n:'A3',d:'4n'},{n:'B3',d:'4n'},{n:'C4',d:'4n'},{n:'A3',d:'4n'},
-        {n:'G3',d:'4n'},{n:'A3',d:'4n'},{n:'B3',d:'2n'},
-        {n:'G4',d:'2n'},{n:'D4',d:'2n'},{n:'G3',d:'2n'}
-      ], chords: [{notes:['G3','B3','D4'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'},{notes:['D4','F4','A4'],d:'1m'},{notes:['G3','B3','D4'],d:'1m'}]},
-      3: { tempo: 110, melody: [
-        {n:'D4',d:'8n'},{n:'E4',d:'8n'},{n:'F4',d:'4n'},{n:'E4',d:'8n'},{n:'D4',d:'8n'},
-        {n:'C4',d:'4n'},{n:'D4',d:'2n'},
-        {n:'E4',d:'8n'},{n:'F4',d:'8n'},{n:'G4',d:'4n'},{n:'F4',d:'8n'},{n:'E4',d:'8n'},
-        {n:'D4',d:'4n'},{n:'E4',d:'2n'},
-        {n:'A4',d:'4n'},{n:'G4',d:'8n'},{n:'F4',d:'8n'},{n:'E4',d:'4n'},{n:'D4',d:'4n'},
-        {n:'C4',d:'4n'},{n:'D4',d:'2n'}
-      ], chords: [{notes:['D4','F4','A4'],d:'1m'},{notes:['G4','B4','D5'],d:'1m'},{notes:['A4','C5','E5'],d:'1m'},{notes:['D4','F4','A4'],d:'1m'}]},
-      4: { tempo: 95, melody: [
-        {n:'F4',d:'4n'},{n:'A4',d:'4n'},{n:'C5',d:'4n'},{n:'A4',d:'4n'},
-        {n:'F4',d:'4n'},{n:'A4',d:'4n'},{n:'C5',d:'2n'},
-        {n:'C5',d:'4n'},{n:'A4',d:'4n'},{n:'F4',d:'4n'},{n:'A4',d:'4n'},
-        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'B4',d:'2n'},
-        {n:'C5',d:'4n'},{n:'D5',d:'8n'},{n:'C5',d:'8n'},{n:'A4',d:'4n'},{n:'F4',d:'4n'},
-        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'2n'}
-      ], chords: [{notes:['F4','A4','C5'],d:'1m'},{notes:['C4','E4','G4'],d:'1m'},{notes:['B4','D5','F5'],d:'1m'},{notes:['F4','A4','C5'],d:'1m'}]},
-      5: { tempo: 120, melody: [
-        {n:'E4',d:'4n'},{n:'G4',d:'4n'},{n:'B4',d:'4n'},{n:'E5',d:'2n'},
-        {n:'D5',d:'4n'},{n:'C5',d:'4n'},{n:'B4',d:'4n'},{n:'A4',d:'2n'},
-        {n:'G4',d:'4n'},{n:'A4',d:'4n'},{n:'B4',d:'4n'},{n:'C5',d:'2n'},
-        {n:'B4',d:'4n'},{n:'A4',d:'4n'},{n:'G4',d:'4n'},{n:'E4',d:'2n'}
-      ], chords: [{notes:['E4','G4','B4'],d:'1m'},{notes:['A4','C5','E5'],d:'1m'},{notes:['B4','D5','G5'],d:'1m'},{notes:['E4','G4','B4'],d:'1m'}]}
-    };
+    function playNote(frequency, duration, startTime, type = 'sine', volume = 0.15) {
+      if (!audioContext) return null;
+      
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      
+      osc.type = type;
+      osc.frequency.value = frequency;
+      
+      // Envelope
+      gain.gain.setValueAtTime(0, startTime);
+      gain.gain.linearRampToValueAtTime(volume, startTime + 0.05);
+      gain.gain.setValueAtTime(volume, startTime + duration * 0.7 / 1000);
+      gain.gain.linearRampToValueAtTime(0, startTime + duration / 1000);
+      
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      
+      osc.start(startTime);
+      osc.stop(startTime + duration / 1000);
+      
+      return osc;
+    }
     
-    const TRANSITIONS = {
-      to1: [{n:'C4',d:'8n'},{n:'E4',d:'8n'},{n:'G4',d:'4n'}],
-      to2: [{n:'G4',d:'8n'},{n:'B4',d:'8n'},{n:'D5',d:'4n'}],
-      to3: [{n:'D4',d:'8n'},{n:'F4',d:'8n'},{n:'A4',d:'4n'}],
-      to4: [{n:'F4',d:'8n'},{n:'A4',d:'8n'},{n:'C5',d:'4n'}],
-      to5: [{n:'E4',d:'8n'},{n:'G4',d:'8n'},{n:'B4',d:'4n'}],
-      end: [{n:'C5',d:'16n'},{n:'E5',d:'16n'},{n:'G5',d:'16n'},{n:'C6',d:'2n'}]
-    };
+    function playChord(frequencies, duration, startTime, volume = 0.06) {
+      frequencies.forEach(freq => {
+        playNote(freq, duration, startTime, 'triangle', volume);
+      });
+    }
     
-    function playZoneMusic(zoneNum) {
-      if (!musicPlaying || !melodySynth) return;
-      const music = MELODIES[zoneNum];
-      if (!music) return;
+    function playMelody(zoneNum) {
+      if (!musicPlaying || !audioContext) return;
       
-      if (currentLoop) { currentLoop.stop(); currentLoop.dispose(); }
-      Tone.Transport.bpm.value = music.tempo;
+      const melody = MELODIES[zoneNum];
+      if (!melody) return;
       
-      const melodyPart = new Tone.Part((time, note) => {
-        melodySynth.triggerAttackRelease(note.n, note.d, time);
-      }, music.melody.map((n, i) => ({
-        time: Tone.Time(music.melody.slice(0, i).reduce((acc, n) => acc + Tone.Time(n.d).toSeconds(), 0) + 's'),
-        n: n
-      })));
-      melodyPart.loop = true;
-      const melodyDuration = music.melody.reduce((acc, n) => acc + Tone.Time(n.d).toSeconds(), 0);
-      melodyPart.loopEnd = melodyDuration + 's';
+      stopMelody();
       
-      const chordPart = new Tone.Part((time, chord) => {
-        padSynth.triggerAttackRelease(chord.notes, chord.d, time);
-      }, music.chords.map((c, i) => ({
-        time: Tone.Time(music.chords.slice(0, i).reduce((acc, c) => acc + Tone.Time(c.d).toSeconds(), 0) + 's'),
-        notes: c.notes, d: c.d
-      })));
-      chordPart.loop = true;
-      const chordDuration = music.chords.reduce((acc, c) => acc + Tone.Time(c.d).toSeconds(), 0);
-      chordPart.loopEnd = chordDuration + 's';
+      const msPerBeat = 60000 / melody.bpm;
+      let currentTime = audioContext.currentTime + 0.1;
       
-      Tone.Transport.start();
-      melodyPart.start(0);
-      chordPart.start(0);
+      melody.notes.forEach((note, i) => {
+        const duration = melody.durations[i];
+        
+        // Nota principal
+        playNote(FREQ[note], duration, currentTime, 'sine', 0.12);
+        
+        // Octava superior suave
+        if (FREQ[note] * 2 < 2000) {
+          playNote(FREQ[note] * 2, duration, currentTime, 'triangle', 0.04);
+        }
+        
+        currentTime += duration / 1000;
+      });
       
-      currentLoop = {
-        stop: () => { melodyPart.stop(); chordPart.stop(); },
-        dispose: () => { melodyPart.dispose(); chordPart.dispose(); }
-      };
+      // Calcular duración total y repetir
+      const totalDuration = melody.durations.reduce((a, b) => a + b, 0);
+      
+      currentMusicInterval = setTimeout(() => {
+        if (musicPlaying) playMelody(zoneNum);
+      }, totalDuration);
+    }
+    
+    function stopMelody() {
+      if (currentMusicInterval) {
+        clearTimeout(currentMusicInterval);
+        currentMusicInterval = null;
+      }
     }
     
     function playTransition(key) {
-      if (!melodySynth) return;
-      const notes = TRANSITIONS[key];
+      if (!audioContext) return;
+      
+      const transitions = {
+        to1: ['C4','E4','G4'],
+        to2: ['G4','B4','D5'],
+        to3: ['D4','F4','A4'],
+        to4: ['F4','A4','C5'],
+        to5: ['E4','G4','B4'],
+        end: ['C5','E5','G5','C6']
+      };
+      
+      const notes = transitions[key];
       if (!notes) return;
-      let t = Tone.now();
-      notes.forEach(note => { melodySynth.triggerAttackRelease(note.n, note.d, t); t += Tone.Time(note.d).toSeconds(); });
+      
+      let t = audioContext.currentTime + 0.05;
+      notes.forEach((note, i) => {
+        const dur = i === notes.length - 1 ? 500 : 200;
+        playNote(FREQ[note], dur, t, 'sine', 0.15);
+        t += 0.2;
+      });
     }
     
-    function stopMusic() {
-      if (currentLoop) { currentLoop.stop(); currentLoop.dispose(); currentLoop = null; }
-      Tone.Transport.stop();
-    }
-    
-    async function toggleMusic() {
-      if (!melodySynth) await initAudio();
-      if (musicPlaying) { musicPlaying = false; musicBtn.textContent = '🎵'; stopMusic(); }
-      else { musicPlaying = true; musicBtn.textContent = '🔊'; playZoneMusic(zone || 1); }
+    function toggleMusic() {
+      if (!audioContext) {
+        initAudio();
+      }
+      
+      // iOS: resumir contexto si está suspendido
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
+      if (musicPlaying) {
+        musicPlaying = false;
+        musicBtn.textContent = '🎵';
+        stopMelody();
+      } else {
+        musicPlaying = true;
+        musicBtn.textContent = '🔊';
+        playMelody(zone || 1);
+      }
     }
     
     musicBtn.onclick = toggleMusic;
     
     // ===== CÁMARA =====
     async function initCamera() {
-      try { const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }); document.getElementById('camera').srcObject = stream; }
-      catch (e) { loadingStatus.textContent = 'Sin cámara'; }
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        document.getElementById('camera').srcObject = stream;
+      } catch (e) {
+        loadingStatus.textContent = 'Sin cámara';
+      }
     }
     
-    // ===== VOZ CON ESPACIOS ENTRE DIÁLOGOS =====
+    // ===== VOZ =====
     function speak(text, onEndCallback = null) {
       pauseIdle();
       speaking = true;
@@ -880,23 +845,22 @@
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
         u.rate = 0.9;
+        
+        // Buscar voz latina
         const voices = speechSynthesis.getVoices();
-        const latinVoice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-US') || v.lang.includes('Latin'));
+        const latinVoice = voices.find(v => 
+          v.lang.includes('es-MX') || v.lang.includes('es-US') || 
+          v.lang.includes('es-419') || v.lang.includes('Latin')
+        );
         if (latinVoice && lang === 'ES') u.voice = latinVoice;
         
         setAnim('encourage');
         
         u.onend = () => {
           speaking = false;
-          if (zone > 0 && zone <= 5) {
-            setAnim('brush');
-          } else {
-            resumeIdle();
-          }
-          // Callback después de un pequeño espacio
-          if (onEndCallback) {
-            setTimeout(onEndCallback, 300);
-          }
+          if (zone > 0 && zone <= 5) setAnim('brush');
+          else resumeIdle();
+          if (onEndCallback) setTimeout(onEndCallback, 500);
         };
         
         speechSynthesis.speak(u);
@@ -905,14 +869,12 @@
     
     // ===== BOCA ANIMADA =====
     function showDentalOverlay(zoneNum) {
-      // Limpiar highlights anteriores
       document.querySelectorAll('.tooth').forEach(t => t.classList.remove('highlight'));
       tongue.classList.remove('highlight');
       indicatorLeft.classList.add('hidden');
       indicatorRight.classList.add('hidden');
       
       if (zoneNum === 5) {
-        // Lengua - destacar la lengua
         tongue.classList.add('highlight');
         dentalTitle.textContent = T[lang].tonguePrep;
         dentalZone.textContent = T[lang].zones[4];
@@ -920,15 +882,12 @@
                                          lang === 'EN' ? 'Brush gently from back to front' :
                                          'Escove suavemente de dentro para fora';
       } else {
-        // Dientes
         const isUpper = zoneNum === 1 || zoneNum === 2;
         const isRight = zoneNum === 1 || zoneNum === 3;
         
-        // Mostrar indicador de lado
         if (isRight) indicatorRight.classList.remove('hidden');
         else indicatorLeft.classList.remove('hidden');
         
-        // Resaltar dientes
         const toothIds = isUpper ? 
           (isRight ? ['u1','u2','u3','u4'] : ['u5','u6','u7','u8']) :
           (isRight ? ['l1','l2','l3','l4'] : ['l5','l6','l7','l8']);
@@ -959,28 +918,38 @@
       message.textContent = T[lang].intro;
       speak(T[lang].intro);
       
-      setTimeout(() => { if (!musicPlaying) toggleMusic(); }, 2000);
+      // Iniciar música después de un momento
+      setTimeout(() => {
+        initAudio();
+        if (!musicPlaying) toggleMusic();
+      }, 2500);
       
-      // Más tiempo antes de empezar
       setTimeout(nextZone, 12000);
     }
+    
+    // ===== INICIO CON GESTO (para iOS) =====
+    function handleStart() {
+      initAudio();
+      if (audioContext && audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      startBtn.style.display = 'none';
+      startApp();
+    }
+    
+    startBtn.onclick = handleStart;
     
     // ===== ZONAS =====
     function nextZone() {
       zone++;
       if (zone > 5) { celebrate(); return; }
       
-      // Transición musical
       playTransition('to' + zone);
-      
-      // Mostrar animación de boca
       showDentalOverlay(zone);
       
-      // Decir preparación y esperar a que termine
       const prepText = zone === 5 ? T[lang].tonguePrep : T[lang].zonePrep + ' ' + T[lang].zones[zone - 1];
       message.textContent = prepText;
       speak(prepText, () => {
-        // Esperar un momento después de hablar
         setTimeout(() => {
           hideDentalOverlay();
           startZoneTimer();
@@ -998,18 +967,15 @@
       
       document.querySelectorAll('.zone-dot').forEach((d, i) => d.classList.toggle('active', i + 1 === zone));
       
-      // Mensaje de zona después de un espacio
       setTimeout(() => {
-        if (zone === 5) {
-          message.textContent = T[lang].tongue;
-        } else {
-          message.textContent = T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
-        }
+        message.textContent = zone === 5 ? T[lang].tongue : T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
         speak(message.textContent);
       }, 500);
       
-      // Música
-      if (musicPlaying) { stopMusic(); setTimeout(() => playZoneMusic(zone), 100); }
+      if (musicPlaying) {
+        stopMelody();
+        setTimeout(() => playMelody(zone), 100);
+      }
       
       clearInterval(timer);
       
@@ -1024,25 +990,20 @@
         const threshold = zone === 5 ? 5 : 10;
         timerProgress.style.stroke = seconds > threshold ? '#4CAF50' : seconds > 3 ? '#FFC107' : '#F44336';
         
-        // ENCOURAGE solo cuando NO está hablando
         const encourageTime = zone === 5 ? 5 : 20;
         const encourageTime2 = zone === 5 ? 3 : 10;
         
         if (!speaking && (seconds === encourageTime || seconds === encourageTime2)) {
-          const encText = T[lang].encourage[encI++ % 4];
-          message.textContent = encText;
-          speak(encText);
+          message.textContent = T[lang].encourage[encI++ % 4];
+          speak(message.textContent);
         }
         
-        // Actualizar animación
-        if (!speaking && currentAnim !== 'brush') {
-          setAnim('brush');
-        }
+        if (!speaking && currentAnim !== 'brush') setAnim('brush');
         
         if (seconds <= 0) {
           clearInterval(timer);
           setAnim('bounce', 1200);
-          setTimeout(nextZone, 1500); // Más tiempo entre zonas
+          setTimeout(nextZone, 1500);
         }
       }, 1000);
     }
@@ -1069,7 +1030,7 @@
       }
       
       setTimeout(() => {
-        stopMusic();
+        stopMelody();
         musicPlaying = false;
         musicBtn.textContent = '🎵';
         startIdleCycle();
@@ -1104,7 +1065,24 @@
     speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     
     tina.addEventListener('progress', (e) => { loadingStatus.textContent = Math.floor(e.detail.totalProgress * 100) + '%'; });
-    tina.addEventListener('load', () => { console.log('🦕 Model loaded!'); modelLoaded = true; startApp(); });
+    
+    tina.addEventListener('load', () => {
+      console.log('🦕 Model loaded!');
+      modelLoaded = true;
+      
+      // Detectar iOS
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      
+      if (isIOS) {
+        // iOS necesita un gesto del usuario para audio
+        loading.style.display = 'none';
+        startBtn.style.display = 'block';
+      } else {
+        startApp();
+      }
+    });
+    
     tina.addEventListener('error', (e) => { console.error('❌ Error:', e); loadingStatus.textContent = 'Error - recarga'; });
     
     setTimeout(() => { if (!modelLoaded) { console.log('⏰ Timeout - forcing start'); startApp(); } }, 15000);
