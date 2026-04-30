@@ -88,7 +88,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* ========== OVERLAY BOCA ========== */
+    /* ========== OVERLAY BOCA (PEQUEÑO Y CENTRADO) ========== */
     #dental-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -102,66 +102,64 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s;
-      padding: 20px;
     }
     
     #dental-overlay.show { opacity: 1; pointer-events: auto; }
     
     #dental-title {
-      font-size: 24px;
+      font-size: 18px;
       font-weight: 700;
       color: white;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       text-align: center;
     }
     
     #dental-zone {
-      font-size: 32px;
+      font-size: 22px;
       font-weight: 800;
       color: #FFD700;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       text-align: center;
-      text-shadow: 0 0 15px rgba(255,215,0,0.6);
+      text-shadow: 0 0 10px rgba(255,215,0,0.6);
     }
     
     #mouth-container {
+      width: 200px;
+      height: 180px;
       position: relative;
-      width: 260px;
-      height: 240px;
-      max-width: 90vw;
     }
     
     .side-indicator {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
       color: white;
-      padding: 6px 10px;
+      padding: 4px 8px;
       background: linear-gradient(135deg, #FF69B4, #FF1493);
-      border-radius: 15px;
+      border-radius: 10px;
       white-space: nowrap;
     }
     
-    .side-indicator.left { left: -60px; animation: pulse-left 1s ease-in-out infinite; }
-    .side-indicator.right { right: -60px; animation: pulse-right 1s ease-in-out infinite; }
+    .side-indicator.left { left: -50px; animation: pulse-l 1s ease-in-out infinite; }
+    .side-indicator.right { right: -50px; animation: pulse-r 1s ease-in-out infinite; }
     
-    @keyframes pulse-left { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-5px); } }
-    @keyframes pulse-right { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(5px); } }
+    @keyframes pulse-l { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-4px); } }
+    @keyframes pulse-r { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(4px); } }
     
     #dental-instruction {
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 600;
       color: white;
-      margin-top: 15px;
+      margin-top: 12px;
       text-align: center;
-      opacity: 0.95;
+      opacity: 0.9;
     }
     
     .tooth { fill: #FFF; stroke: #DDD; stroke-width: 1; transition: fill 0.3s; }
-    .tooth-hl { fill: #FFD700; filter: drop-shadow(0 0 8px #FFD700); }
-    .tongue-hl { fill: #FF6B6B; filter: drop-shadow(0 0 10px #FF6B6B); }
+    .tooth-hl { fill: #FFD700; filter: drop-shadow(0 0 6px #FFD700); }
+    .tongue-hl { fill: #FF6B6B; filter: drop-shadow(0 0 8px #FF6B6B); }
     
     .hidden { display: none !important; }
     
@@ -237,8 +235,8 @@
     
     #message {
       position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
-      background: rgba(255,105,180,0.95); color: white; padding: 16px 30px;
-      border-radius: 30px; font-size: 18px; font-weight: 600; max-width: 90%; text-align: center; z-index: 100;
+      background: rgba(255,105,180,0.95); color: white; padding: 14px 24px;
+      border-radius: 25px; font-size: 16px; font-weight: 600; max-width: 85%; text-align: center; z-index: 100;
     }
     
     #music-btn {
@@ -250,14 +248,14 @@
     
     #restart-btn {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-      padding: 18px 40px; background: linear-gradient(135deg, #FF69B4, #FF1493);
-      color: white; border: none; border-radius: 30px; font-size: 20px; font-weight: 700;
+      padding: 16px 35px; background: linear-gradient(135deg, #FF69B4, #FF1493);
+      color: white; border: none; border-radius: 25px; font-size: 18px; font-weight: 700;
       cursor: pointer; z-index: 200; display: none;
     }
     
     .confetti {
       position: fixed;
-      width: 12px; height: 12px;
+      width: 10px; height: 10px;
       top: -20px;
       border-radius: 50%;
       animation: fall 3s linear forwards;
@@ -287,60 +285,45 @@
   
   <button id="start-btn">Toca para empezar</button>
   
-  <!-- Boca -->
+  <!-- Boca pequeña y centrada -->
   <div id="dental-overlay">
-    <div id="dental-title">Prepárate para cepillar</div>
-    <div id="dental-zone">Arriba a la derecha</div>
+    <div id="dental-title">Prepárate</div>
+    <div id="dental-zone">Arriba derecha</div>
     
     <div id="mouth-container">
-      <div class="side-indicator left hidden" id="indicator-left">IZQUIERDA</div>
-      <div class="side-indicator right hidden" id="indicator-right">DERECHA</div>
+      <div class="side-indicator left hidden" id="indicator-left">IZQ</div>
+      <div class="side-indicator right hidden" id="indicator-right">DER</div>
       
-      <svg viewBox="0 0 260 240" style="width:100%;height:100%">
-        <!-- Fondo boca -->
-        <ellipse cx="130" cy="120" rx="115" ry="110" fill="#6B2D2D"/>
+      <svg viewBox="0 0 200 180" style="width:100%;height:100%">
+        <ellipse cx="100" cy="90" rx="90" ry="85" fill="#6B2D2D"/>
+        <ellipse id="tongue" cx="100" cy="115" rx="45" ry="28" fill="#C85050"/>
+        <ellipse cx="100" cy="110" rx="32" ry="18" fill="#D86060" opacity="0.5"/>
+        <ellipse cx="100" cy="55" rx="65" ry="20" fill="#E89090"/>
+        <path d="M30 58 Q100 20 170 58 Q170 42 100 30 Q30 42 30 58" fill="#E88888"/>
         
-        <!-- Lengua -->
-        <ellipse id="tongue" cx="130" cy="155" rx="55" ry="35" fill="#C85050"/>
-        <ellipse cx="130" cy="150" rx="40" ry="25" fill="#D86060" opacity="0.5"/>
-        
-        <!-- Paladar -->
-        <ellipse cx="130" cy="70" rx="80" ry="25" fill="#E89090"/>
-        
-        <!-- Encías superiores -->
-        <path d="M40 75 Q130 25 220 75 Q220 55 130 40 Q40 55 40 75" fill="#E88888"/>
-        
-        <!-- Dientes superiores -->
         <g id="upper-teeth">
-          <path id="u1" class="tooth" d="M42 50 Q48 38 58 38 Q68 38 72 50 L72 75 Q68 80 58 80 Q48 80 42 75 Z"/>
-          <path id="u2" class="tooth" d="M76 45 Q82 32 95 32 Q108 32 112 45 L112 78 Q108 85 95 85 Q82 85 76 78 Z"/>
-          <path id="u3" class="tooth" d="M116 40 Q124 26 138 26 Q152 26 156 40 L156 82 Q152 90 138 90 Q124 90 116 82 Z"/>
-          <path id="u4" class="tooth" d="M160 40 Q168 26 182 26 Q196 26 200 40 L200 82 Q196 90 182 90 Q168 90 160 82 Z"/>
-          <path id="u5" class="tooth" d="M204 45 Q212 32 225 32 Q238 32 242 45 L242 78 Q238 85 225 85 Q212 85 204 78 Z"/>
-          <path id="u6" class="tooth" d="M246 50 Q252 38 262 38 Q272 38 278 50 L278 75 Q272 80 262 80 Q252 80 246 75 Z"/>
+          <path id="u1" class="tooth" d="M32 42 Q38 32 48 32 Q56 32 58 42 L58 58 Q54 62 48 62 Q38 62 32 58 Z"/>
+          <path id="u2" class="tooth" d="M62 38 Q68 28 80 28 Q90 28 94 38 L94 60 Q90 66 80 66 Q68 66 62 60 Z"/>
+          <path id="u3" class="tooth" d="M98 36 Q106 24 120 24 Q134 24 138 36 L138 62 Q134 70 120 70 Q106 70 98 62 Z"/>
+          <path id="u4" class="tooth" d="M142 38 Q150 28 162 28 Q172 28 178 38 L178 60 Q172 66 162 66 Q150 66 142 60 Z"/>
+          <path id="u5" class="tooth" d="M182 42 Q186 32 196 32 Q204 32 210 42 L210 58 Q204 62 196 62 Q186 62 182 58 Z"/>
         </g>
         
-        <!-- Etiqueta ARRIBA -->
-        <text x="130" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="700">ARRIBA</text>
+        <text x="100" y="14" text-anchor="middle" fill="white" font-size="11" font-weight="700">ARRIBA</text>
         
-        <!-- Encías inferiores -->
-        <path d="M40 165 Q130 215 220 165 Q220 185 130 200 Q40 185 40 165" fill="#D87878"/>
+        <path d="M30 122 Q100 160 170 122 Q170 138 100 150 Q30 138 30 122" fill="#D87878"/>
         
-        <!-- Dientes inferiores -->
         <g id="lower-teeth">
-          <path id="l1" class="tooth" d="M42 170 Q48 158 58 158 Q68 158 72 170 L72 195 Q68 200 58 200 Q48 200 42 195 Z"/>
-          <path id="l2" class="tooth" d="M76 168 Q82 155 95 155 Q108 155 112 168 L112 198 Q108 205 95 205 Q82 205 76 198 Z"/>
-          <path id="l3" class="tooth" d="M116 165 Q124 152 138 152 Q152 152 156 165 L156 200 Q152 208 138 208 Q124 208 116 200 Z"/>
-          <path id="l4" class="tooth" d="M160 165 Q168 152 182 152 Q196 152 200 165 L200 200 Q196 208 182 208 Q168 208 160 200 Z"/>
-          <path id="l5" class="tooth" d="M204 168 Q212 155 225 155 Q238 155 242 168 L242 198 Q238 205 225 205 Q212 205 204 198 Z"/>
-          <path id="l6" class="tooth" d="M246 170 Q252 158 262 158 Q272 158 278 170 L278 195 Q272 200 262 200 Q252 200 246 195 Z"/>
+          <path id="l1" class="tooth" d="M32 126 Q38 118 48 118 Q56 118 58 126 L58 142 Q54 146 48 146 Q38 146 32 142 Z"/>
+          <path id="l2" class="tooth" d="M62 124 Q68 116 80 116 Q90 116 94 124 L94 144 Q90 150 80 150 Q68 150 62 144 Z"/>
+          <path id="l3" class="tooth" d="M98 122 Q106 112 120 112 Q134 112 138 122 L138 146 Q134 154 120 154 Q106 154 98 146 Z"/>
+          <path id="l4" class="tooth" d="M142 124 Q150 116 162 116 Q172 116 178 124 L178 144 Q172 150 162 150 Q150 150 142 144 Z"/>
+          <path id="l5" class="tooth" d="M182 126 Q186 118 196 118 Q204 118 210 126 L210 142 Q204 146 196 146 Q186 146 182 142 Z"/>
         </g>
         
-        <!-- Etiqueta ABAJO -->
-        <text x="130" y="232" text-anchor="middle" fill="white" font-size="14" font-weight="700">ABAJO</text>
+        <text x="100" y="172" text-anchor="middle" fill="white" font-size="11" font-weight="700">ABAJO</text>
         
-        <!-- Labios -->
-        <path d="M15 120 Q130 -25 245 120 Q130 265 15 120" fill="none" stroke="#C06060" stroke-width="6" opacity="0.6"/>
+        <path d="M10 90 Q100 -20 190 90 Q100 200 10 90" fill="none" stroke="#C06060" stroke-width="4" opacity="0.5"/>
       </svg>
     </div>
     
@@ -393,6 +376,8 @@
     let audioContext = null;
     let nextNoteTime = 0;
     let musicTimer = null;
+    let currentSong = null;
+    let noteIndex = 0;
     
     const $ = id => document.getElementById(id);
     const loading = $('loading');
@@ -458,7 +443,7 @@
         tonguePrep: 'Vamos a cepillar la lengua',
         encourage: ['Muy bien, sigue así.', 'Qué bien lo haces.', 'Eres un campeón.', 'Excelente trabajo.'],
         celebrate: 'Lo lograste. Cepillaste todos tus dientes y tu lengua como un súper héroe. Estoy muy orgullosa de ti.',
-        zones: ['Arriba a la derecha', 'Arriba a la izquierda', 'Abajo a la derecha', 'Abajo a la izquierda', 'La lengua'],
+        zones: ['Arriba derecha', 'Arriba izquierda', 'Abajo derecha', 'Abajo izquierda', 'La lengua'],
         restart: 'Jugar de nuevo'
       },
       EN: {
@@ -469,7 +454,7 @@
         tonguePrep: 'Let\'s brush the tongue',
         encourage: ['Great job, keep going.', 'You\'re doing so well.', 'You\'re a champion.', 'Awesome work.'],
         celebrate: 'You did it. You brushed all your teeth and tongue like a super hero. I\'m so proud of you.',
-        zones: ['Top right side', 'Top left side', 'Bottom right side', 'Bottom left side', 'The tongue'],
+        zones: ['Top right', 'Top left', 'Bottom right', 'Bottom left', 'The tongue'],
         restart: 'Play again'
       },
       PT: {
@@ -480,66 +465,32 @@
         tonguePrep: 'Vamos escovar a língua',
         encourage: ['Muito bem, continue.', 'Você está indo super bem.', 'Você é um campeão.', 'Trabalho incrível.'],
         celebrate: 'Você conseguiu. Escovou todos os dentes e a língua como um super herói. Estou muito orgulhosa de você.',
-        zones: ['Em cima à direita', 'Em cima à esquerda', 'Em baixo à direita', 'Em baixo à esquerda', 'A língua'],
+        zones: ['Em cima direita', 'Em cima esquerda', 'Em baixo direita', 'Em baixo esquerda', 'A língua'],
         restart: 'Jogar de novo'
       }
     };
     
     // ===== MÚSICA =====
-    const F = { // Frecuencias
+    const F = {
       C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88,
-      C5:523.25, D5:587.33, E5:659.25, G5:783.99
+      C5:523.25, D5:587.33, E5:659.25, F5:698.46, G5:783.99,
+      B3:246.94, G3:196.00, A3:220.00
     };
     
-    // Melodías: [nota, duración en segundos]
     const SONGS = {
-      1: [ // Twinkle Twinkle
-        ['C4',0.4],['C4',0.4],['G4',0.4],['G4',0.4],['A4',0.4],['A4',0.4],['G4',0.8],
-        ['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.4],['D4',0.4],['C4',0.8],
-        ['G4',0.4],['G4',0.4],['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.8],
-        ['G4',0.4],['G4',0.4],['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.8],
-        ['C4',0.4],['C4',0.4],['G4',0.4],['G4',0.4],['A4',0.4],['A4',0.4],['G4',0.8],
-        ['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.4],['D4',0.4],['C4',0.8]
-      ],
-      2: [ // Canción de cuna
-        ['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1],
-        ['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1],
-        ['A3',0.5],['B3',0.5],['C4',0.5],['A3',0.5],['G3',0.5],['A3',0.5],['B3',1],
-        ['G4',1],['D4',1],['G3',1]
-      ],
-      3: [ // Juguetona
-        ['D4',0.25],['E4',0.25],['F4',0.5],['E4',0.25],['D4',0.25],['C4',0.5],['D4',1],
-        ['E4',0.25],['F4',0.25],['G4',0.5],['F4',0.25],['E4',0.25],['D4',0.5],['E4',1],
-        ['A4',0.5],['G4',0.25],['F4',0.25],['E4',0.5],['D4',0.5],['C4',0.5],['D4',1],
-        ['A4',0.5],['G4',0.25],['A4',0.25],['B4',0.5],['A4',0.5],['G4',0.5],['F4',1]
-      ],
-      4: [ // Triunfal
-        ['F4',0.5],['A4',0.5],['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['C5',1],
-        ['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['G4',0.5],['A4',0.5],['B4',1],
-        ['C5',0.5],['D5',0.25],['C5',0.25],['A4',0.5],['F4',0.5],['G4',0.5],['A4',0.5],['G4',1],
-        ['F4',0.5],['A4',0.5],['C5',0.5],['A4',0.5],['F4',0.5],['G4',0.5],['F4',1]
-      ],
-      5: [ // Lengua
-        ['E4',0.5],['G4',0.5],['B4',0.5],['E5',1],
-        ['D5',0.5],['C5',0.5],['B4',0.5],['A4',1],
-        ['G4',0.5],['A4',0.5],['B4',0.5],['C5',1],
-        ['B4',0.5],['A4',0.5],['G4',0.5],['E4',1]
-      ]
+      1: [['C4',0.4],['C4',0.4],['G4',0.4],['G4',0.4],['A4',0.4],['A4',0.4],['G4',0.8],['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.4],['D4',0.4],['C4',0.8]],
+      2: [['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1],['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1]],
+      3: [['D4',0.25],['E4',0.25],['F4',0.5],['E4',0.25],['D4',0.25],['C4',0.5],['D4',1],['E4',0.25],['F4',0.25],['G4',0.5],['F4',0.25],['E4',0.25],['D4',0.5],['E4',1]],
+      4: [['F4',0.5],['A4',0.5],['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['C5',1],['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['G4',0.5],['A4',0.5],['B4',1]],
+      5: [['E4',0.5],['G4',0.5],['B4',0.5],['E5',1],['D5',0.5],['C5',0.5],['B4',0.5],['A4',1],['G4',0.5],['A4',0.5],['B4',0.5],['C5',1]],
+      victory: [['C5',0.2],['E5',0.2],['G5',0.2],['C6',0.4],['G5',0.15],['E5',0.15],['C5',0.15],['E5',0.15],['G5',0.3],['C6',0.6]]
     };
-    
-    // Agregar notas faltantes para zona 2
-    F.B3 = 246.94;
-    F.G3 = 196.00;
-    F.A3 = 220.00;
-    
-    let currentSong = null;
-    let noteIndex = 0;
     
     function initAudio() {
       if (audioContext) return true;
       try {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        console.log('🔊 AudioContext state:', audioContext.state);
+        console.log('🔊 AudioContext created, state:', audioContext.state);
         return true;
       } catch (e) {
         console.error('Audio error:', e);
@@ -557,8 +508,8 @@
       osc.frequency.value = freq;
       
       gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(0.15, startTime + 0.03);
-      gain.gain.setValueAtTime(0.15, startTime + dur - 0.05);
+      gain.gain.linearRampToValueAtTime(0.12, startTime + 0.02);
+      gain.gain.setValueAtTime(0.12, startTime + dur - 0.03);
       gain.gain.linearRampToValueAtTime(0, startTime + dur);
       
       osc.connect(gain);
@@ -573,45 +524,46 @@
       
       while (nextNoteTime < audioContext.currentTime + 0.5) {
         const [note, dur] = currentSong[noteIndex];
-        const freq = F[note];
-        if (freq) {
-          playNote(freq, nextNoteTime, dur);
-        }
+        if (F[note]) playNote(F[note], nextNoteTime, dur);
         nextNoteTime += dur;
         noteIndex++;
         
         if (noteIndex >= currentSong.length) {
           noteIndex = 0;
-          nextNoteTime += 0.3; // Pausa entre repeticiones
+          nextNoteTime += 0.2;
         }
       }
       
-      musicTimer = setTimeout(scheduleNotes, 200);
+      musicTimer = setTimeout(scheduleNotes, 150);
     }
     
     function startMusic(zoneNum) {
-      if (!audioContext) {
-        initAudio();
-      }
+      console.log('🎵 startMusic called for zone:', zoneNum);
+      
+      if (!audioContext) initAudio();
       
       if (audioContext.state === 'suspended') {
+        console.log('AudioContext suspended, attempting resume...');
         audioContext.resume().then(() => {
-          console.log('AudioContext resumed');
+          console.log('AudioContext resumed, state:', audioContext.state);
           _startMusic(zoneNum);
-        });
+        }).catch(e => console.error('Resume failed:', e));
       } else {
         _startMusic(zoneNum);
       }
     }
     
     function _startMusic(zoneNum) {
-      if (!audioContext) return;
+      if (!audioContext) {
+        console.error('No audioContext');
+        return;
+      }
       
       stopMusic();
       
       currentSong = SONGS[zoneNum];
       if (!currentSong) {
-        console.error('No song for zone', zoneNum);
+        console.error('No song for zone:', zoneNum);
         return;
       }
       
@@ -620,36 +572,38 @@
       musicPlaying = true;
       musicBtn.textContent = '🔊';
       
+      console.log('Starting music, song length:', currentSong.length);
       scheduleNotes();
-      console.log('🎵 Playing song for zone', zoneNum);
     }
     
     function stopMusic() {
       musicPlaying = false;
-      if (musicTimer) {
-        clearTimeout(musicTimer);
-        musicTimer = null;
-      }
+      if (musicTimer) { clearTimeout(musicTimer); musicTimer = null; }
       currentSong = null;
       noteIndex = 0;
     }
     
     function playTransition(key) {
       if (!audioContext) return;
-      
       const trans = {
-        to1: [['C4',0.15],['E4',0.15],['G4',0.25]],
-        to2: [['G4',0.15],['B4',0.15],['D5',0.25]],
-        to3: [['D4',0.15],['F4',0.15],['A4',0.25]],
-        to4: [['F4',0.15],['A4',0.15],['C5',0.25]],
-        to5: [['E4',0.15],['G4',0.15],['B4',0.25]],
-        end: [['C5',0.1],['E5',0.1],['G5',0.1],['C6',0.3]]
+        to1: [['C4',0.15],['E4',0.15],['G4',0.2]],
+        to2: [['G4',0.15],['B4',0.15],['D5',0.2]],
+        to3: [['D4',0.15],['F4',0.15],['A4',0.2]],
+        to4: [['F4',0.15],['A4',0.15],['C5',0.2]],
+        to5: [['E4',0.15],['G4',0.15],['B4',0.2]]
       };
       const notes = trans[key];
       if (!notes) return;
-      
       let t = audioContext.currentTime + 0.05;
-      notes.forEach(([note, dur]) => {
+      notes.forEach(([note, dur]) => { if (F[note]) playNote(F[note], t, dur); t += dur; });
+    }
+    
+    function playVictoryMusic() {
+      if (!audioContext) return;
+      
+      const victory = SONGS.victory;
+      let t = audioContext.currentTime + 0.1;
+      victory.forEach(([note, dur]) => {
         if (F[note]) playNote(F[note], t, dur);
         t += dur;
       });
@@ -661,9 +615,7 @@
         musicBtn.textContent = '🎵';
       } else {
         if (!audioContext) initAudio();
-        if (audioContext && audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
+        if (audioContext && audioContext.state === 'suspended') audioContext.resume();
         startMusic(zone || 1);
       }
     }
@@ -680,7 +632,7 @@
       }
     }
     
-    // ===== VOZ FEMENINA =====
+    // ===== VOZ FEMENINA iOS =====
     function speak(text, callback = null) {
       pauseIdle();
       speaking = true;
@@ -688,23 +640,41 @@
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
-        u.rate = 0.9;
-        u.pitch = 1.15;
         
-        const voices = speechSynthesis.getVoices();
-        let voice = null;
-        
+        // Para iOS, usar es-ES que suele tener voz femenina
         if (lang === 'ES') {
-          voice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-419')) ||
-                  voices.find(v => v.lang.includes('es-ES'));
+          u.lang = 'es-ES';
         } else if (lang === 'EN') {
-          voice = voices.find(v => v.lang.includes('en-US'));
+          u.lang = 'en-US';
         } else {
-          voice = voices.find(v => v.lang.includes('pt-BR'));
+          u.lang = 'pt-BR';
         }
         
-        if (voice) u.voice = voice;
+        u.rate = 0.9;
+        u.pitch = 1.2; // Más agudo = más femenino
+        
+        // Buscar voz femenina
+        const voices = speechSynthesis.getVoices();
+        console.log('Voces:', voices.map(v => v.name + ' (' + v.lang + ')'));
+        
+        let voice = voices.find(v => {
+          const name = v.name.toLowerCase();
+          const isFemale = name.includes('female') || name.includes('woman') || 
+                          name.includes('samantha') || name.includes('victoria') ||
+                          name.includes('karen') || name.includes('moira') ||
+                          name.includes('fiona') || name.includes('elvira') ||
+                          name.includes('monica') || name.includes('loreta');
+          return v.lang.includes(lang === 'ES' ? 'es' : lang === 'EN' ? 'en' : 'pt') && isFemale;
+        });
+        
+        if (!voice) {
+          voice = voices.find(v => v.lang.includes(lang === 'ES' ? 'es' : lang === 'EN' ? 'en' : 'pt'));
+        }
+        
+        if (voice) {
+          u.voice = voice;
+          console.log('Using voice:', voice.name);
+        }
         
         setAnim('encourage');
         
@@ -712,7 +682,7 @@
           speaking = false;
           if (zone > 0 && zone <= 5) setAnim('brush');
           else resumeIdle();
-          if (callback) setTimeout(callback, 500);
+          if (callback) setTimeout(callback, 400);
         };
         
         speechSynthesis.speak(u);
@@ -730,9 +700,7 @@
         tongue.classList.add('tongue-hl');
         dentalTitle.textContent = T[lang].tonguePrep;
         dentalZone.textContent = T[lang].zones[4];
-        dentalInstruction.textContent = lang === 'ES' ? 'Cepilla suavemente de adentro hacia afuera' :
-                                         lang === 'EN' ? 'Brush gently from back to front' :
-                                         'Escove suavemente de dentro para fora';
+        dentalInstruction.textContent = lang === 'ES' ? 'Cepilla de adentro hacia afuera' : lang === 'EN' ? 'Brush back to front' : 'Escove de dentro para fora';
       } else {
         const isUpper = zoneNum === 1 || zoneNum === 2;
         const isRight = zoneNum === 1 || zoneNum === 3;
@@ -740,16 +708,12 @@
         if (isRight) indicatorRight.classList.remove('hidden');
         else indicatorLeft.classList.remove('hidden');
         
-        const ids = isUpper ? 
-          (isRight ? ['u1','u2','u3'] : ['u4','u5','u6']) :
-          (isRight ? ['l1','l2','l3'] : ['l4','l5','l6']);
-        
+        const ids = isUpper ? (isRight ? ['u1','u2'] : ['u3','u4','u5']) : (isRight ? ['l1','l2'] : ['l3','l4','l5']);
         ids.forEach(id => { const el = $(id); if (el) el.classList.add('tooth-hl'); });
         
         dentalTitle.textContent = T[lang].zonePrep;
         dentalZone.textContent = T[lang].zones[zoneNum - 1];
-        dentalInstruction.textContent = lang === 'ES' ? 'Haz circulitos suaves en esta zona' :
-                                         lang === 'EN' ? 'Make small circles' : 'Faça circulinhos suaves';
+        dentalInstruction.textContent = lang === 'ES' ? 'Haz circulitos suaves' : lang === 'EN' ? 'Make small circles' : 'Faça circulinhos';
       }
       
       dentalOverlay.classList.add('show');
@@ -778,10 +742,15 @@
     }
     
     function handleStart() {
+      console.log('handleStart called');
       initAudio();
+      
       if (audioContext && audioContext.state === 'suspended') {
-        audioContext.resume();
+        audioContext.resume().then(() => {
+          console.log('AudioContext resumed in handleStart');
+        });
       }
+      
       startBtn.style.display = 'none';
       startApp();
     }
@@ -802,7 +771,7 @@
         setTimeout(() => {
           hideDentalOverlay();
           startZoneTimer();
-        }, 1500);
+        }, 1200);
       });
     }
     
@@ -819,9 +788,8 @@
       setTimeout(() => {
         message.textContent = zone === 5 ? T[lang].tongue : T[lang].zone.replace('{z}', T[lang].zones[zone - 1]);
         speak(message.textContent);
-      }, 500);
+      }, 400);
       
-      // Iniciar música para esta zona
       startMusic(zone);
       
       clearInterval(timer);
@@ -855,18 +823,21 @@
       }, 1000);
     }
     
-    // ===== CELEBRACIÓN CON CONFETI =====
+    // ===== CELEBRACIÓN CON MÚSICA VICTORIA =====
     function celebrate() {
       zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
       
       stopMusic();
-      playTransition('end');
+      
+      // MÚSICA DE VICTORIA
+      playVictoryMusic();
+      
       setAnim('celebrate');
       message.textContent = T[lang].celebrate;
       speak(T[lang].celebrate);
       
-      // CREAR CONFETI
+      // CONFETI
       const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD','#FF6347','#40E0D0'];
       for (let i = 0; i < 150; i++) {
         const c = document.createElement('div');
@@ -879,7 +850,6 @@
         setTimeout(() => c.remove(), 5000);
       }
       
-      // Mostrar botón de reinicio
       setTimeout(() => {
         musicBtn.textContent = '🎵';
         startIdleCycle();
@@ -907,18 +877,18 @@
     console.log('🦕 Initializing...');
     initCamera();
     
+    // Cargar voces
+    speechSynthesis.getVoices();
     if (speechSynthesis.onvoiceschanged !== undefined) {
       speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     }
-    speechSynthesis.getVoices();
     
     tina.addEventListener('progress', e => { loadingStatus.textContent = Math.floor(e.detail.totalProgress * 100) + '%'; });
     tina.addEventListener('load', () => {
       console.log('🦕 Model loaded!');
       modelLoaded = true;
       
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
-                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       
       if (isIOS) {
         loading.style.display = 'none';
