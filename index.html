@@ -88,7 +88,7 @@
       100% { transform: translateX(-50%) translateY(0) scale(1); }
     }
     
-    /* ========== OVERLAY BOCA REALISTA ========== */
+    /* ========== OVERLAY BOCA ========== */
     #dental-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -102,61 +102,66 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s;
+      padding: 20px;
     }
     
     #dental-overlay.show { opacity: 1; pointer-events: auto; }
     
     #dental-title {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       color: white;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-align: center;
     }
     
     #dental-zone {
-      font-size: 38px;
+      font-size: 32px;
       font-weight: 800;
       color: #FFD700;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       text-align: center;
-      text-shadow: 0 0 20px rgba(255,215,0,0.6);
+      text-shadow: 0 0 15px rgba(255,215,0,0.6);
     }
     
     #mouth-container {
       position: relative;
-      width: 340px;
-      height: 320px;
+      width: 260px;
+      height: 240px;
+      max-width: 90vw;
     }
     
     .side-indicator {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      font-size: 16px;
+      font-size: 12px;
       font-weight: 700;
       color: white;
-      padding: 8px 14px;
+      padding: 6px 10px;
       background: linear-gradient(135deg, #FF69B4, #FF1493);
-      border-radius: 20px;
-      box-shadow: 0 2px 10px rgba(255,105,180,0.5);
+      border-radius: 15px;
+      white-space: nowrap;
     }
     
-    .side-indicator.left { left: -75px; animation: pulse-left 1s ease-in-out infinite; }
-    .side-indicator.right { right: -75px; animation: pulse-right 1s ease-in-out infinite; }
+    .side-indicator.left { left: -60px; animation: pulse-left 1s ease-in-out infinite; }
+    .side-indicator.right { right: -60px; animation: pulse-right 1s ease-in-out infinite; }
     
-    @keyframes pulse-left { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-8px); } }
-    @keyframes pulse-right { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(8px); } }
+    @keyframes pulse-left { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(-5px); } }
+    @keyframes pulse-right { 0%, 100% { transform: translateY(-50%) translateX(0); } 50% { transform: translateY(-50%) translateX(5px); } }
     
     #dental-instruction {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       color: white;
-      margin-top: 20px;
+      margin-top: 15px;
       text-align: center;
       opacity: 0.95;
-      max-width: 300px;
     }
+    
+    .tooth { fill: #FFF; stroke: #DDD; stroke-width: 1; transition: fill 0.3s; }
+    .tooth-hl { fill: #FFD700; filter: drop-shadow(0 0 8px #FFD700); }
+    .tongue-hl { fill: #FF6B6B; filter: drop-shadow(0 0 10px #FF6B6B); }
     
     .hidden { display: none !important; }
     
@@ -250,7 +255,14 @@
       cursor: pointer; z-index: 200; display: none;
     }
     
-    .confetti { position: fixed; width: 12px; height: 12px; top: -20px; animation: fall 3s linear forwards; z-index: 500; }
+    .confetti {
+      position: fixed;
+      width: 12px; height: 12px;
+      top: -20px;
+      border-radius: 50%;
+      animation: fall 3s linear forwards;
+      z-index: 500;
+    }
     @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
   </style>
 </head>
@@ -275,7 +287,7 @@
   
   <button id="start-btn">Toca para empezar</button>
   
-  <!-- Boca Realista -->
+  <!-- Boca -->
   <div id="dental-overlay">
     <div id="dental-title">Prepárate para cepillar</div>
     <div id="dental-zone">Arriba a la derecha</div>
@@ -284,63 +296,55 @@
       <div class="side-indicator left hidden" id="indicator-left">IZQUIERDA</div>
       <div class="side-indicator right hidden" id="indicator-right">DERECHA</div>
       
-      <svg viewBox="0 0 340 320" style="width:100%;height:100%">
-        <!-- Fondo interior boca -->
-        <ellipse cx="170" cy="160" rx="150" ry="145" fill="#6B2D2D"/>
+      <svg viewBox="0 0 260 240" style="width:100%;height:100%">
+        <!-- Fondo boca -->
+        <ellipse cx="130" cy="120" rx="115" ry="110" fill="#6B2D2D"/>
         
         <!-- Lengua -->
-        <ellipse class="tongue" id="tongue" cx="170" cy="210" rx="70" ry="45" fill="#C85050"/>
-        <ellipse cx="170" cy="205" rx="50" ry="30" fill="#D86060" opacity="0.6"/>
+        <ellipse id="tongue" cx="130" cy="155" rx="55" ry="35" fill="#C85050"/>
+        <ellipse cx="130" cy="150" rx="40" ry="25" fill="#D86060" opacity="0.5"/>
         
-        <!-- Paladar superior -->
-        <ellipse cx="170" cy="85" rx="100" ry="30" fill="#E89090"/>
+        <!-- Paladar -->
+        <ellipse cx="130" cy="70" rx="80" ry="25" fill="#E89090"/>
         
         <!-- Encías superiores -->
-        <path d="M50 95 Q170 30 290 95 Q290 70 170 50 Q50 70 50 95" fill="#E88888"/>
+        <path d="M40 75 Q130 25 220 75 Q220 55 130 40 Q40 55 40 75" fill="#E88888"/>
         
-        <!-- Dientes superiores realistas -->
+        <!-- Dientes superiores -->
         <g id="upper-teeth">
-          <!-- Muelas derechas -->
-          <path class="tooth" id="u1" d="M55 65 Q60 50 70 50 Q80 50 85 65 L85 95 Q80 100 70 100 Q60 100 55 95 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="u2" d="M90 58 Q95 42 108 42 Q120 42 125 58 L125 98 Q120 105 108 105 Q95 105 90 98 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <!-- Canino y premolares -->
-          <path class="tooth" id="u3" d="M130 52 Q138 35 152 35 Q165 35 170 52 L170 102 Q165 110 152 110 Q138 110 130 102 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <!-- Incisivos -->
-          <path class="tooth" id="u4" d="M175 50 Q182 32 195 32 Q207 32 212 50 L212 105 Q207 115 195 115 Q182 115 175 105 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="u5" d="M217 50 Q225 32 238 32 Q250 32 255 50 L255 105 Q250 115 238 115 Q225 115 217 105 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <!-- Canino y premolares izq -->
-          <path class="tooth" id="u6" d="M260 52 Q268 35 282 35 Q295 35 300 52 L300 102 Q295 110 282 110 Q268 110 260 102 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="u7" d="M305 58 Q312 42 325 42 Q337 42 342 58 L342 98 Q337 105 325 105 Q312 105 305 98 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="u8" d="M347 65 Q352 50 362 50 Q372 50 377 65 L377 95 Q372 100 362 100 Q352 100 347 95 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
+          <path id="u1" class="tooth" d="M42 50 Q48 38 58 38 Q68 38 72 50 L72 75 Q68 80 58 80 Q48 80 42 75 Z"/>
+          <path id="u2" class="tooth" d="M76 45 Q82 32 95 32 Q108 32 112 45 L112 78 Q108 85 95 85 Q82 85 76 78 Z"/>
+          <path id="u3" class="tooth" d="M116 40 Q124 26 138 26 Q152 26 156 40 L156 82 Q152 90 138 90 Q124 90 116 82 Z"/>
+          <path id="u4" class="tooth" d="M160 40 Q168 26 182 26 Q196 26 200 40 L200 82 Q196 90 182 90 Q168 90 160 82 Z"/>
+          <path id="u5" class="tooth" d="M204 45 Q212 32 225 32 Q238 32 242 45 L242 78 Q238 85 225 85 Q212 85 204 78 Z"/>
+          <path id="u6" class="tooth" d="M246 50 Q252 38 262 38 Q272 38 278 50 L278 75 Q272 80 262 80 Q252 80 246 75 Z"/>
         </g>
         
         <!-- Etiqueta ARRIBA -->
-        <text x="170" y="22" text-anchor="middle" fill="white" font-size="18" font-weight="700">ARRIBA</text>
+        <text x="130" y="18" text-anchor="middle" fill="white" font-size="14" font-weight="700">ARRIBA</text>
         
         <!-- Encías inferiores -->
-        <path d="M50 225 Q170 290 290 225 Q290 250 170 270 Q50 250 50 225" fill="#D87878"/>
+        <path d="M40 165 Q130 215 220 165 Q220 185 130 200 Q40 185 40 165" fill="#D87878"/>
         
-        <!-- Dientes inferiores realistas -->
+        <!-- Dientes inferiores -->
         <g id="lower-teeth">
-          <path class="tooth" id="l1" d="M55 230 Q60 215 70 215 Q80 215 85 230 L85 260 Q80 265 70 265 Q60 265 55 260 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l2" d="M90 228 Q95 212 108 212 Q120 212 125 228 L125 262 Q120 270 108 270 Q95 270 90 262 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l3" d="M130 225 Q138 210 152 210 Q165 210 170 225 L170 265 Q165 275 152 275 Q138 275 130 265 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l4" d="M175 225 Q182 208 195 208 Q207 208 212 225 L212 268 Q207 278 195 278 Q182 278 175 268 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l5" d="M217 225 Q225 208 238 208 Q250 208 255 225 L255 268 Q250 278 238 278 Q225 278 217 268 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l6" d="M260 225 Q268 210 282 210 Q295 210 300 225 L300 265 Q295 275 282 275 Q268 275 260 265 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l7" d="M305 228 Q312 212 325 212 Q337 212 342 228 L342 262 Q337 270 325 270 Q312 270 305 262 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
-          <path class="tooth" id="l8" d="M347 230 Q352 215 362 215 Q372 215 377 230 L377 260 Q372 265 362 265 Q352 265 347 260 Z" fill="#FFF" stroke="#DDD" stroke-width="1"/>
+          <path id="l1" class="tooth" d="M42 170 Q48 158 58 158 Q68 158 72 170 L72 195 Q68 200 58 200 Q48 200 42 195 Z"/>
+          <path id="l2" class="tooth" d="M76 168 Q82 155 95 155 Q108 155 112 168 L112 198 Q108 205 95 205 Q82 205 76 198 Z"/>
+          <path id="l3" class="tooth" d="M116 165 Q124 152 138 152 Q152 152 156 165 L156 200 Q152 208 138 208 Q124 208 116 200 Z"/>
+          <path id="l4" class="tooth" d="M160 165 Q168 152 182 152 Q196 152 200 165 L200 200 Q196 208 182 208 Q168 208 160 200 Z"/>
+          <path id="l5" class="tooth" d="M204 168 Q212 155 225 155 Q238 155 242 168 L242 198 Q238 205 225 205 Q212 205 204 198 Z"/>
+          <path id="l6" class="tooth" d="M246 170 Q252 158 262 158 Q272 158 278 170 L278 195 Q272 200 262 200 Q252 200 246 195 Z"/>
         </g>
         
         <!-- Etiqueta ABAJO -->
-        <text x="170" y="305" text-anchor="middle" fill="white" font-size="18" font-weight="700">ABAJO</text>
+        <text x="130" y="232" text-anchor="middle" fill="white" font-size="14" font-weight="700">ABAJO</text>
         
         <!-- Labios -->
-        <path d="M20 160 Q170 -30 320 160 Q170 350 20 160" fill="none" stroke="#C06060" stroke-width="8" opacity="0.7"/>
+        <path d="M15 120 Q130 -25 245 120 Q130 265 15 120" fill="none" stroke="#C06060" stroke-width="6" opacity="0.6"/>
       </svg>
     </div>
     
-    <div id="dental-instruction">Haz circulitos suaves en esta zona</div>
+    <div id="dental-instruction">Haz circulitos suaves</div>
   </div>
   
   <div class="dropdown-container">
@@ -387,8 +391,8 @@
     let musicPlaying = false;
     let speaking = false;
     let audioContext = null;
-    let currentMusicTimeout = null;
-    let scheduledNotes = [];
+    let nextNoteTime = 0;
+    let musicTimer = null;
     
     const $ = id => document.getElementById(id);
     const loading = $('loading');
@@ -426,9 +430,7 @@
     
     function startIdleCycle() {
       stopIdleCycle();
-      isIdle = true;
-      idlePhase = 'static';
-      setAnim(null);
+      isIdle = true; idlePhase = 'static'; setAnim(null);
       idleTimer = setInterval(() => {
         if (!isIdle) return;
         if (idlePhase === 'static') { idlePhase = 'breathe'; setAnim('breathe'); }
@@ -483,82 +485,70 @@
       }
     };
     
-    // ===== MÚSICA - MELODÍAS REALES =====
-    const FREQ = {
-      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
-      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00,
-      REST: 0
+    // ===== MÚSICA =====
+    const F = { // Frecuencias
+      C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392, A4:440, B4:493.88,
+      C5:523.25, D5:587.33, E5:659.25, G5:783.99
     };
     
-    // Melodías con estructura de canción real (nota, duración en beats)
-    // 1 beat = 500ms aprox
+    // Melodías: [nota, duración en segundos]
     const SONGS = {
-      1: { // "Twinkle Twinkle" - Do mayor
-        tempo: 400, // ms por beat
-        melody: [
-          ['C4',1],['C4',1],['G4',1],['G4',1],['A4',1],['A4',1],['G4',2],
-          ['F4',1],['F4',1],['E4',1],['E4',1],['D4',1],['D4',1],['C4',2],
-          ['G4',1],['G4',1],['F4',1],['F4',1],['E4',1],['E4',1],['D4',2],
-          ['G4',1],['G4',1],['F4',1],['F4',1],['E4',1],['E4',1],['D4',2],
-          ['C4',1],['C4',1],['G4',1],['G4',1],['A4',1],['A4',1],['G4',2],
-          ['F4',1],['F4',1],['E4',1],['E4',1],['D4',1],['D4',1],['C4',2]
-        ]
-      },
-      2: { // Canción de cuna - Sol mayor
-        tempo: 500,
-        melody: [
-          ['D4',1],['E4',0.5],['D4',0.5],['B3',1],['C4',1],['A3',2],
-          ['D4',1],['E4',0.5],['D4',0.5],['B3',1],['C4',1],['A3',2],
-          ['A3',1],['B3',1],['C4',1],['A3',1],['G3',1],['A3',1],['B3',2],
-          ['G4',2],['D4',2],['G3',2]
-        ]
-      },
-      3: { // Juguetona - Re mayor
-        tempo: 350,
-        melody: [
-          ['D4',0.5],['E4',0.5],['F4',1],['E4',0.5],['D4',0.5],['C4',1],['D4',2],
-          ['E4',0.5],['F4',0.5],['G4',1],['F4',0.5],['E4',0.5],['D4',1],['E4',2],
-          ['A4',1],['G4',0.5],['F4',0.5],['E4',1],['D4',1],['C4',1],['D4',2],
-          ['A4',1],['G4',0.5],['A4',0.5],['B4',1],['A4',1],['G4',1],['F4',2]
-        ]
-      },
-      4: { // Triunfal - Fa mayor
-        tempo: 400,
-        melody: [
-          ['F4',1],['A4',1],['C5',1],['A4',1],['F4',1],['A4',1],['C5',2],
-          ['C5',1],['A4',1],['F4',1],['A4',1],['G4',1],['A4',1],['B4',2],
-          ['C5',1],['D5',0.5],['C5',0.5],['A4',1],['F4',1],['G4',1],['A4',1],['G4',2],
-          ['F4',1],['A4',1],['C5',1],['A4',1],['F4',1],['G4',1],['F4',2]
-        ]
-      },
-      5: { // Lengua - Mi mayor (corta)
-        tempo: 350,
-        melody: [
-          ['E4',1],['G4',1],['B4',1],['E5',2],
-          ['D5',1],['C5',1],['B4',1],['A4',2],
-          ['G4',1],['A4',1],['B4',1],['C5',2],
-          ['B4',1],['A4',1],['G4',1],['E4',2]
-        ]
-      }
+      1: [ // Twinkle Twinkle
+        ['C4',0.4],['C4',0.4],['G4',0.4],['G4',0.4],['A4',0.4],['A4',0.4],['G4',0.8],
+        ['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.4],['D4',0.4],['C4',0.8],
+        ['G4',0.4],['G4',0.4],['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.8],
+        ['G4',0.4],['G4',0.4],['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.8],
+        ['C4',0.4],['C4',0.4],['G4',0.4],['G4',0.4],['A4',0.4],['A4',0.4],['G4',0.8],
+        ['F4',0.4],['F4',0.4],['E4',0.4],['E4',0.4],['D4',0.4],['D4',0.4],['C4',0.8]
+      ],
+      2: [ // Canción de cuna
+        ['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1],
+        ['D4',0.5],['E4',0.25],['D4',0.25],['B3',0.5],['C4',0.5],['A3',1],
+        ['A3',0.5],['B3',0.5],['C4',0.5],['A3',0.5],['G3',0.5],['A3',0.5],['B3',1],
+        ['G4',1],['D4',1],['G3',1]
+      ],
+      3: [ // Juguetona
+        ['D4',0.25],['E4',0.25],['F4',0.5],['E4',0.25],['D4',0.25],['C4',0.5],['D4',1],
+        ['E4',0.25],['F4',0.25],['G4',0.5],['F4',0.25],['E4',0.25],['D4',0.5],['E4',1],
+        ['A4',0.5],['G4',0.25],['F4',0.25],['E4',0.5],['D4',0.5],['C4',0.5],['D4',1],
+        ['A4',0.5],['G4',0.25],['A4',0.25],['B4',0.5],['A4',0.5],['G4',0.5],['F4',1]
+      ],
+      4: [ // Triunfal
+        ['F4',0.5],['A4',0.5],['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['C5',1],
+        ['C5',0.5],['A4',0.5],['F4',0.5],['A4',0.5],['G4',0.5],['A4',0.5],['B4',1],
+        ['C5',0.5],['D5',0.25],['C5',0.25],['A4',0.5],['F4',0.5],['G4',0.5],['A4',0.5],['G4',1],
+        ['F4',0.5],['A4',0.5],['C5',0.5],['A4',0.5],['F4',0.5],['G4',0.5],['F4',1]
+      ],
+      5: [ // Lengua
+        ['E4',0.5],['G4',0.5],['B4',0.5],['E5',1],
+        ['D5',0.5],['C5',0.5],['B4',0.5],['A4',1],
+        ['G4',0.5],['A4',0.5],['B4',0.5],['C5',1],
+        ['B4',0.5],['A4',0.5],['G4',0.5],['E4',1]
+      ]
     };
+    
+    // Agregar notas faltantes para zona 2
+    F.B3 = 246.94;
+    F.G3 = 196.00;
+    F.A3 = 220.00;
+    
+    let currentSong = null;
+    let noteIndex = 0;
     
     function initAudio() {
       if (audioContext) return true;
       try {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioContext.state === 'suspended') {
-          audioContext.resume();
-        }
-        console.log('🔊 Audio initialized, state:', audioContext.state);
+        console.log('🔊 AudioContext state:', audioContext.state);
         return true;
       } catch (e) {
-        console.error('Audio init error:', e);
+        console.error('Audio error:', e);
         return false;
       }
     }
     
-    function playNote(freq, startTime, duration, vol = 0.15) {
-      if (!audioContext || freq === 0) return;
+    function playNote(freq, startTime, dur) {
+      if (!audioContext || !freq) return;
       
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
@@ -566,96 +556,115 @@
       osc.type = 'sine';
       osc.frequency.value = freq;
       
-      // Envelope suave
       gain.gain.setValueAtTime(0, startTime);
-      gain.gain.linearRampToValueAtTime(vol, startTime + 0.05);
-      gain.gain.setValueAtTime(vol, startTime + duration - 0.1);
-      gain.gain.linearRampToValueAtTime(0, startTime + duration);
+      gain.gain.linearRampToValueAtTime(0.15, startTime + 0.03);
+      gain.gain.setValueAtTime(0.15, startTime + dur - 0.05);
+      gain.gain.linearRampToValueAtTime(0, startTime + dur);
       
       osc.connect(gain);
       gain.connect(audioContext.destination);
       
       osc.start(startTime);
-      osc.stop(startTime + duration);
-      
-      scheduledNotes.push(osc);
+      osc.stop(startTime + dur);
     }
     
-    function playSong(zoneNum) {
-      if (!musicPlaying || !audioContext) return;
+    function scheduleNotes() {
+      if (!musicPlaying || !currentSong || !audioContext) return;
       
-      stopSong();
-      
-      const song = SONGS[zoneNum];
-      if (!song) return;
-      
-      const beat = song.tempo / 1000; // convertir a segundos
-      let time = audioContext.currentTime + 0.1;
-      
-      song.melody.forEach(([note, beats]) => {
-        const duration = beats * beat;
-        if (note !== 'REST') {
-          playNote(FREQ[note], time, duration, 0.12);
-          // Armónico suave
-          if (FREQ[note] * 2 < 1500) {
-            playNote(FREQ[note] * 2, time, duration, 0.03);
-          }
+      while (nextNoteTime < audioContext.currentTime + 0.5) {
+        const [note, dur] = currentSong[noteIndex];
+        const freq = F[note];
+        if (freq) {
+          playNote(freq, nextNoteTime, dur);
         }
-        time += duration;
-      });
+        nextNoteTime += dur;
+        noteIndex++;
+        
+        if (noteIndex >= currentSong.length) {
+          noteIndex = 0;
+          nextNoteTime += 0.3; // Pausa entre repeticiones
+        }
+      }
       
-      // Repetir
-      const totalDuration = song.melody.reduce((acc, [_, b]) => acc + b * beat, 0);
-      currentMusicTimeout = setTimeout(() => {
-        if (musicPlaying) playSong(zoneNum);
-      }, totalDuration * 1000 + 200);
+      musicTimer = setTimeout(scheduleNotes, 200);
     }
     
-    function stopSong() {
-      if (currentMusicTimeout) {
-        clearTimeout(currentMusicTimeout);
-        currentMusicTimeout = null;
+    function startMusic(zoneNum) {
+      if (!audioContext) {
+        initAudio();
       }
-      scheduledNotes.forEach(osc => {
-        try { osc.stop(); } catch(e) {}
-      });
-      scheduledNotes = [];
+      
+      if (audioContext.state === 'suspended') {
+        audioContext.resume().then(() => {
+          console.log('AudioContext resumed');
+          _startMusic(zoneNum);
+        });
+      } else {
+        _startMusic(zoneNum);
+      }
+    }
+    
+    function _startMusic(zoneNum) {
+      if (!audioContext) return;
+      
+      stopMusic();
+      
+      currentSong = SONGS[zoneNum];
+      if (!currentSong) {
+        console.error('No song for zone', zoneNum);
+        return;
+      }
+      
+      noteIndex = 0;
+      nextNoteTime = audioContext.currentTime + 0.1;
+      musicPlaying = true;
+      musicBtn.textContent = '🔊';
+      
+      scheduleNotes();
+      console.log('🎵 Playing song for zone', zoneNum);
+    }
+    
+    function stopMusic() {
+      musicPlaying = false;
+      if (musicTimer) {
+        clearTimeout(musicTimer);
+        musicTimer = null;
+      }
+      currentSong = null;
+      noteIndex = 0;
     }
     
     function playTransition(key) {
       if (!audioContext) return;
+      
       const trans = {
-        to1: [['C4',0.2],['E4',0.2],['G4',0.3]],
-        to2: [['G4',0.2],['B4',0.2],['D5',0.3]],
-        to3: [['D4',0.2],['F4',0.2],['A4',0.3]],
-        to4: [['F4',0.2],['A4',0.2],['C5',0.3]],
-        to5: [['E4',0.2],['G4',0.2],['B4',0.3]],
-        end: [['C5',0.1],['E5',0.1],['G5',0.1],['C6',0.4]]
+        to1: [['C4',0.15],['E4',0.15],['G4',0.25]],
+        to2: [['G4',0.15],['B4',0.15],['D5',0.25]],
+        to3: [['D4',0.15],['F4',0.15],['A4',0.25]],
+        to4: [['F4',0.15],['A4',0.15],['C5',0.25]],
+        to5: [['E4',0.15],['G4',0.15],['B4',0.25]],
+        end: [['C5',0.1],['E5',0.1],['G5',0.1],['C6',0.3]]
       };
       const notes = trans[key];
       if (!notes) return;
       
       let t = audioContext.currentTime + 0.05;
       notes.forEach(([note, dur]) => {
-        playNote(FREQ[note], t, dur, 0.15);
+        if (F[note]) playNote(F[note], t, dur);
         t += dur;
       });
     }
     
     function toggleMusic() {
-      if (!audioContext) initAudio();
-      if (audioContext && audioContext.state === 'suspended') {
-        audioContext.resume();
-      }
-      
       if (musicPlaying) {
-        musicPlaying = false;
+        stopMusic();
         musicBtn.textContent = '🎵';
-        stopSong();
       } else {
-        musicPlaying = true;
-        musicBtn.textContent = '🔊';
-        playSong(zone || 1);
+        if (!audioContext) initAudio();
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume();
+        }
+        startMusic(zone || 1);
       }
     }
     
@@ -679,72 +688,23 @@
       if ('speechSynthesis' in window) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        
-        // Configurar idioma
-        if (lang === 'ES') {
-          u.lang = 'es-MX';
-        } else if (lang === 'EN') {
-          u.lang = 'en-US';
-        } else {
-          u.lang = 'pt-BR';
-        }
-        
+        u.lang = lang === 'ES' ? 'es-MX' : lang === 'EN' ? 'en-US' : 'pt-BR';
         u.rate = 0.9;
-        u.pitch = 1.1; // Un poco más agudo
+        u.pitch = 1.15;
         
-        // Buscar voz FEMENINA
         const voices = speechSynthesis.getVoices();
-        console.log('Voces disponibles:', voices.map(v => `${v.name} (${v.lang})`));
-        
-        let femaleVoice = null;
+        let voice = null;
         
         if (lang === 'ES') {
-          // Buscar voz femenina en español
-          femaleVoice = voices.find(v => 
-            v.lang.includes('es') && (
-              v.name.toLowerCase().includes('female') ||
-              v.name.toLowerCase().includes('mujer') ||
-              v.name.toLowerCase().includes('dora') ||
-              v.name.toLowerCase().includes('elvira') ||
-              v.name.toLowerCase().includes('loretta') ||
-              v.name.toLowerCase().includes('monica') ||
-              v.name.toLowerCase().includes('paulina') ||
-              v.name.toLowerCase().includes('soledad') ||
-              v.name.toLowerCase().includes('penelope') ||
-              v.name.includes('Microsoft Sabrina') ||
-              v.name.includes('Google español')
-            )
-          );
-          // Fallback: cualquier voz es-MX o es-ES
-          if (!femaleVoice) {
-            femaleVoice = voices.find(v => v.lang.includes('es-MX')) ||
-                          voices.find(v => v.lang.includes('es-419')) ||
-                          voices.find(v => v.lang.includes('es-ES'));
-          }
+          voice = voices.find(v => v.lang.includes('es-MX') || v.lang.includes('es-419')) ||
+                  voices.find(v => v.lang.includes('es-ES'));
         } else if (lang === 'EN') {
-          femaleVoice = voices.find(v => 
-            v.lang.includes('en') && (
-              v.name.toLowerCase().includes('female') ||
-              v.name.toLowerCase().includes('samantha') ||
-              v.name.toLowerCase().includes('victoria') ||
-              v.name.toLowerCase().includes('karen') ||
-              v.name.toLowerCase().includes('moira') ||
-              v.name.toLowerCase().includes('fiona') ||
-              v.name.toLowerCase().includes('susan') ||
-              v.name.includes('Google US English')
-            )
-          );
-          if (!femaleVoice) {
-            femaleVoice = voices.find(v => v.lang.includes('en-US'));
-          }
+          voice = voices.find(v => v.lang.includes('en-US'));
         } else {
-          femaleVoice = voices.find(v => v.lang.includes('pt-BR'));
+          voice = voices.find(v => v.lang.includes('pt-BR'));
         }
         
-        if (femaleVoice) {
-          u.voice = femaleVoice;
-          console.log('Usando voz:', femaleVoice.name);
-        }
+        if (voice) u.voice = voice;
         
         setAnim('encourage');
         
@@ -759,46 +719,37 @@
       }
     }
     
-    // ===== BOCA ANIMADA =====
+    // ===== BOCA =====
     function showDentalOverlay(zoneNum) {
-      document.querySelectorAll('.tooth').forEach(t => t.style.fill = '#FFF');
-      tongue.style.fill = '#C85050';
+      document.querySelectorAll('.tooth').forEach(t => t.classList.remove('tooth-hl'));
+      tongue.classList.remove('tongue-hl');
       indicatorLeft.classList.add('hidden');
       indicatorRight.classList.add('hidden');
       
       if (zoneNum === 5) {
-        tongue.style.fill = '#FF6B6B';
-        tongue.style.filter = 'drop-shadow(0 0 15px #FF6B6B)';
+        tongue.classList.add('tongue-hl');
         dentalTitle.textContent = T[lang].tonguePrep;
         dentalZone.textContent = T[lang].zones[4];
         dentalInstruction.textContent = lang === 'ES' ? 'Cepilla suavemente de adentro hacia afuera' :
                                          lang === 'EN' ? 'Brush gently from back to front' :
                                          'Escove suavemente de dentro para fora';
       } else {
-        tongue.style.filter = 'none';
         const isUpper = zoneNum === 1 || zoneNum === 2;
         const isRight = zoneNum === 1 || zoneNum === 3;
         
         if (isRight) indicatorRight.classList.remove('hidden');
         else indicatorLeft.classList.remove('hidden');
         
-        const toothIds = isUpper ? 
-          (isRight ? ['u1','u2','u3','u4'] : ['u5','u6','u7','u8']) :
-          (isRight ? ['l1','l2','l3','l4'] : ['l5','l6','l7','l8']);
+        const ids = isUpper ? 
+          (isRight ? ['u1','u2','u3'] : ['u4','u5','u6']) :
+          (isRight ? ['l1','l2','l3'] : ['l4','l5','l6']);
         
-        toothIds.forEach(id => {
-          const el = $(id);
-          if (el) {
-            el.style.fill = '#FFD700';
-            el.style.filter = 'drop-shadow(0 0 10px #FFD700)';
-          }
-        });
+        ids.forEach(id => { const el = $(id); if (el) el.classList.add('tooth-hl'); });
         
         dentalTitle.textContent = T[lang].zonePrep;
         dentalZone.textContent = T[lang].zones[zoneNum - 1];
         dentalInstruction.textContent = lang === 'ES' ? 'Haz circulitos suaves en esta zona' :
-                                         lang === 'EN' ? 'Make small circles in this area' :
-                                         'Faça circulinhos suaves nesta área';
+                                         lang === 'EN' ? 'Make small circles' : 'Faça circulinhos suaves';
       }
       
       dentalOverlay.classList.add('show');
@@ -820,19 +771,16 @@
       
       setTimeout(() => {
         initAudio();
-        if (!musicPlaying) toggleMusic();
+        startMusic(1);
       }, 2500);
       
       setTimeout(nextZone, 12000);
     }
     
     function handleStart() {
-      // Inicializar audio con gesto del usuario
       initAudio();
       if (audioContext && audioContext.state === 'suspended') {
-        audioContext.resume().then(() => {
-          console.log('Audio context resumed');
-        });
+        audioContext.resume();
       }
       startBtn.style.display = 'none';
       startApp();
@@ -873,28 +821,26 @@
         speak(message.textContent);
       }, 500);
       
-      if (musicPlaying) {
-        stopSong();
-        setTimeout(() => playSong(zone), 100);
-      }
+      // Iniciar música para esta zona
+      startMusic(zone);
       
       clearInterval(timer);
       
       let encI = 0;
-      const duration = zone === 5 ? 10 : 30;
+      const dur = zone === 5 ? 10 : 30;
       
       timer = setInterval(() => {
         seconds--;
         timerText.textContent = seconds;
-        timerProgress.style.strokeDashoffset = 339.292 * (1 - (duration - seconds) / duration);
+        timerProgress.style.strokeDashoffset = 339.292 * (1 - (dur - seconds) / dur);
         
-        const threshold = zone === 5 ? 5 : 10;
-        timerProgress.style.stroke = seconds > threshold ? '#4CAF50' : seconds > 3 ? '#FFC107' : '#F44336';
+        const thr = zone === 5 ? 5 : 10;
+        timerProgress.style.stroke = seconds > thr ? '#4CAF50' : seconds > 3 ? '#FFC107' : '#F44336';
         
-        const encourageTime = zone === 5 ? 5 : 20;
-        const encourageTime2 = zone === 5 ? 3 : 10;
+        const t1 = zone === 5 ? 5 : 20;
+        const t2 = zone === 5 ? 3 : 10;
         
-        if (!speaking && (seconds === encourageTime || seconds === encourageTime2)) {
+        if (!speaking && (seconds === t1 || seconds === t2)) {
           message.textContent = T[lang].encourage[encI++ % 4];
           speak(message.textContent);
         }
@@ -909,30 +855,32 @@
       }, 1000);
     }
     
-    // ===== CELEBRACIÓN =====
+    // ===== CELEBRACIÓN CON CONFETI =====
     function celebrate() {
       zonesEl.classList.add('hidden');
       timerEl.classList.add('hidden');
       
+      stopMusic();
       playTransition('end');
       setAnim('celebrate');
       message.textContent = T[lang].celebrate;
       speak(T[lang].celebrate);
       
-      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD'];
-      for (let i = 0; i < 100; i++) {
+      // CREAR CONFETI
+      const colors = ['#FF69B4','#FFB6C1','#FFD700','#87CEEB','#98FB98','#DDA0DD','#FF6347','#40E0D0'];
+      for (let i = 0; i < 150; i++) {
         const c = document.createElement('div');
         c.className = 'confetti';
         c.style.left = Math.random() * 100 + '%';
         c.style.background = colors[Math.floor(Math.random() * colors.length)];
         c.style.animationDelay = Math.random() * 2 + 's';
+        c.style.animationDuration = (2 + Math.random() * 2) + 's';
         document.body.appendChild(c);
         setTimeout(() => c.remove(), 5000);
       }
       
+      // Mostrar botón de reinicio
       setTimeout(() => {
-        stopSong();
-        musicPlaying = false;
         musicBtn.textContent = '🎵';
         startIdleCycle();
         restartBtn.style.display = 'block';
@@ -959,13 +907,9 @@
     console.log('🦕 Initializing...');
     initCamera();
     
-    // Cargar voces
     if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = () => {
-        console.log('Voces cargadas:', speechSynthesis.getVoices().length);
-      };
+      speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
     }
-    // Cargar voces inmediatamente si ya están disponibles
     speechSynthesis.getVoices();
     
     tina.addEventListener('progress', e => { loadingStatus.textContent = Math.floor(e.detail.totalProgress * 100) + '%'; });
@@ -973,7 +917,6 @@
       console.log('🦕 Model loaded!');
       modelLoaded = true;
       
-      // Detectar iOS
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
                     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       
